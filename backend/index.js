@@ -1,8 +1,7 @@
-// dependencies 
 const app = require('./app.js');
 const mongoose = require("mongoose");
 require("dotenv").config();
-// connect to database
+mongoose.set("strictQuery", false);
 mongoose.connect(
     process.env.DB,
     { useNewUrlParser: true, useUnifiedTopology: true },
@@ -13,7 +12,6 @@ mongoose.connect(
         console.log("Connected to Mongo DB");
   
         try {
-          // start server
           app.start();
         } catch (err) {
           console.log(`Error setting up Database: Error: ${err}`);
