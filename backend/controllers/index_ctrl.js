@@ -1,9 +1,9 @@
 exports.controllers = {
-    // ScholarController: require('./scholar_ctrl'),
-    // UserController: require('./user_ctrl'),
+    ScholarController: require('./scholar_ctrl'),
+    UserController: require('./user_ctrl'),
     DonorController: require('./donor_ctrl'),
-    // ScholarshipController: require('./scholarship_ctrl'),
-    // ApplicantController : require('./applicant_ctrl'),
-    // LogController : require('./utils_ctrl'),
-    // UploadController : require('./upload_ctrl'),
+    ScholarshipController: require('./scholarship_ctrl'),
+    ApplicantController : require('./applicant_ctrl'),
+    LogController : require('./utils_ctrl'),
+    UploadController : require('./upload_ctrl'),
 }
