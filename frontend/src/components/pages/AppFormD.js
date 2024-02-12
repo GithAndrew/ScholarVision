@@ -9,6 +9,7 @@ const AppFormDonor = () => {
         <div>
             <Header/>
             <button className='back-button'><Link to="/Home">BACK</Link></button>
+
             <form className='app-form-body'>
 
             <div className='app-form-buttons'>
@@ -18,7 +19,6 @@ const AppFormDonor = () => {
                 <br></br>
                 <button className='buttons-g'>Submit <br></br> Application</button>
             </div>
-
 
             <div className='app-form-main'>
                 <h2 className='form-title'>Donor Application Form</h2>

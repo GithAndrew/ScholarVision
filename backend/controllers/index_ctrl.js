@@ -4,6 +4,6 @@ exports.controllers = {
     DonorController: require('./donor_ctrl'),
     ScholarshipController: require('./scholarship_ctrl'),
     ApplicantController : require('./applicant_ctrl'),
-    LogController : require('./utils_ctrl'),
+    LogController : require('./utils'),
     UploadController : require('./upload_ctrl'),
 }

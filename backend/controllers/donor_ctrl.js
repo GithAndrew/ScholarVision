@@ -6,17 +6,17 @@ const Log = require('../handlers/log_hndlr');
 const utils = require('./utils');
 
 exports.findDonor = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
   
-    const token = await utils.verifyToken(req);
+    // const token = await utils.verifyToken(req);
     
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
   
     const id = req.params.id;
   
@@ -42,17 +42,17 @@ exports.findDonor = async (req, res) => {
 }
 
 exports.findAll = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     try {
         donor = await Donor.getAll();

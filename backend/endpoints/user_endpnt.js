@@ -1,4 +1,4 @@
-const { UserController } = require('../controllers/index').controllers;
+const { UserController } = require('../controllers/index_ctrl').controllers;
 const Router = require('express').Router;
 
 const User = Router();

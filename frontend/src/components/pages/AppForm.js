@@ -10,16 +10,15 @@ const AppForm = () => {
             <Header/>
             <button className='back-button'><Link to="/Home">BACK</Link></button>
 
-        <form className='app-form-body'>
+            <form className='app-form-body'>
 
             <div className='app-form-buttons'>
-                <div className='buttons'>Upload <br></br> CSV</div>
+                <button className='buttons'>Upload <br></br> CSV</button>
                 <br></br>
-                <div className='buttons'>Download Blank <br></br> Application Form</div>
+                <button className='buttons'>Download Blank <br></br> Application Form</button>
                 <br></br>
                 <button className='buttons-g'>Submit <br></br> Application</button>
             </div>
-
 
             <div className='app-form-main'>
                 <h2 className='form-title'>Scholarship Application Form</h2>
