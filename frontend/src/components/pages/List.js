@@ -8,9 +8,9 @@ import {BsSearch}  from 'react-icons/bs';
 import '../css/List.css'
 
 function List () {
-    const [viewValue] = useState("viewby");
+    const [viewValue] = useState("applicant");
     const [orderValue] = useState("orderby");
-    const [donor, setDonor] = useState([]);
+    const [record, setRecord] = useState([]);
 
     const viewFilter = [
         {label:'VIEW BY', value:'viewby'},
@@ -47,25 +47,35 @@ function List () {
 
     useEffect(() => {
         Promise.all([
-          fetch(apiUrl("/donor"))
+          fetch(apiUrl("/donor")),
+          fetch(apiUrl("/applicant")),
+        //   fetch(apiUrl("/accepted")),
+        //   fetch(apiUrl("/scholar")),
+        //   fetch(apiUrl("/scholarship"))
         ])
-        .then(([resDonors]) => 
-        Promise.all([resDonors.json()])
+        .then(([resDonors, resApps, resAccepted, resScholars]) => 
+            Promise.all([resDonors.json(), resApps.json()])
+            // Promise.all([resDonors.json(), resApps.json(), resAccepted.json(), resScholars.json()])
         )
-        .then(([dataDonors]) => {
-        setDonor(dataDonors);
+        .then(([dataDonors, dataApps]) => {
+            if(viewValue === "donor") {setRecord(dataDonors)};
+            if(viewValue === "applicant") {setRecord(dataApps)};
         });
-    }, []);
+        // .then(([dataDonors, dataApps, dataAccepted, dataScholars]) => {
+        //     if(viewValue === "donor") {setRecord(dataDonors)};
+        //     if(viewValue === "applicant") {setRecord(dataApps)};
+        //     if(viewValue === "scholar?value=false") {setRecord(dataAccepted)};
+        //     if(viewValue === "scholar?value=true") {setRecord(dataScholars)};
+        // });
+    }, [viewValue]);
 
-    console.log(donor)
+    console.log(record)
 
     return (
         <div>
             <Header/>
             <button className='back-button'><Link to="/Home">BACK</Link></button>
-
-            <header className='list-header'>RECORD OF DONORS &#91; {donor ? <span> {donor.length} </span> : ""} &#93; </header>
-            {/* {viewValue === 'scholar?value=true' ? 
+            {viewValue === 'scholar?value=true' ? 
                 <header className='list-header'>RECORD OF SCHOLARS &#91; {record ? <span> {record.length} &#93;</span> : ""}</header> : 
                 (viewValue === 'scholar?value=false' ?
                     <header className='list-header'>RECORD OF ACCEPTED APPLICANTS &#91; {record ? <span> {record.length} &#93;</span> : ""}</header> : 
@@ -74,7 +84,7 @@ function List () {
                         <header className='list-header'>RECORD OF APPLICANTS &#91; {record ? <span> {record.length} &#93;</span> : ""}</header>
                     )
                 )
-            } */}
+            }
 
             <ul className='record-dropdowns'>
                 <li><button className = 'record-print-button'>PRINT</button></li>
@@ -96,12 +106,12 @@ function List () {
                         <th className='list-head'>ADD</th>
                     </tr>
                     <tr className='smol'></tr>
-                    {donor.map((person, i) => {
+                    {record.map((person, i) => {
                         return (
                             <tr className='list-row'>
                                 <td className='first-list-cell'><Link to="/Profile">{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>
                                 <td className='list-cell'><a href={`mailto: andrew.teope4@gmail.com`} className='email-color'>{person.email}</a></td>
-                                <td className='list-cell'>{person.address}</td>
+                                <td className='list-cell'>{person.address.street} {person.address.subd} {person.address.brgy} {person.address.city} {person.address.province} {person.address.postal_code}</td>
                                 <td className='list-cell'>
                                     <div className='list-buttons'>
                                         <button className='app-green-button'>ACCEPT</button>&nbsp;
