@@ -108,8 +108,8 @@ function List () {
                     <tr className='smol'></tr>
                     {record.map((person, i) => {
                         return (
-                            <tr className='list-row'>
-                                <td className='first-list-cell'><Link to="/Profile">{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>
+                            <tr className='list-row' key = {i}>
+                                <td className='first-list-cell'><Link to={`/${viewValue}/${person._id}/Profile`}>{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>
                                 <td className='list-cell'><a href={`mailto: andrew.teope4@gmail.com`} className='email-color'>{person.email}</a></td>
                                 <td className='list-cell'>{person.address.street} {person.address.subd} {person.address.brgy} {person.address.city} {person.address.province} {person.address.postal_code}</td>
                                 <td className='list-cell'>

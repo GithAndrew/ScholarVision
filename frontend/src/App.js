@@ -3,7 +3,6 @@ import {BrowserRouter , Route , Routes} from 'react-router-dom';
 import Login from './components/pages/Login'
 import Home from './components/pages/Home'
 import Profile from './components/pages/Profile'
-import ProfileDonor from './components/pages/ProfileD'
 import ProfileEducation from './components/pages/Profile-Education'
 import ProfileFamily from './components/pages/Profile-Family'
 import ProfileScholarship from './components/pages/Profile-Scholarship'
@@ -21,11 +20,10 @@ function App() {
           <Routes>
             <Route exact={true} path="/" element={<Login />} />
             <Route exact={true} path="/Home" element={<Home />} />
-            <Route exact={true} path="/Profile" element={<Profile />} />
-            <Route exact={true} path="/ProfileDonor" element={<ProfileDonor />} />
-            <Route exact={true} path="/Profile-Family" element={<ProfileFamily />} />
-            <Route exact={true} path="/Profile-Education" element={<ProfileEducation />} />
-            <Route exact={true} path="/Profile-Scholarship" element={<ProfileScholarship />} />
+            <Route exact={true} path="/:type/:id/Profile" element={<Profile />} />
+            <Route exact={true} path="/:type/:id/Profile-Family" element={<ProfileFamily />} />
+            <Route exact={true} path="/:type/:id/Profile-Education" element={<ProfileEducation />} />
+            <Route exact={true} path="/:type/:id/Profile-Scholarship" element={<ProfileScholarship />} />
             <Route exact={true} path="/List" element={<List />} />
             <Route exact={true} path="/Logs" element={<Logs />} />
             <Route exact={true} path="/ApplicationForm" element={<AppForm />} />

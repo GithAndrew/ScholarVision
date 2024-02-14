@@ -115,6 +115,10 @@
     padding: 10px;    
 }
 
+.info-white {
+    color: #FFFEF2;
+}
+
 .huge-info-here {
     background-color: #FFFEF2;
     text-align: left;
@@ -123,5 +127,5 @@
 }
 
 .barrier {
-    color: #EFEFEF;   
+    color: #EFEFEF;
 }

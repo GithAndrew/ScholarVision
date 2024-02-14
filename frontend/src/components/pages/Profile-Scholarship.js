@@ -1,23 +1,54 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import Avatar from '../images/Avatar.jpg'
-import {Link} from 'react-router-dom';
+import {React, useState, useEffect} from 'react';
+import {apiUrl} from '../../apiUrl';
+import {Link, useParams} from 'react-router-dom';
 import '../css/Profile.css'
 
 
 function ProfileScholarship () {
+    const [record, setRecord] = useState([]);
+    const {type, id} = useParams();
+
+    useEffect(() => {
+        Promise.all([
+            type === "donor" ? fetch(apiUrl(`/donor/${id}`)) : null,
+            type === "applicant" ? fetch(apiUrl(`/applicant/${id}`)) : null
+        ])
+        .then(([resDonors, resApps]) => {
+            return Promise.all([
+                resDonors ? resDonors.json() : null,
+                resApps ? resApps.json() : null
+            ]);
+        })
+        .then(([dataDonors, dataApps]) => {
+            if (type === "donor") {setRecord(dataDonors);}
+            if (type === "applicant") {setRecord(dataApps);}
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+    }, [type, id]);
+
     return (
         <div>
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
                     <img className="profile-pic" src={Avatar} alt="logo"/>
-                    <div className='name'>NAME C. SURNAME</div>
+                    {record.first_name ? 
+                        <div className='name'>{record.first_name.toUpperCase()} {record.middle_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
+                    : ""}
                     <table className='profile-table'>
                         <tr>&nbsp;</tr>
-                        <tr><td><button className='profile-button'><Link to="/Profile">Personal & Contact</Link></button></td></tr>
-                        <tr><td><button className='profile-button'><Link to="/Profile-Family">Family Background</Link></button></td></tr>
-                        <tr><td><button className='profile-button'><Link to="/Profile-Education">Education</Link></button></td></tr>
+                        <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile`}>Personal & Contact</Link></button></td></tr>
+                        {type !== "donor" ? 
+                            <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile-Family`}>Family Background</Link></button></td></tr>
+                        :""}
+                        {type !== "donor" ? 
+                            <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile-Education`}>Education</Link></button></td></tr>
+                        :""}
                         <tr><td><button className='profile-button-current'>Scholarship</button></td></tr>
                     </table>
                 </div>
