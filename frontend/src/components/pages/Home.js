@@ -31,7 +31,7 @@ function Home () {
             <hr className='horizontal-line'></hr>
 
             <div className='home-row'>
-                <button className='blue-button'><Link to="/List">VIEW <br></br>APPLICANTS</Link></button>
+                <button className='blue-button'><Link to={{ state: { viewValue: "applicant" }, pathname: "/List" }}>VIEW <br></br>APPLICANTS</Link></button>
                 <div>
                     <p className='home-text'>VIEW APPLICANTS</p>
                     <p className='home-desc'> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
@@ -41,7 +41,7 @@ function Home () {
             <hr className='horizontal-line'></hr>
 
             <div className='home-row'>
-                <button className='green-button'><Link to="/List">VIEW <br></br>ACCEPTED</Link></button>
+                <button className='green-button'><Link to={{ pathname: "/List", state: { viewValue: "scholar?value=false" } }}>VIEW <br></br>ACCEPTED</Link></button>
                 <div>
                     <p className='home-text'>VIEW ACCEPTED</p>
                     <p className='home-desc'> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>

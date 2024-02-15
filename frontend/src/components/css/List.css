@@ -151,6 +151,19 @@
     vertical-align: middle;
 }
 
+.list-cell-trash {
+    font-size: 100%;
+    font-weight: bold;
+    display: 'flex';
+    color: #1A1423;
+    vertical-align: middle;
+}
+
+.list-cell-trash :hover{
+    cursor: pointer;
+    color: #C05746;
+}
+
 .last-list-cell {
     font-size: 30px;
     border-top-right-radius: 10px;
@@ -218,4 +231,12 @@
 
 .record-print-button:hover {
     background-color: #1F4F6F;
+}
+
+.none-found {
+    top: 45%;
+    left: 40%;
+    position: absolute;
+    font-weight: bolder;
+    font-size: 200%;
 }
