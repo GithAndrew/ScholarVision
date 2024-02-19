@@ -46,7 +46,7 @@ function List () {
             <label>
                 <select value={value} onChange={(e) => onChange(e.target.value)} className='record-dropdown'>
                     {options.map((option, i) => (
-                    <option key={i} value={option.value} className='record-option'>{option.label}</option>
+                        <option key={i} value={option.value} className='record-option'>{option.label}</option>
                     ))}
                 </select>
             </label>
@@ -108,7 +108,7 @@ function List () {
                 <li><DropDown options = {orderFilter} value = {orderValue} onChange={orderChange}/> </li>
             </ul>
 
-            {/* {record.length !== 0 ? */}
+            {record.length !== 0 ?
                 <div className='scholar-container'>
                     <div className='list-search-container'>
                         <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record"required></input>
@@ -151,8 +151,8 @@ function List () {
                         })}
                     </table>
                 </div>
-            {/* : */}
-                {/* <div className='scholar-container'>
+            :
+                <div className='scholar-container'>
                     <div className='list-search-container'>
                         <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record"required></input>
                         <BsSearch className='list-search-icon'/>
@@ -165,8 +165,8 @@ function List () {
                             )
                         )
                     }
-                </div> */}
-            {/* } */}
+                </div>
+            }
             <Footer/>
         </div>
     )
