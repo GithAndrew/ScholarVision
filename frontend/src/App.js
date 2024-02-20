@@ -13,6 +13,7 @@ import Logs from './components/pages/Logs'
 import Users from './components/pages/Users'
 
 function App() {
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -26,7 +27,7 @@ function App() {
             <Route exact={true} path="/:type/:id/Profile-Scholarship" element={<ProfileScholarship />} />
             <Route exact={true} path="/List" element={<List />} />
             <Route exact={true} path="/Logs" element={<Logs />} />
-            <Route exact={true} path="/ApplicationForm" element={<AppForm />} />
+            <Route exact={true} path="/ApplicationForm" element={<AppForm/>} />
             <Route exact={true} path="/ApplicationFormDonor" element={<AppFormDonor />} />
             <Route exact={true} path="/Users" element={<Users />} />
           </Routes>

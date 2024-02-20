@@ -1,10 +1,177 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import {React} from 'react';
+import {React, useState, useEffect} from 'react';
+import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom'
 import '../css/AppForm.css'
 
 const AppFormDonor = () => {
+
+    let missingFields = [];
+    const [allEmails, setAllEmails] = useState([]);
+
+    const sendData = (e) => {
+        e.preventDefault();
+    
+        const tempEmail = document.getElementById("emailaddress").value;
+        const notuniqueEmail = !allEmails.includes(tempEmail);
+
+        if (notuniqueEmail) {
+            const last_name = getValue("surname", true);
+            const first_name = getValue("firstname", true);
+            const middle_name = getValue("middlename");
+            const suffix = getValue("suffix");
+
+            const address = {
+                street: getValue("streetname", true),
+                subd: getValue("subdivision", true),
+                brgy: getValue("barangay", true),
+                city: getValue("city", true),
+                province: getValue("province", true),
+                postal_code: getValue("postalcode", true)
+            };
+
+            const mobile_no = getValue("contactnum", true);
+            const birthday = getValue("birthdate", true);
+            const birthplace = getValue("birthplace", true);
+            const sex = getValue("sex", true);
+            const citizenship = getValue("citizenship", true);
+            getValue("scholarshipname", true);
+            getValue("grantyear", true);
+            getValue("totalgrant", true);
+            getValue("grantdetails", true);
+            const statement = getValue("appreason", true);
+
+            if(missingFields.length !== 0) {
+                return
+            } else {
+                fetch(apiUrl("/donor"), {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        last_name: last_name,
+                        first_name: first_name,
+                        middle_name: middle_name,
+                        suffix: suffix,
+                        address: address,
+                        mobile_no: mobile_no,
+                        email: tempEmail,
+                        birthday: birthday,
+                        birthplace: birthplace,
+                        sex: sex,
+                        citizenship: citizenship,
+                        statement: statement,
+                        upload_id: ""
+                    })
+                })
+                .then(response => response.json())
+                .then(allEmails.push(tempEmail))
+                .then(getDonorData())
+                .then(alert("Application accepted!"))
+                .catch(error => {
+                    console.error('Error submitting application:', error);
+                });
+            }
+            window.location.reload();
+        } else {
+            alert("Inputted email address already exists!");
+        }
+    }
+
+    const getValue = (id, required = false) => {
+        const element = document.getElementById(id);
+        const value = element ? element.value : '';
+        let showID = ""
+
+        if(missingFields.length !== 0 && missingFields[0] === id) {
+            missingFields = []
+        } else if (missingFields.length !== 0) {
+            return
+        }
+    
+        if (required && value === '') {
+            missingFields.push(id);
+            if (id === "surname") {showID = "Surname"}
+            if (id === "firstname") {showID = "First Name"}
+            if (id === "streetname") {showID = "Address Street Name"}
+            if (id === "subdivision") {showID = "Address Subdivision"}
+            if (id === "barangay") {showID = "Address Barangay"}
+            if (id === "city") {showID = "Address City"}
+            if (id === "province") {showID = "Address Province"}
+            if (id === "postalcode") {showID = "Address Postal Code"}
+            if (id === "studentno") {showID = "Student Number"}
+            if (id === "gradyear") {showID = "Graduation Year"}
+            if (id === "contactnum") {showID = "Contact Number"}
+            if (id === "birthdate") {showID = "Birthday"}
+            if (id === "birthplace") {showID = "Birthplace"}
+            if (id === "sex") {showID = "Sex"}
+            if (id === "citizenship") {showID = "Citizenship"}
+            if (id === "totalgrant") {showID = "Scholarship Total Grant"}
+            if (id === "scholarshipname") {showID = "Scholarship Name"}
+            if (id === "grantdetails") {showID = "Scholarship Grant Details"}
+            if (id === "grantyear") {showID = "Scholarship Grant Year"}
+            if (id === "appreason") {showID = "Personal Statement"}
+            alert(`Missing the value for ${showID}!`);
+        } else {
+            return value;
+        }
+    };
+
+    const getDonorData = () => {
+        Promise.all([
+            fetch(apiUrl(`/donor`))
+        ])
+        .then(([resDonors]) => {
+            return Promise.all([resDonors.json()]);
+        })
+        .then(([dataDonors]) => {
+            sendScholarship(dataDonors[dataDonors.length-1])
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+    }
+
+    const sendScholarship = (donorData) => {
+        fetch(apiUrl("/scholarship"), {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                donor: getValue("firstname") + " " + getValue("surname"),
+                grant: getValue("totalgrant"),
+                scholarshipname: getValue("scholarshipname"),
+                details: "(" + getValue("grantdetails") + ")",
+                year: getValue("grantyear"),
+                donor_id: donorData._id
+            })
+        })
+        .then(response => { return response.json() })
+    }
+    
+    useEffect(() => {
+        Promise.all([
+            fetch(apiUrl(`/donor`))
+        ])
+        .then(([resDonors]) => {
+            return Promise.all([
+                resDonors.json()
+            ]);
+        })
+        .then(([dataDonors]) => {
+            const emails = dataDonors.map(don => don.email);
+            setAllEmails(emails);
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+    }, []);
+
     return (
         <div>
             <Header/>
@@ -17,7 +184,7 @@ const AppFormDonor = () => {
                 <br></br>
                 <button className='buttons'>Download Blank <br></br> Application Form</button>
                 <br></br>
-                <button className='buttons-g'>Submit <br></br> Application</button>
+                <button className='buttons-g' onClick = {sendData}>Submit <br></br> Application</button>
             </div>
 
             <div className='app-form-main'>
@@ -75,7 +242,7 @@ const AppFormDonor = () => {
                                     <td className='table-form-td'><input type = "number" id = "contactnum" required></input></td>
                                     <td className='table-form-td'><input type = "email" id = "emailaddress" required></input></td>
                                 </tr>
-                                <p className='form-subtitle'>Address</p>
+                                <td className='form-subtitle'>Address</td>
                                 <tr className='table-form-tr'>
                                     <th className='table-form-th'>Street Name, House No.</th>
                                     <th className='table-form-th'>Subdivision</th>
@@ -98,15 +265,13 @@ const AppFormDonor = () => {
                                     <td className='table-form-td'><input type = "number" id = "postalcode" required></input></td>
                                 </tr>
 
-                                <p className='form-subtitle'>Scholarship Details</p>
+                                <td className='form-subtitle'>Scholarship Details</td>
                                 <tr className='table-form-tr'>
                                     <th className='table-form-th'>Scholarship Name</th>
-                                    <th className='table-form-th'>Date of Acceptance</th>
                                     <th className='table-form-th'>Year Granted</th>
                                 </tr>
                                 <tr className='table-form-tr'>
                                     <td className='table-form-td'><input type = "text" id = "scholarshipname" required></input></td>
-                                    <td className='table-form-td'><input type = "text" id = "dateofacceptance" required></input></td>
                                     <td className='table-form-td'><input type = "text" id = "grantyear" required></input></td>
                                 </tr>
 

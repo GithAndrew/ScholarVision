@@ -99,3 +99,31 @@
 .logout:hover {
     background-color: #3C6742;
 }
+
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    z-index: 9999;
+}
+
+.alert-info {
+    background-color: #3498db;
+}
+
+.alert-success {
+    background-color: #2ecc71;
+}
+
+.alert-warning {
+    background-color: #f39c12;
+}
+
+.alert-error {
+    background-color: #e74c3c;
+}

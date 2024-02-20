@@ -5,16 +5,17 @@ const Delete = require('../handlers/deleted_hndlr');
 const utils = require('./utils');
 
 exports.findScholarship = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
-    
-    const token = await utils.verifyToken(req);
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
   
-    if (!token.status) {
-        return res.status(token.code).send({ message: token.message });
-    }
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
   
     const id = req.params.id;
   
@@ -40,17 +41,17 @@ exports.findScholarship = async (req, res) => {
 }
 
 exports.findAll = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     if (token.user.role == 'admin' || token.user.role == 'member' || token.user.role == 'scholar' || token.user.role == 'donor') {
         const sort = req.body.sort;
@@ -85,19 +86,19 @@ exports.findAll = async (req, res) => {
 };
 
 exports.addScholarship = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({message: "Unauthorized access"});
-        return;
-    }
-      
-    const token = await utils.verifyToken(req);
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
     
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
-    if (token.user.role == 'admin' || token.user.role == 'member' || token.user.role == 'donor') {
+    // if (token.user.role == 'admin' || token.user.role == 'member' || token.user.role == 'donor') {
         const body = req.body;
 
         const newScholarship = {
@@ -111,31 +112,31 @@ exports.addScholarship = async (req, res) => {
     
         try {
             const scholarship = await Scholarship.create(newScholarship);
-            await Log.create(token.user, 'create', `scholarship ${scholarship._id}`)
+            // await Log.create(token.user, 'create', `scholarship ${scholarship._id}`)
             console.log(`New Scholarship: \n ${scholarship}`);
             return res.status(201).send({ message: 'New Scholarship successfully added' });
         } catch(err) {
             console.log(`Unable to create new Scholarship. Error: ${err}`);
             return res.status(500).send({ message: "Error creating new Scholarship" })
         }
-    } else {
-        console.log("Unauthorized access")
-        return res.status(401).send({message: "Unauthorized access"});
-    }
+    // } else {
+    //     console.log("Unauthorized access")
+    //     return res.status(401).send({message: "Unauthorized access"});
+    // }
 }
 
 exports.editScholarship = async (req,res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({message: "Unauthorized access"});
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
     
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     if (token.user.role == 'admin' || token.user.role == 'member') {
         const body = req.body;
@@ -178,17 +179,17 @@ exports.editScholarship = async (req,res) => {
 }
 
 exports.deleteScholarship = async (req,res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({message: "Unauthorized access"});
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     if (token.user.role == 'admin' || token.user.role == 'member') {
         const idList = req.body.ids;

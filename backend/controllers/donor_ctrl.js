@@ -69,17 +69,17 @@ exports.findAll = async (req, res) => {
 }
 
 exports.search = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     let search = req.query.name;
     let result = new Array;
@@ -110,17 +110,17 @@ exports.search = async (req, res) => {
 }
 
 exports.sortBy = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     let orderby = req.query;
     const key = Object.keys(orderby);
@@ -154,17 +154,17 @@ exports.sortBy = async (req, res) => {
 }
 
 exports.addDonor = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     const body = req.body;
 
@@ -196,7 +196,7 @@ exports.addDonor = async (req, res) => {
 
     try {
         const donor = await Donor.create(newDonor);
-        await Log.create(token.user, 'create', `donor ${donor._id}`);
+        // await Log.create(token.user, 'create', `donor ${donor._id}`);
         console.log(`New donor: \n ${donor}`);
         return res.status(201).send({ message: 'New donor successfully added' });
     } catch (err) {
@@ -206,17 +206,17 @@ exports.addDonor = async (req, res) => {
 }
   
 exports.editDonor = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        res.status(token.code).send({ message: token.message });
-        return;
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     if (token.user.role == 'admin' || token.user.role == 'member') {
         const body = req.body;
@@ -272,15 +272,17 @@ exports.editDonor = async (req, res) => {
 }
   
 exports.deleteDonor = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        return res.status(401).send({ message: "Unauthorized access" });
-    }
-
-    const token = await utils.verifyToken(req);
-
-    if (!token.status) {
-        return res.status(token.code).send({ message: token.message });
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
 
     if (token.user.role == 'admin' || token.user.role == 'member') {
         const idList = req.body.ids;

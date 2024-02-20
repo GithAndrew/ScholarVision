@@ -8,6 +8,22 @@ import '../css/Profile.css'
 
 
 function Profile () {
+
+    function formatDate(birthday) {
+        console.log(birthday)
+        if(birthday !== undefined) {
+            const dateParts = birthday.split('-');
+            const year = parseInt(dateParts[0]);
+            const month = parseInt(dateParts[1]);
+            const day = parseInt(dateParts[2]);
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+            const formattedDate = monthNames[month-1] + ' ' + day + ', ' + year;
+        
+            return formattedDate;
+        }
+    }
+
     const [record, setRecord] = useState([]);
     const {type, id} = useParams();
 
@@ -75,7 +91,7 @@ function Profile () {
                         <tr className='smol'></tr>
                         <tr>
                         <td className='cell-bold'>Birthdate</td>
-                        <td className='info-here'>{record.birthday}</td>
+                        <td className='info-here'>{formatDate(record.birthday)}</td>
                         <td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td>
                         <td className='cell-bold'>Sex</td>
                         <td className='info-here'>{record.sex}</td>

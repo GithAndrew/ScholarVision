@@ -1,10 +1,195 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import {React} from 'react';
+import {React, useEffect, useState} from 'react';
+import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom'
 import '../css/AppForm.css'
 
 const AppForm = () => {
+
+    let missingFields = [];
+    const [allEmails, setAllEmails] = useState([]);
+
+    const sendData = (e) => {
+        e.preventDefault();
+    
+        const tempEmail = document.getElementById("emailaddress").value;
+        const notuniqueEmail = !allEmails.includes(tempEmail);
+
+        if (notuniqueEmail) {    
+            const last_name = getValue("surname", true);
+            const first_name = getValue("firstname", true);
+            const middle_name = getValue("middlename");
+            const suffix = getValue("suffix");
+
+            const address = {
+                street: getValue("streetname", true),
+                subd: getValue("subdivision", true),
+                brgy: getValue("barangay", true),
+                city: getValue("city", true),
+                province: getValue("province", true),
+                postal_code: getValue("postalcode", true)
+            };
+
+            const student_no = getValue("studentno", true);
+            const graduation_year = getValue("gradyear", true);
+            const mobile_no = getValue("contactnum", true);
+            const birthday = getValue("birthdate", true);
+            const birthplace = getValue("birthplace", true);
+            const sex = getValue("sex", true);
+            const citizenship = getValue("citizenship", true);
+            const father_details = getPersonDetails("father");
+            const mother_details = getPersonDetails("mother");
+            const guardian_name = getValue("guardianname");
+            const guardian_contact = getValue("guardiannum");
+            const sibling_details = getSiblingDetails();
+            const educational_bg = getEducationDetails();
+            const statement = getValue("appreason", true);
+
+            if(missingFields.length !== 0) {
+                return
+            } else {
+                fetch(apiUrl("/applicant"), {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        last_name: last_name,
+                        first_name: first_name,
+                        middle_name: middle_name,
+                        suffix: suffix,
+                        address: address,
+                        student_no: student_no,
+                        graduation_year: graduation_year,
+                        mobile_no: mobile_no,
+                        email: tempEmail,
+                        birthday: birthday,
+                        birthplace: birthplace,
+                        sex: sex,
+                        citizenship: citizenship,
+                        father_details: father_details,
+                        mother_details: mother_details,
+                        guardian_name: guardian_name,
+                        guardian_contact: guardian_contact,
+                        sibling_details: sibling_details,
+                        educational_bg: educational_bg,
+                        statement: statement,
+                        upload_id: ""
+                    })
+                })
+                .then(response => response.json())
+                .then(allEmails.push(tempEmail))
+                .then(alert("Application accepted!"))
+                .catch(error => {
+                    console.error('Error submitting application:', error);
+                });
+            }
+            window.location.reload();
+        } else {
+            alert("Inputted email address already exists!");
+        }
+    }
+
+    const getValue = (id, required = false) => {
+        const element = document.getElementById(id);
+        const value = element ? element.value : '';
+        let showID = ""
+
+        if(missingFields.length !== 0 && missingFields[0] === id) {
+            missingFields = []
+        } else if (missingFields.length !== 0) {
+            return
+        }
+    
+        if (required && value === '') {
+            missingFields.push(id);
+            if (id === "surname") {showID = "Surname"}
+            if (id === "firstname") {showID = "First Name"}
+            if (id === "streetname") {showID = "Address Street Name"}
+            if (id === "subdivision") {showID = "Address Subdivision"}
+            if (id === "barangay") {showID = "Address Barangay"}
+            if (id === "city") {showID = "Address City"}
+            if (id === "province") {showID = "Address Province"}
+            if (id === "postalcode") {showID = "Address Postal Code"}
+            if (id === "studentno") {showID = "Student Number"}
+            if (id === "gradyear") {showID = "Graduation Year"}
+            if (id === "contactnum") {showID = "Contact Number"}
+            if (id === "birthdate") {showID = "Birthday"}
+            if (id === "birthplace") {showID = "Birthplace"}
+            if (id === "sex") {showID = "Sex"}
+            if (id === "citizenship") {showID = "Citizenship"}
+            if (id === "appreason") {showID = "Personal Statement"}
+            alert(`Missing the value for ${showID}!`);
+        } else {
+            return value;
+        }
+    };
+    
+    const getPersonDetails = (parent) => ({
+        [`${parent}_name`]: getValue(`${parent}name`),
+        [`${parent}_birthday`]: getValue(`${parent}birthdate`),
+        [`${parent}_citizenship`]: getValue(`${parent}citizenship`),
+        [`${parent}_mobile_no`]: getValue(`${parent}contactnum`),
+        [`${parent}_occupation`]: getValue(`${parent}occupation`),
+        [`${parent}_employer`]: getValue(`${parent}employer`),
+        [`${parent}_business_address`]: getValue(`${parent}businessaddr`),
+        [`${parent}_educ_attainment`]: getValue(`${parent}highesteduatt`),
+        [`${parent}_income`]: getValue(`${parent}annualinc`)
+    });
+    
+    const getSiblingDetails = () => {
+        const siblings = {};
+        for (let i = 1; i <= 5; i++) {
+            const prefix = `sibling${i}-`;
+            siblings[`sibling${i}`] = {
+                name: getValue(`${prefix}name`),
+                age: getValue(`${prefix}age`),
+                civil_status: getValue(`${prefix}civilstatus`),
+                educ_attainment: getValue(`${prefix}educ`),
+                occupation: getValue(`${prefix}occupation`)
+            };
+        }
+        return siblings;
+    }
+    
+    const getEducationDetails = () => {
+        const education = {};
+        for (let i = 1; i <= 5; i++) {
+            education[`educ_bg${i}`] = {
+                level: getValue(`level-${i}`),
+                school: getValue(`school-${i}`),
+                dates: getValue(`inclusive_dates-${i}`),
+                awards: getValue(`scholar-award-${i}`)
+            };
+        }
+        return education;
+    }
+
+    useEffect(() => {
+        Promise.all([
+            fetch(apiUrl(`/applicant`)),
+            fetch(apiUrl(`/scholar?value=false`)),
+            fetch(apiUrl(`/scholar?value=true`))
+        ])
+        .then(([resApps, resAccepted, resScholars]) => {
+            return Promise.all([
+                resApps.json(), resAccepted.json(), resScholars.json()
+            ]);
+        })
+        .then(([dataApps, dataAccepted, dataScholars]) => {
+            const emails = dataApps.map(app => app.email)
+                .concat(dataAccepted.map(acc => acc.email))
+                .concat(dataScholars.map(sch => sch.email));          
+            setAllEmails(emails);
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+    }, []);
+
+
     return (
         <div>
             <Header/>
@@ -17,7 +202,7 @@ const AppForm = () => {
                 <br></br>
                 <button className='buttons'>Download Blank <br></br> Application Form</button>
                 <br></br>
-                <button className='buttons-g'>Submit <br></br> Application</button>
+                <button className='buttons-g' onClick = {sendData}>Submit <br></br> Application</button>
             </div>
 
             <div className='app-form-main'>
@@ -32,13 +217,11 @@ const AppForm = () => {
                                     <th className='table-form-th'>Surname</th>
                                     <th className='table-form-th'>First Name</th>
                                     <th className='table-form-th'>Middle Name</th>
-                                    <th rowspan="6">
+                                    <th rowSpan="6">
                                         <div className='upload-photo-box'>
-                                            <form>
-                                                <label for="upload-photo">Upload Picture Here<br></br>(1x1 or 2x2)</label>
-                                                <input type="file" name="photo" id="upload-photo"/>
-                                                <button type="submit" className='submit-button'>Submit Photo</button>
-                                            </form> 
+                                            <label htmlFor="upload-photo">Upload Picture Here<br></br>(1x1 or 2x2)</label>
+                                            <input type="file" name="photo" id="upload-photo"/>
+                                            <button type="submit" className='submit-button'>Submit Photo</button>
                                         </div>
                                     </th>
                                 </tr>
@@ -85,7 +268,7 @@ const AppForm = () => {
                                     <td className='table-form-td'><input type = "number" id= "gradyear" required></input></td>
 
                                 </tr>
-                                <p className='form-subtitle'>Address</p>
+                                <td className='form-subtitle'>Address</td>
                                 <tr className='table-form-tr'>
                                     <th className='table-form-th'>Street Name, House No.</th>
                                     <th className='table-form-th'>Subdivision</th>
@@ -332,7 +515,7 @@ const AppForm = () => {
                 <div className='backgrounds'>
                     <h4 className='form-sections'>PERSONAL STATEMENT</h4>
                     <div className='agreement'>State the reason/s for applying for financial assistance.</div>
-                    <textarea className='text-area' id = "appreason"></textarea>
+                    <textarea className='text-area' id = "appreason" required></textarea>
                 </div>
 
                 <div className='backgrounds'>
