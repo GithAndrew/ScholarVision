@@ -1,0 +1,131 @@
+.view-users-body{
+    background-color: #FFFEF2;
+    width: 100%;
+    height:100%;
+    position:fixed;
+    top:60px;
+}
+
+.user-tile{
+    width: 43%;
+    border-color: #9E9E9E;
+    border-style: solid;
+    border-width: 7px;
+    padding: 10px;
+    margin-right: 2.5%;
+    margin-bottom:10px;
+    text-align: left;
+    display:flex;
+    float:left;
+    height: auto;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.user-tile:hover{
+    background-color: #EBEBEB;
+}
+
+.user-name{
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    padding-right: 5px;
+}   
+
+.user-name span{
+    font-family: "Inter";
+    font-weight: 300;
+    font-size: 14px;
+    padding-top: 10px;
+}
+
+.user-odd-tile{
+    width:43%;
+    border-color: #9E9E9E;
+    border-style: solid;
+    border-width: 7px;
+    text-align: left;
+    padding: 10px;
+    margin-bottom:10px;
+    display:flex;
+    height: auto;
+    cursor:pointer;
+    border-radius: 10px;
+}
+
+.user-odd-tile:hover{
+    background-color: #EBEBEB;
+}
+
+.no-users{
+    text-align: center;
+    font-family: Optima;
+    margin-top: 10%;
+    font-size: 18px;
+}
+
+.no-users button{
+    background-color: white;
+    border:1px solid gray;
+    outline:none;
+    padding: 10px 15px ;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.no-users button:hover{
+    background-color: #EBEBEB;
+}
+
+.delete-button{
+    border:none;
+    outline:none;
+    width: auto;
+    margin: 12px 0px 12px 0px;
+    font-size: 15px;
+    font-family: "Inter", sans-serif;
+    background-color: #E5E5E5;
+    border-radius: 10px;
+    font-weight: bold;
+    padding:7px 10px;
+    margin-left: auto;
+    display: block;
+    cursor:pointer;
+}
+
+.delete-button:hover{
+    background-color: #C05746;
+    color: white;
+}
+
+.tile-page{
+    width: 67%;
+    margin-top: 15px;
+    margin-left: 17.8%;
+    margin-bottom: 18%;
+}
+
+.user-dp{
+    margin-right: 15px;
+    object-fit: cover;
+    width: 55px;
+    height: 55px;
+    border-radius: 4px;
+}
+
+.add-user-button{
+    background-color: #C05746;
+    color: #FFFEF2;
+    padding: 5px 9px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 50px;
+    margin-top: 13%;
+    margin-right: 5%;
+    font-family: "Inter", sans-serif;
+}
+
+.add-user-button:hover{
+    background-color: #A74839;
+}

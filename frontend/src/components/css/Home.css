@@ -1,0 +1,98 @@
+body {
+    background-color: #FFFEF2;
+    overflow: auto;
+}
+
+.home-main-text {
+    font-family: "Inter", sans-serif;
+    padding-top: 7%;
+    font-weight: bold;
+    font-size: 450%;
+    padding-left: 2.5%;
+}
+
+.home-row {
+    display: flex;
+    align-items: center;
+    padding-left: 3%;
+}
+
+.home-desc {
+    font-family: "Inter", sans-serif;
+    margin: 0;
+    font-size: 300%;
+    padding-left: 2.5%;
+    padding-right: 10%;
+    padding-bottom: 3%;
+}
+
+.horizontal-line {
+    border-top: 2000% solid;
+}
+
+.home-text {
+    font-family: "Inter", sans-serif;
+    text-align: left;
+    padding-top: 1%;
+    font-weight: bold;
+    font-size: 450%;
+    padding-left: 2.5%;
+}
+
+.green-button {
+    font-family: "Inter", sans-serif;
+    background-color: #4B7F52;
+    border: none;
+    border-radius: 40px;
+    height: 300px;
+    width: 500px;
+    text-align: center;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.green-button :link {
+    color: #FFFEF2;
+    text-decoration: none;
+    font-size: 300%;
+}
+
+.green-button :visited {
+    color: #FFFEF2;
+    text-decoration: none;
+    font-size: 300%;
+}
+
+.green-button:hover {
+    background-color: #3C6742;
+}
+
+.blue-button {
+    font-family: "Inter", sans-serif;
+    background-color: #255F85;
+    border: none;
+    border-radius: 40px;
+    height: 300px;
+    width: 500px;
+    text-align: center;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.blue-button :link {
+    color: #FFFEF2;
+    text-decoration: none;
+    font-size: 300%;
+}
+
+.blue-button :visited {
+    color: #FFFEF2;
+    text-decoration: none;
+    font-size: 300%;
+}
+
+.blue-button:hover {
+    background-color: #1F4F6F;
+}
