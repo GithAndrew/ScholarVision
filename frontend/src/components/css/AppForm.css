@@ -161,6 +161,7 @@
 .text-area {
     width: 700px;
     height: 150px;
+    padding: 10px;
 }
 
 .agreement {

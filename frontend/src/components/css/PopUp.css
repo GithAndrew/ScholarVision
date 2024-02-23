@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Adjust the transparency level here (0.5 means 50% opacity) */
+    background-color: #1A142340;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,7 +35,7 @@
     margin-top: 0.5%;
     line-height: 20px;
     text-align: center;
-    border: 1px solid #999;
+    border: 1px solid #888888;
     font-size: 20px;
 }
 
@@ -66,27 +66,16 @@
     width: 100%;
 }
 
-.popup-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .delete-popup-box {
     background-color: white;
     border: 1px solid #ccc;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 1px #1A1423;
 }
 
 .delete-label {
+    font-family: "Inter", sans-serif;
     text-align: center;
     font-size: 18px;
     font-weight: bold;
@@ -124,4 +113,76 @@
 
 .delete-red-button:hover{
     background-color: #A74839;
+}
+
+.add-popup-box {
+    position: relative;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 30%;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 1px #1A1423;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add-close-icon {
+    position: absolute;
+    top: 5%;
+    right: 2%;
+    background: #C05746;
+    color: #FFFEF2;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    line-height: 20px;
+    text-align: center;
+    border: 1px solid #888888;
+    font-size: 20px;
+}
+
+.add-close-icon:hover{
+    background-color: #A74839;
+    cursor: pointer;
+}
+
+.add-label {
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bolder;
+    margin-bottom: 15px;
+}
+
+.add-input {
+    font-family: "Inter", sans-serif;
+    width: 100%;
+    padding: 8px;
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: #E5E5E5;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0 0 2px #1A1423;
+}
+
+.add-input::placeholder {
+    text-align: center;
+}
+
+.add-green-button {
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4B7F52;
+    color: #EFEFEF;
+}
+
+.add-green-button:hover {
+    background-color: #3C6742;
+    cursor: pointer;
 }

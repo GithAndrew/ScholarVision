@@ -24,13 +24,13 @@ function DeletePopUp (props) {
         <div>
             <Header/>
             <div className='popup-wrapper'>
-            <div className="delete-popup-box">
-                <p className='delete-label'>Confirm Deletion?</p>
-                <div className="delete-buttons">
-                    <button className='delete-red-button' onClick = {() => deletePerson(toDelete._id)}>Delete</button>
-                    <button className='delete-gray-button' onClick={props.handleClose}>Cancel</button>
+                <div className="delete-popup-box">
+                    <p className='delete-label'>Confirm Deletion?</p>
+                    <div className="delete-buttons">
+                        <button className='delete-red-button' onClick = {() => deletePerson(toDelete._id)}>Delete</button>
+                        <button className='delete-gray-button' onClick={props.handleClose}>Cancel</button>
+                    </div>
                 </div>
-            </div>
             </div>
             <Footer/>
         </div>

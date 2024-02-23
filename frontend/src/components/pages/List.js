@@ -7,13 +7,14 @@ import {Link} from 'react-router-dom';
 import {BsSearch, BsTrash}  from 'react-icons/bs';
 import DonorPopUp from '../components/DonorPopUp';
 import DeletePopUp from '../components/DeletePopUp';
+import AddPopUp from '../components/AddPopUp';
 import '../css/List.css'
 
 function List () {
     // const location = useLocation();
     // console.log(location)
     // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
-    const [viewValue, setViewValue] = useState("scholar?value=false");
+    const [viewValue, setViewValue] = useState("applicant");
     const [orderValue, setOrderValue] = useState("name");
     const [assignScholar, setAssign] = useState([]);
     const [assignDelete, setDelete] = useState([]);
@@ -21,13 +22,13 @@ function List () {
     const [record, setRecord] = useState([]);
     const [openDonor, setOpenDonor] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
+    const [openAdd, setAddField] = useState(false);
 
     const viewFilter = [
         {label:'SCHOLAR', value:'scholar?value=true'},
         {label:'DONOR', value:'donor'},
         {label:'ACCEPTED', value:'scholar?value=false'},
-        {label:'APPLICANT', value:'applicant'},
-        {label:'ADD FIELD', value:'newfield'}
+        {label:'APPLICANT', value:'applicant'}
     ]
 
     const orderFilter = [
@@ -62,6 +63,10 @@ function List () {
 
     const toggleDeletePopup = () => {
         setOpenDelete(!openDelete);
+    }
+
+    const toggleAddPopup = () => {
+        setAddField(!openAdd);
     }
 
     const acceptApplicant = (person) => {
@@ -111,6 +116,58 @@ function List () {
             })
             
         }).then(response => {return response.json()})
+        .then(setTimeout(() => window.location.reload(), 450))
+    }
+
+    const editAppLink = (person, i) => {
+        let current_link = "app_link" + i
+        const element = document.getElementById(current_link);
+        const value = element ? element.value : '';
+        const urlPattern = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
+        // https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
+
+        if (value === '') {
+            alert("No link inputted!");
+            return;
+        }
+
+        if (!urlPattern.test(value)) {
+            alert("Not a valid link!");
+            return;
+        }
+
+        fetch(apiUrl("/" + [viewValue] + "/" + person._id),{
+            method: "PUT",
+            credentials:'include',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify({
+                first_name: person.first_name,
+                last_name: person.last_name,
+                middle_name: person.middle_name,
+                suffix: person.suffix,
+                address: person.address,
+                student_no: person.student_no,
+                graduation_year: person.graduation_year,
+                mobile_no: person.mobile_no,
+                email: person.email,
+                birthday: person.birthday,
+                birthplace: person.birthplace,
+                sex: person.sex,
+                citizenship: person.citizenship,
+                father_details: person.father_details,
+                mother_details: person.mother_details,
+                guardian_name: person.guardian_name,
+                guardian_contact: person.guardian_contact,
+                sibling_details: person.sibling_details,
+                educational_bg: person.educational_bg,
+                statement: person.statement,
+                upload_id: person.upload_id,
+                applicant_link: document.getElementById(current_link).value
+            })
+        })
+        .then(response => {return response.json()})
         .then(setTimeout(() => window.location.reload(), 450))
     }
 
@@ -175,6 +232,7 @@ function List () {
             }
 
             <ul className='record-dropdowns'>
+                <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>
                 <li><button className = 'record-print-button'>PRINT</button></li>
                 <li><DropDown options = {viewFilter} value = {viewValue} onChange={viewChange} type = "view"/></li>
                 <li><DropDown options = {orderFilter} value = {orderValue} onChange={orderChange}/> </li>
@@ -196,10 +254,11 @@ function List () {
                             {viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
                             {viewValue === "applicant" ? <th className='list-head'>ACCEPT?</th> : ""}
                             {viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
-                            <th className='list-head'>ADD</th>
+                            <th className='list-head'></th>
                         </tr>
                         <tr className='smol'></tr>
                         {record.map((person, i) => {
+                            let app_files = "app_link" + i
                             return (
                                 <tr className='list-row' key = {i}>
                                     {viewValue === 'scholar?value=true' || viewValue === 'scholar?value=false' ? 
@@ -221,8 +280,11 @@ function List () {
                                                         : " "
                                             )
                                         })
-                                    : ""}                                    
-                                    {viewValue !== "donor" ? <td className='list-cell'><a href={`http://${person.applicant_link}`} target="_blank" rel="noreferrer" className='email-color'>link</a></td> : ""}
+                                    : ""}
+                                    {(viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='email-color'>link</a> </td> :
+                                        viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {app_files} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
+                                    : ""}
+                                    {/* {viewValue === "donor" ? <td className='list-cell'><a href={`http://${person.applicant_link}`} target="_blank" rel="noreferrer" className='email-color'>link</a></td> : ""} */}
                                     {viewValue === "scholar?value=false" ? <td className='list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
                                     {viewValue === "applicant" ?
                                         <td className='list-cell'>
@@ -255,6 +317,9 @@ function List () {
                     }
                 </div>
             }
+            {openAdd ? <AddPopUp
+                handleClose = {toggleAddPopup}
+            /> : ""}
             {openDonor ? <DonorPopUp
                 scholar = {assignScholar}
                 handleClose = {toggleDonorPopup}
