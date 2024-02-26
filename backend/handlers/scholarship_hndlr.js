@@ -59,6 +59,7 @@ exports.edit = (object) =>{
             scholarship.details = object.details
             scholarship.scholarshipname = object.scholarshipname
             scholarship.year = object.year
+            scholarship.acceptancedate = object.acceptancedate
             scholarship.donor_id = object.donor_id
             
             scholarship.save((err, scholarship) => {

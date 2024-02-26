@@ -260,6 +260,7 @@ exports.addScholar = async (req, res) => {
         sibling_details: body.sibling_details,
         educational_bg: body.educational_bg,
         statement: body.statement,
+        applicant_link: body.applicant_link,
         scholarship_id: body.scholarship_id,
         upload_id: body.upload_id
     };
@@ -325,6 +326,7 @@ exports.editScholar = async (req, res) => {
             sibling_details: body.sibling_details,
             educational_bg: body.educational_bg,
             statement: body.statement,
+            applicant_link: body.applicant_link,
             scholarship_id: body.scholarship_id,
             upload_id: body.upload_id
         };

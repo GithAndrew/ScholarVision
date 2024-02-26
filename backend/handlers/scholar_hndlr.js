@@ -64,6 +64,7 @@ exports.edit = (object) =>{
             scholar.mobile_no = object.mobile_no
             scholar.email = object.email
             scholar.scholarship_id = object.scholarship_id
+            scholar.applicant_link = object.applicant_link
             scholar.upload_id = object.upload_id
             
             scholar.save((err, scholar) => {

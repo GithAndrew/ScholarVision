@@ -23,6 +23,7 @@ const ScholarSchema = new mongoose.Schema(
         sibling_details:  {type: Object},
         educational_bg: {type: Object},
         statement: {type: String},
+        applicant_link: {type: String},
         scholarship_id: {type: String},
         upload_id: {type: String}
     }

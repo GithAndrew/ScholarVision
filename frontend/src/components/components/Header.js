@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import SVLogo from '../images/SVLogo.png'
 import SchoolLogo from '../images/SchoolLogo.png'
-// import ProfilePic from '../images/ProfilePic.png'
 import ProfilePic from '../images/drewllibee.jpg'
 import '../css/Header.css';
 
