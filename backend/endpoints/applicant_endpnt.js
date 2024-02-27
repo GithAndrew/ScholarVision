@@ -3,11 +3,12 @@ const Router = require('express').Router;
 
 const Applicant = Router();
 
-Applicant.get('/:id', ApplicantController.findApplicant);
-Applicant.get('/', ApplicantController.findAll);
-Applicant.get('/search', ApplicantController.search);
 Applicant.post('/', ApplicantController.addApplicant);
 Applicant.put('/:id', ApplicantController.editApplicant);
 Applicant.delete('/', ApplicantController.deleteApplicant);
+Applicant.get('/search', ApplicantController.search);
+Applicant.get('/orderby', ApplicantController.sortBy);
+Applicant.get('/:id', ApplicantController.findApplicant);
+Applicant.get('/', ApplicantController.findAll);
 
 module.exports = Applicant;

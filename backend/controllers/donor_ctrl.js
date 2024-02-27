@@ -125,31 +125,32 @@ exports.sortBy = async (req, res) => {
     let orderby = req.query;
     const key = Object.keys(orderby);
     const value = Object.values(orderby);
+
     try {
-        if (key[0] === 'name') {
-            const donor = await Donor.getAllSorted({ last_name: parseInt(value) });
-            if (!donor) {
-                console.log("Donor database is empty");
-                return res.status(404).send({ message: `No donor in database` });
-            } else {
-                return res.status(200).send(donor);
-            }
-        } else if (key[0] === 'grant') {
-            const sortedArr = new Array;
-            const donor = await Donor.getAll();
-            const scholarship = await Scholarship.getAllSorted(parseInt(value));
-            for (i = 0; i < scholarship.length; i++) {
-                for (j = 0; j < donor.length; j++) {
-                    if (scholarship[i].donor_id == donor[j]._id) {
-                        sortedArr.push(donor[j]);
-                    }
-                }
-            }
-            return res.status(200).send(sortedArr);
+        const toSort = key[0];
+        const donor = await Donor.getAllSorted({ [toSort]: parseInt(value) });
+        if (!donor) {
+            console.log("Donor database is empty");
+            return res.status(404).send({ message: `No donor in database` });
+        } else {
+            return res.status(200).send(donor);
         }
+        // if (key[0] === 'grant') {
+        //     const sortedArr = new Array;
+        //     const donor = await Donor.getAll();
+        //     const scholarship = await Scholarship.getAllSorted(parseInt(value));
+        //     for (i = 0; i < scholarship.length; i++) {
+        //         for (j = 0; j < donor.length; j++) {
+        //             if (scholarship[i].donor_id == donor[j]._id) {
+        //                 sortedArr.push(donor[j]);
+        //             }
+        //         }
+        //     }
+        //     return res.status(200).send(sortedArr);
+        // }
     } catch (err) {
-        console.log(`Error searching for scholar in the DB ${err}`);
-        return res.status(500).send({ message: 'Error searching for scholar' });
+        console.log(`Error searching for donor in the DB ${err}`);
+        return res.status(500).send({ message: 'Error searching for donor' });
     }
 }
 

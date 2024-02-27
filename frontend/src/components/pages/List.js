@@ -9,13 +9,14 @@ import DonorPopUp from '../components/DonorPopUp';
 import DeletePopUp from '../components/DeletePopUp';
 import AddPopUp from '../components/AddPopUp';
 import '../css/List.css'
+import OrderPopUp from '../components/OrderPopUp';
 
 function List () {
     // const location = useLocation();
     // console.log(location)
     // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
     const [viewValue, setViewValue] = useState("applicant");
-    const [orderValue, setOrderValue] = useState("name");
+    const [orderValue, setOrderValue] = useState("");
     const [assignScholar, setAssign] = useState([]);
     const [assignDelete, setDelete] = useState([]);
     const [scholarships, setScholarships] = useState([]);
@@ -23,6 +24,7 @@ function List () {
     const [openDonor, setOpenDonor] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openAdd, setAddField] = useState(false);
+    const [openOrder, setOpenOrder] = useState(false);
 
     const viewFilter = [
         {label:'SCHOLAR', value:'scholar?value=true'},
@@ -32,13 +34,18 @@ function List () {
     ]
 
     const orderFilter = [
-        {label: 'NONE', value: ''},
-        {label: 'AMOUNT', value: 'grant'},
-        {label: 'NAME', value: 'name'},
-        {label: 'GRAD YEAR', value: 'grad'},
-        {label:'ADD FIELD', value:'newfield'}
-    ]
-
+        { label: 'NONE', value: '' },
+        { label: 'LAST NAME', value: 'last_name' },
+        { label: 'FIRST NAME', value: 'first_name' },
+        { label: 'GRAD YEAR', value: 'graduation_year' },
+        { label: 'ADD FIELD', value: 'newfield' }
+    ];
+    
+    console.log(orderValue)
+    if (viewValue === "scholar?value=true") {
+        orderFilter.splice(1, 0, { label: 'AMOUNT', value: 'grant' });
+    }
+    
     const viewChange = (selectedValue) => {
         setViewValue(selectedValue);
     }
@@ -67,6 +74,11 @@ function List () {
 
     const toggleAddPopup = () => {
         setAddField(!openAdd);
+    }
+
+    const toggleOrderPopup = () => {
+        setOpenOrder(!openOrder);
+        if (openOrder === false) {setTimeout(() => window.location.reload(), 450)}
     }
 
     const acceptApplicant = (person) => {
@@ -186,14 +198,22 @@ function List () {
     // SOURCE: https://medium.com/@jdhawks/make-fetch-s-happen-5022fcc2ddae
     useEffect(() => {
         Promise.all([
+            orderValue !== '' && viewValue === "donor" ? fetch(apiUrl(`/donor/orderby?${orderValue}=1`)) : null,
+            orderValue !== '' && viewValue === "applicant" ? fetch(apiUrl(`/applicant/orderby?${orderValue}=1`)) : null,
+            orderValue !== '' && viewValue === "scholar?value=false" ? fetch(apiUrl(`/scholar/orderby?${orderValue}=1&value=false`)) : null,
+            orderValue !== '' && viewValue === "scholar?value=true" ? fetch(apiUrl(`/scholar/orderby?${orderValue}=1&value=true`)) : null,
             viewValue === "donor" ? fetch(apiUrl(`/donor`)) : null,
             viewValue === "applicant" ? fetch(apiUrl(`/applicant`)) : null,
             viewValue === "scholar?value=false" ? fetch(apiUrl(`/scholar?value=false`)) : null,
             viewValue === "scholar?value=true" ? fetch(apiUrl(`/scholar?value=true`)) : null,
             fetch(apiUrl(`/scholarship`))
         ])
-        .then(([resDonors, resApps, resAccepted, resScholars, resScholarships]) => {
+        .then(([resDonorsO, resAppsO, resAcceptedO, resScholarsO, resDonors, resApps, resAccepted, resScholars, resScholarships]) => {
             return Promise.all([
+                resDonorsO ? resDonorsO.json() : null,
+                resAppsO ? resAppsO.json() : null,
+                resAcceptedO ? resAcceptedO.json() : null,
+                resScholarsO ? resScholarsO.json() : null,
                 resDonors ? resDonors.json() : null,
                 resApps ? resApps.json() : null,
                 resAccepted ? resAccepted.json() : null,
@@ -201,17 +221,24 @@ function List () {
                 resScholarships.json()
             ]);
         })
-        .then(([dataDonors, dataApps, dataAccepted, dataScholars, dataScholarship]) => {
-            if (viewValue === "donor") {setRecord(dataDonors);}
-            if (viewValue === "applicant") {setRecord(dataApps);}
-            if (viewValue === "scholar?value=false") {setRecord(dataAccepted);}
-            if (viewValue === "scholar?value=true") {setRecord(dataScholars);}
+        .then(([dataDonorsO, dataAppsO, dataAcceptedO, dataScholarsO, dataDonors, dataApps, dataAccepted, dataScholars, dataScholarship]) => {
+            if (orderValue !== '') {
+                if (viewValue === "donor") {setRecord(dataDonorsO);}
+                if (viewValue === "applicant") {setRecord(dataAppsO);}
+                if (viewValue === "scholar?value=false") {setRecord(dataAcceptedO);}
+                if (viewValue === "scholar?value=true") {setRecord(dataScholarsO);}
+            } else {
+                if (viewValue === "donor") {setRecord(dataDonors);}
+                if (viewValue === "applicant") {setRecord(dataApps);}
+                if (viewValue === "scholar?value=false") {setRecord(dataAccepted);}
+                if (viewValue === "scholar?value=true") {setRecord(dataScholars);}    
+            }
             setScholarships(dataScholarship);
         })
         .catch(error => {
             console.error("Error fetching data:", error);
         });
-    }, [viewValue]);
+    }, [orderValue, viewValue]);
 
     return (
         <div>
@@ -284,7 +311,6 @@ function List () {
                                     {(viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='email-color'>link</a> </td> :
                                         viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {app_files} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
                                     : ""}
-                                    {/* {viewValue === "donor" ? <td className='list-cell'><a href={`http://${person.applicant_link}`} target="_blank" rel="noreferrer" className='email-color'>link</a></td> : ""} */}
                                     {viewValue === "scholar?value=false" ? <td className='list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
                                     {viewValue === "applicant" ?
                                         <td className='list-cell'>
@@ -317,6 +343,11 @@ function List () {
                     }
                 </div>
             }
+            {orderValue === "newfield" && <OrderPopUp
+                record = {record}
+                orderFilter = {orderFilter}
+                handleClose = {toggleOrderPopup}
+            />}
             {openAdd ? <AddPopUp
                 handleClose = {toggleAddPopup}
             /> : ""}

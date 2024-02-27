@@ -28,6 +28,16 @@ exports.getAll = () => {
     });
 }
 
+exports.getAllSorted = (query) => {
+    return new Promise((resolve, reject) => {
+        Applicant.find((err,applicant) => {
+            if(err) {reject(err); }
+            resolve(applicant)
+        })
+        .sort(query)
+    });
+}
+
 exports.create = (object) => {
     return new Promise((resolve,reject) => {
         const newApplicant = new Applicant(object);

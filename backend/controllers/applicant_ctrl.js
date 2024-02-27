@@ -111,6 +111,38 @@ exports.search = async (req, res) => {
     }
 }
 
+exports.sortBy = async (req, res) => {
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+  
+    // const token = await utils.verifyToken(req);
+    
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
+
+    let orderby = req.query;
+    const key = Object.keys(orderby);
+    const value = Object.values(orderby);
+
+    try {
+        const toSort = key[0];
+        const applicant = await Applicant.getAllSorted({ [toSort]: parseInt(value) });
+        if (!applicant) {
+            console.log("Applicant database is empty");
+            return res.status(404).send({ message: `No applicant in database` });
+        } else {
+            return res.status(200).send(applicant);
+        }
+    } catch (err) {
+        console.log(`Error searching for applicant in the DB ${err}`);
+        return res.status(500).send({ message: 'Error searching for applicant' });
+    }
+}
+
 exports.addApplicant = async (req, res) => {
     const body = req.body;
 

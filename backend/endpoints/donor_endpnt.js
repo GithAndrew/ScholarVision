@@ -3,12 +3,12 @@ const Router = require('express').Router;
 
 const Donor = Router();
 
-Donor.get('/:id', DonorController.findDonor);
-Donor.get('/', DonorController.findAll);
-Donor.get('/search', DonorController.search);
-Donor.get('/orderby', DonorController.sortBy);
 Donor.post('/', DonorController.addDonor);
 Donor.put('/:id', DonorController.editDonor);
 Donor.delete('/', DonorController.deleteDonor);
+Donor.get('/search', DonorController.search);
+Donor.get('/orderby', DonorController.sortBy);
+Donor.get('/', DonorController.findAll);
+Donor.get('/:id', DonorController.findDonor);
 
 module.exports = Donor;
