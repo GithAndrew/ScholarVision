@@ -41,8 +41,9 @@ const AppFormDonor = () => {
             getValue("totalgrant", true);
             getValue("grantdetails", true);
             const statement = getValue("appreason", true);
+            getValue("agree", true);
 
-            if(missingFields.length !== 0) {
+            if (missingFields.length !== 0) {
                 return
             } else {
                 fetch(apiUrl("/donor"), {
@@ -84,6 +85,15 @@ const AppFormDonor = () => {
     const getValue = (id, required = false) => {
         const element = document.getElementById(id);
         const value = element ? element.value : '';
+
+        if (id === 'agree') {
+            if (document.getElementById(id).checked === false) {
+                missingFields.push(id);
+                alert("Check the agreement.");
+                return;
+            }
+        }
+        
         let showID = ""
 
         if (id === "emailaddress") {

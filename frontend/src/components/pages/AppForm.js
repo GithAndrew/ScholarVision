@@ -45,8 +45,9 @@ const AppForm = () => {
             const sibling_details = getSiblingDetails();
             const educational_bg = getEducationDetails();
             const statement = getValue("appreason", true);
+            getValue("agree", true);
 
-            if(missingFields.length !== 0) {
+            if (missingFields.length !== 0) {
                 return
             } else {
                 fetch(apiUrl("/applicant"), {
@@ -95,6 +96,15 @@ const AppForm = () => {
     const getValue = (id, required = false) => {
         const element = document.getElementById(id);
         const value = element ? element.value : '';
+
+        if (id === 'agree') {
+            if (document.getElementById(id).checked === false) {
+                missingFields.push(id);
+                alert("Check the agreement.");
+                return;
+            }
+        }
+
         let showID = ""
 
         if (id === "emailaddress") {
@@ -545,7 +555,7 @@ const AppForm = () => {
                     financial benefits received. 
                     </div>
                     <label>
-                        <input type='checkbox'></input>
+                        <input type='checkbox' id='agree'></input>
                         &nbsp;I agree. <span className='for-required'>*</span>
                     </label>
                 </div>

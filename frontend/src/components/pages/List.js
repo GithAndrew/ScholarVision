@@ -15,6 +15,7 @@ function List () {
     // const location = useLocation();
     // console.log(location)
     // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
+    let input;
     const [viewValue, setViewValue] = useState("applicant");
     const [orderValue, setOrderValue] = useState("");
     const [assignScholar, setAssign] = useState([]);
@@ -33,19 +34,14 @@ function List () {
         {label:'APPLICANT', value:'applicant'}
     ]
 
-    const orderFilter = [
+    const [orderFilter, setOrderFilter] = useState([
         { label: 'NONE', value: '' },
         { label: 'LAST NAME', value: 'last_name' },
         { label: 'FIRST NAME', value: 'first_name' },
         { label: 'GRAD YEAR', value: 'graduation_year' },
-        { label: 'ADD FIELD', value: 'newfield' }
-    ];
-    
-    console.log(orderValue)
-    if (viewValue === "scholar?value=true") {
-        orderFilter.splice(1, 0, { label: 'AMOUNT', value: 'grant' });
-    }
-    
+        { label: 'ADD VIEW', value: 'newfield' }
+    ]);
+
     const viewChange = (selectedValue) => {
         setViewValue(selectedValue);
     }
@@ -78,7 +74,46 @@ function List () {
 
     const toggleOrderPopup = () => {
         setOpenOrder(!openOrder);
-        if (openOrder === false) {setTimeout(() => window.location.reload(), 450)}
+        setOrderValue("")
+    }
+
+    const updateOrderFilter = (newValue) => {
+        const newAttribute = newValue.replace(' ', '_').replace('Number', 'no');
+        orderFilter.splice(1, 0, { label: newValue.toUpperCase(), value: newAttribute.toLowerCase() });
+        setOrderFilter(orderFilter)
+        setOrderValue(newAttribute.toLowerCase())
+    }
+
+    const handleUserInput = (e) => {
+        input = e.target.value;
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        let inputLink = ""
+
+        if (input !== '' && input !== undefined && viewValue === "donor") {inputLink = (apiUrl(`/donor/search?name=${input}`))}
+        if (input !== '' && input !== undefined && viewValue === "applicant") {inputLink = (apiUrl(`/applicant/search?name=${input}`))}
+        if (input !== '' && input !== undefined && viewValue === "scholar?value=false") {inputLink = (apiUrl(`/scholar/search?name=${input}&value=false`))}
+        if (input !== '' && input !== undefined && viewValue === "scholar?value=true") {inputLink = (apiUrl(`/scholar/search?name=${input}&value=true`))}
+
+        if (inputLink !== "") {
+            fetch(inputLink, {
+                method: "GET",
+                credentials:'include',
+            })
+            .then(response => {return response.json()})
+            .then((data) => {setRecord(data.result)})
+        } else {
+            fetch(apiUrl(`/${viewValue}`),
+            {
+                method: "GET",
+                credentials:'include'
+            })
+            .then(response => {return response.json()})
+            .then((data) => {setRecord(data)})
+        }
     }
 
     const acceptApplicant = (person) => {
@@ -108,16 +143,18 @@ function List () {
                 guardian_contact: person.guardian_contact,
                 sibling_details:  person.sibling_details,
                 educational_bg: person.educational_bg,
+                applicant_link: person.applicant_link,
                 statement: person.statement,
                 upload_id: person.upload_id
             })
         })
         .then(response => {return response.json()})
+        .then(alert("The applicant is accepted!"))
         .then(deletePerson(person._id))
     }
 
     const deletePerson = (id) => {
-        fetch(apiUrl("/" + [viewValue] + "/"), {
+        fetch(apiUrl(`/${viewValue}/`), {
             method: "DELETE",
             credentials:'include',
             headers:{
@@ -132,7 +169,7 @@ function List () {
     }
 
     const editAppLink = (person, i) => {
-        let current_link = "app_link" + i
+        let current_link = `app_link${i}`
         const element = document.getElementById(current_link);
         const value = element ? element.value : '';
         const urlPattern = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/;
@@ -180,6 +217,7 @@ function List () {
             })
         })
         .then(response => {return response.json()})
+        .then(alert("Link submitted!"))
         .then(setTimeout(() => window.location.reload(), 450))
     }
 
@@ -193,7 +231,7 @@ function List () {
                 </select>
             </label>
         );
-    }            
+    }
 
     // SOURCE: https://medium.com/@jdhawks/make-fetch-s-happen-5022fcc2ddae
     useEffect(() => {
@@ -261,15 +299,15 @@ function List () {
             <ul className='record-dropdowns'>
                 <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>
                 <li><button className = 'record-print-button'>PRINT</button></li>
-                <li><DropDown options = {viewFilter} value = {viewValue} onChange={viewChange} type = "view"/></li>
-                <li><DropDown options = {orderFilter} value = {orderValue} onChange={orderChange}/> </li>
+                <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li>
+                <li><DropDown value = {orderValue} options = {orderFilter} onChange={orderChange}/></li>
             </ul>
 
             {record.length !== 0 ?
                 <div className='scholar-container'>
                     <div className='list-search-container'>
-                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record"required></input>
-                        <BsSearch className='list-search-icon'/>
+                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record" value={input} onChange={handleUserInput} required></input>
+                        <BsSearch className='list-search-icon' onClick={handleSubmit}/>
                     </div>
                     <table className='list-table'>
                         <tr className='table-header'>
@@ -347,6 +385,7 @@ function List () {
                 record = {record}
                 orderFilter = {orderFilter}
                 handleClose = {toggleOrderPopup}
+                addView = {updateOrderFilter}
             />}
             {openAdd ? <AddPopUp
                 handleClose = {toggleAddPopup}
