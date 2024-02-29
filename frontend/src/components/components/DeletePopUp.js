@@ -6,18 +6,37 @@ function DeletePopUp (props) {
     const type = props.type;
     const toDelete = props.person;
 
+    const isArray = Array.isArray(toDelete)
+
     const deletePerson = (id) => {
-        fetch(apiUrl("/" + [type]), {
-            method: "DELETE",
-            credentials:'include',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-                ids: [`${id}`],
-            }) 
-        }).then(response => {return response.json()})
-        .then(setTimeout(() => window.location.reload(), 450))
+        if (isArray) {
+            for (let i = 0; i < id.length; i++){
+                fetch(apiUrl("/" + [type]), {
+                    method: "DELETE",
+                    credentials:'include',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify({
+                        ids: [`${id[i]}`],
+                    }) 
+                }).then(response => {return response.json()})
+            }
+            setTimeout(() => window.location.reload(), 450)    
+        } else {
+            fetch(apiUrl(`/${type}/`), {
+                method: "DELETE",
+                credentials:'include',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                    ids: [`${id}`],
+                })
+                
+            }).then(response => {return response.json()})
+            .then(setTimeout(() => window.location.reload(), 450))
+        }
     }
 
     return (
@@ -27,7 +46,8 @@ function DeletePopUp (props) {
                 <div className="delete-popup-box">
                     <p className='delete-label'>Confirm Deletion?</p>
                     <div className="delete-buttons">
-                        <button className='delete-red-button' onClick = {() => deletePerson(toDelete._id)}>Delete</button>
+                        {isArray ? <button className='delete-red-button' onClick = {() => deletePerson(toDelete)}>Delete</button> : 
+                            <button className='delete-red-button' onClick = {() => deletePerson(toDelete._id)}>Delete</button>}
                         <button className='delete-gray-button' onClick={props.handleClose}>Cancel</button>
                     </div>
                 </div>

@@ -290,6 +290,7 @@ exports.deleteApplicant = async (req, res) => {
     // }
 
     const idList = req.body.ids;
+    // console.log(idList.split(","))
     let deleted = 0, failed = 0;
     let invalidId = [];
 

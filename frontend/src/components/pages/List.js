@@ -4,7 +4,8 @@ import {React, useState, useEffect} from 'react';
 import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom';
 // import {Link, useLocation} from 'react-router-dom';
-import {BsSearch, BsTrash}  from 'react-icons/bs';
+import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
+import {BsSearch}  from 'react-icons/bs';
 import DonorPopUp from '../components/DonorPopUp';
 import DeletePopUp from '../components/DeletePopUp';
 import AddPopUp from '../components/AddPopUp';
@@ -16,16 +17,25 @@ function List () {
     // console.log(location)
     // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
     let input;
-    const [viewValue, setViewValue] = useState("applicant");
-    const [orderValue, setOrderValue] = useState("");
     const [assignScholar, setAssign] = useState([]);
     const [assignDelete, setDelete] = useState([]);
+
     const [scholarships, setScholarships] = useState([]);
     const [record, setRecord] = useState([]);
+
     const [openDonor, setOpenDonor] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openAdd, setAddField] = useState(false);
     const [openOrder, setOpenOrder] = useState(false);
+
+    // https://www.freecodecamp.org/news/how-to-work-with-multiple-checkboxes-in-react
+    const [checkedDelete, setcheckedDelete] = useState([]);
+    const [deleteMany, setDeleteMany] = useState([]);
+    const [checkedAccept, setcheckedAccept] = useState([]);
+    const [acceptMany, setAcceptMany] = useState([]);
+
+    const [viewValue, setViewValue] = useState("applicant");
+    const [orderValue, setOrderValue] = useState("");
 
     const viewFilter = [
         {label:'SCHOLAR', value:'scholar?value=true'},
@@ -79,7 +89,7 @@ function List () {
 
     const updateOrderFilter = (newValue) => {
         const newAttribute = newValue.replace(' ', '_').replace('Number', 'no');
-        orderFilter.splice(1, 0, { label: newValue.toUpperCase(), value: newAttribute.toLowerCase() });
+        orderFilter.splice(orderFilter.length-1, 0, { label: newValue.toUpperCase(), value: newAttribute.toLowerCase() });
         setOrderFilter(orderFilter)
         setOrderValue(newAttribute.toLowerCase())
     }
@@ -117,40 +127,83 @@ function List () {
     }
 
     const acceptApplicant = (person) => {
-        fetch(apiUrl("/scholar"), {
-            method: "POST",
-            credentials:'include',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-                first_name: person.first_name,
-                last_name: person.last_name,
-                middle_name: person.middle_name,
-                suffix: person.suffix,
-                address: person.address,
-                student_no: person.student_no,
-                graduation_year: person.graduation_year,
-                mobile_no: person.mobile_no,
-                email: person.email,
-                birthday: person.birthday,
-                birthplace: person.birthplace,
-                sex: person.sex,
-                citizenship: person.citizenship,
-                father_details: person.father_details,
-                mother_details: person.mother_details,
-                guardian_name: person.guardian_name,
-                guardian_contact: person.guardian_contact,
-                sibling_details:  person.sibling_details,
-                educational_bg: person.educational_bg,
-                applicant_link: person.applicant_link,
-                statement: person.statement,
-                upload_id: person.upload_id
+        const isArray = Array.isArray(person)
+
+        if (isArray) {
+            for (let i = 0; i < person.length; i++){
+                fetch(apiUrl("/scholar"), {
+                    method: "POST",
+                    credentials:'include',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body: JSON.stringify({
+                        first_name: person[i].first_name,
+                        last_name: person[i].last_name,
+                        middle_name: person[i].middle_name,
+                        suffix: person[i].suffix,
+                        address: person[i].address,
+                        student_no: person[i].student_no,
+                        graduation_year: person[i].graduation_year,
+                        mobile_no: person[i].mobile_no,
+                        email: person[i].email,
+                        birthday: person[i].birthday,
+                        birthplace: person[i].birthplace,
+                        sex: person[i].sex,
+                        citizenship: person[i].citizenship,
+                        father_details: person[i].father_details,
+                        mother_details: person[i].mother_details,
+                        guardian_name: person[i].guardian_name,
+                        guardian_contact: person[i].guardian_contact,
+                        sibling_details:  person[i].sibling_details,
+                        educational_bg: person[i].educational_bg,
+                        applicant_link: person[i].applicant_link,
+                        statement: person[i].statement,
+                        upload_id: person[i].upload_id
+                    })
+                })
+                .then(response => {return response.json()})
+                .then(alert(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
+                .then(deletePerson(person[i]._id))
+            }
+            setTimeout(() => window.location.reload(), 450)
+        } else {
+            fetch(apiUrl("/scholar"), {
+                method: "POST",
+                credentials:'include',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({
+                    first_name: person.first_name,
+                    last_name: person.last_name,
+                    middle_name: person.middle_name,
+                    suffix: person.suffix,
+                    address: person.address,
+                    student_no: person.student_no,
+                    graduation_year: person.graduation_year,
+                    mobile_no: person.mobile_no,
+                    email: person.email,
+                    birthday: person.birthday,
+                    birthplace: person.birthplace,
+                    sex: person.sex,
+                    citizenship: person.citizenship,
+                    father_details: person.father_details,
+                    mother_details: person.mother_details,
+                    guardian_name: person.guardian_name,
+                    guardian_contact: person.guardian_contact,
+                    sibling_details:  person.sibling_details,
+                    educational_bg: person.educational_bg,
+                    applicant_link: person.applicant_link,
+                    statement: person.statement,
+                    upload_id: person.upload_id
+                })
             })
-        })
-        .then(response => {return response.json()})
-        .then(alert("The applicant is accepted!"))
-        .then(deletePerson(person._id))
+            .then(response => {return response.json()})
+            .then(alert(`The applicant ${person.first_name} ${person.last_name} is accepted!`))
+            .then(deletePerson(person._id))
+            .then(setTimeout(() => window.location.reload(), 450))
+        }
     }
 
     const deletePerson = (id) => {
@@ -165,7 +218,48 @@ function List () {
             })
             
         }).then(response => {return response.json()})
-        .then(setTimeout(() => window.location.reload(), 450))
+    }
+
+    const handleCheckDeleteChange = (position) => {
+        let toDelete = []
+
+        const updatedcheckedDelete = checkedDelete.map((checked, index) => {
+            if (index === position) {
+                if (!checked === true) {
+                    toDelete.push(record[index]._id)
+                }
+                return !checked;
+            } else {
+                if (checked === true) {
+                    toDelete.push(record[index]._id)
+                }
+                return checked;
+            }
+        });
+
+        setcheckedDelete(updatedcheckedDelete);
+        setDeleteMany(toDelete);
+    }
+
+    const handleCheckAcceptChange = (position) => {
+        let toAccept = []
+
+        const updatedcheckedAccept = checkedAccept.map((checked, index) => {
+            if (index === position) {
+                if (!checked === true) {
+                    toAccept.push(record[index])
+                }
+                return !checked;
+            } else {
+                if (checked === true) {
+                    toAccept.push(record[index])
+                }
+                return checked;
+            }
+        });
+
+        setcheckedAccept(updatedcheckedAccept);
+        setAcceptMany(toAccept);
     }
 
     const editAppLink = (person, i) => {
@@ -278,6 +372,14 @@ function List () {
         });
     }, [orderValue, viewValue]);
 
+    useEffect(() => {
+        if (record === undefined) {}
+        else {
+            setcheckedDelete(new Array(record.length).fill(false));
+            setcheckedAccept(new Array(record.length).fill(false))
+        }
+    }, [record])
+
     return (
         <div>
             <Header/>
@@ -297,7 +399,9 @@ function List () {
             }
 
             <ul className='record-dropdowns'>
-                <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>
+                {checkedAccept.includes(true) ? <li><button className = 'record-acceptmany-button' onClick={() => acceptApplicant(acceptMany)}>ACCEPT MANY</button></li> : ""}
+                {checkedDelete.includes(true) ? <li><button className = 'record-deletemany-button' onClick={() => deleteConfirmation(deleteMany)}>DELETE MANY</button></li> : ""}
+                {/* <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li> */}
                 <li><button className = 'record-print-button'>PRINT</button></li>
                 <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li>
                 <li><DropDown value = {orderValue} options = {orderFilter} onChange={orderChange}/></li>
@@ -317,8 +421,10 @@ function List () {
                             {viewValue === "donor" || viewValue === "scholar?value=true" ? <th className='list-head'>SCHOLARSHIP DETAILS</th> : ""}
                             {viewValue !== "donor" ? <th className='list-head'>LINKS</th> : ""}
                             {viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
+                            {viewValue === "applicant" ? <th className='list-head'><AiFillCheckCircle className='green-check'></AiFillCheckCircle></th> : ""}
                             {viewValue === "applicant" ? <th className='list-head'>ACCEPT?</th> : ""}
                             {viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
+                            <th className='list-head'><AiFillDelete className='red-trash'></AiFillDelete> </th>
                             <th className='list-head'></th>
                         </tr>
                         <tr className='smol'></tr>
@@ -350,6 +456,7 @@ function List () {
                                         viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {app_files} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
                                     : ""}
                                     {viewValue === "scholar?value=false" ? <td className='list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
+                                    {viewValue === "applicant" ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedAccept[i]} value = {checkedAccept[i]} onChange={() => handleCheckAcceptChange(i)}></input></td> : ""}
                                     {viewValue === "applicant" ?
                                         <td className='list-cell'>
                                             <div className='list-buttons'>
@@ -358,7 +465,8 @@ function List () {
                                             </div>
                                         </td>
                                     : ""}
-                                    {viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => deleteConfirmation(person)}><BsTrash/></td> : ""}
+                                    {viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => deleteConfirmation(person)}><AiFillDelete/></td> : ""}
+                                    <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedDelete[i]} value = {checkedDelete[i]} onChange={() => handleCheckDeleteChange(i)}></input></td>
                                     <td className='last-list-cell'>...</td>
                                 </tr>
                             );

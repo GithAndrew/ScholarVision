@@ -145,6 +145,10 @@
     color: #1A1423;
 }
 
+.list-checkbox:checked {
+    background-color: #1A1423;
+}
+
 .first-list-cell :link {
     color: #1A1423;
     text-decoration: none;
@@ -272,6 +276,42 @@
     background-color: #1F4F6F;
 }
 
+.record-deletemany-button {
+    font-family: "Inter", sans-serif;
+    background-color: #C05746;
+    color: #FFFEF2;
+    outline: none;
+    border: none;
+    margin: 5px;
+    padding: 5px 10px;
+    width: auto;
+    height: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.record-deletemany-button:hover {
+    background-color: #A74839;
+}
+
+.record-acceptmany-button {
+    font-family: "Inter", sans-serif;
+    background-color: #4B7F52;
+    color: #FFFEF2;
+    outline: none;
+    border: none;
+    margin: 5px;
+    padding: 5px 10px;
+    width: auto;
+    height: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.record-acceptmany-button:hover {
+    background-color: #3C6742;
+}
+
 .link-input {
     font-family: "Inter", sans-serif;
     text-align: center;
@@ -289,6 +329,14 @@
     position: absolute;
     font-weight: bolder;
     font-size: 200%;
+}
+
+.green-check {
+    color: #4B7F52;
+}
+
+.red-trash {
+    color: #C05746;
 }
 
 ::-webkit-scrollbar {

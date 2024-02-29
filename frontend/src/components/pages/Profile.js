@@ -98,7 +98,7 @@ function Profile () {
                         <td className='info-here'>{formatDate(record.birthday)}</td>
                         <td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td>
                         <td className='cell-bold'>Sex</td>
-                        <td className='info-here'>{record.sex}</td>
+                        {record.sex ? <td className='info-here'>{record.sex.charAt(0).toUpperCase() + record.sex.slice(1)}</td> : ""}
                         </tr>
                         <tr className='smol'></tr>
                         <tr>

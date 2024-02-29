@@ -82,7 +82,7 @@ const AppForm = () => {
                 })
                 .then(response => response.json())
                 .then(allEmails.push(tempEmail))
-                .then(alert("Application accepted!"))
+                .then(alert(`Application for ${first_name} ${last_name} accepted!`))
                 .catch(error => {
                     console.error('Error submitting application:', error);
                 });

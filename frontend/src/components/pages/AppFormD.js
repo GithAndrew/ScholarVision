@@ -71,7 +71,7 @@ const AppFormDonor = () => {
                 .then(response => response.json())
                 .then(allEmails.push(tempEmail))
                 .then(getDonorData)
-                .then(alert("Application accepted!"))
+                .then(alert(`Application for ${first_name} ${last_name} accepted!`))
                 .catch(error => {
                     console.error('Error submitting application:', error);
                 });
@@ -333,7 +333,7 @@ const AppFormDonor = () => {
                     financial assistance or subsidy.
                     </div>
                     <label>
-                        <input type='checkbox'></input>
+                        <input type='checkbox' id='agree'></input>
                         &nbsp;I agree. <span className='for-required'>*</span>
                     </label>
                 </div>
