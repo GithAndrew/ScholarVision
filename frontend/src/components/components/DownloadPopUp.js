@@ -32,6 +32,12 @@ function DownloadPopUp (props) {
 
         for (let i = 0; i < rows.length; i ++) {
             let row = rows[i].split(",");
+
+            if (row[1].includes("*") && row[2] === "") {
+                alert(`Missing value for ${row[1].replace(" *","")}!`)
+                return
+            }
+
             if (row[1] === "Reason/s for Applying for Personal Statement"){
                 break
             }
@@ -56,7 +62,7 @@ function DownloadPopUp (props) {
                     <span className="add-close-icon" onClick={props.handleClose}>x</span>
                     <p className='delete-label'>Instructions for Application</p>
                     <p className='form-subtitle'>1. Download the Excel file through the blue button found below.</p>
-                    <p className='form-subtitle'>2. Fill up all your information. Red-colored cells means information is required.</p>
+                    <p className='form-subtitle'>2. Fill up your data. Cells with a * means information is required.</p>
                     <p className='form-subtitle'>3. Save the file as .csv.</p>
                     <p className='form-subtitle'>4. Upload your CSV file using the green button.</p>
                     <p className='form-subtitle'>5. Another button will appear for you to submit your file.</p>
