@@ -72,79 +72,112 @@ function ProfileFamily () {
                         <tr>&nbsp;</tr>
                             <tr>
                                 <td className='cell-bold'>Father's Name</td>
-                                {record.father_details ? <td className='info-here' colSpan='4'>{record.father_details.father_name}</td>: ""}
+                                {record.father_details ? <td className='info-here' colSpan='4'>{record.father_details.father_name}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Mother's Name</td>
-                                {record.mother_details ? <td className='info-here' colSpan='4'>{record.mother_details.mother_name}</td>: ""}
+                                {record.mother_details ? <td className='info-here' colSpan='4'>{record.mother_details.mother_name}</td>: <span className='info-white'>N/A</span>}
                             </tr>
                             <tr className='smol'></tr>
                             <tr>
                                 <td className='cell-bold'>Birthdate</td>
-                                {record.father_details ? <td className='info-here'>{formatDate(record.father_details.father_birthday)}</td>: ""}
+                                {record.father_details ? <td className='info-here'>{formatDate(record.father_details.father_birthday)}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Citizenship</td>
-                                {record.father_details ? <td className='info-here'>{record.father_details.father_citizenship}</td>: ""}
+                                {record.father_details ? <td className='info-here'>{record.father_details.father_citizenship}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Birthdate</td>
-                                {record.mother_details ? <td className='info-here'>{formatDate(record.mother_details.mother_birthday)}</td>: ""}
+                                {record.mother_details ? <td className='info-here'>{formatDate(record.mother_details.mother_birthday)}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Citizenship</td>
-                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_citizenship}</td>: ""}
+                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_citizenship}</td>: <span className='info-white'>N/A</span>}
                             </tr>
                             <tr className='smol'></tr>
                             <tr>
                                 <td className='cell-bold'>Contact Number</td>
-                                {record.father_details ? <td className='info-here'>{record.father_details.father_mobile_no}</td>: ""}
+                                {record.father_details ? <td className='info-here'>{record.father_details.father_mobile_no}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Highest Education Attainment</td>
-                                {record.father_details ? <td className='info-here'>{record.father_details.father_educ_attainment}</td>: ""}
+                                {record.father_details ? <td className='info-here'>{record.father_details.father_educ_attainment}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Contact Number</td>
-                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_mobile_no}</td>: ""}
+                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_mobile_no}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Highest Education Attainment</td>
-                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_educ_attainment}</td>: ""}
+                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_educ_attainment}</td>: <span className='info-white'>N/A</span>}
                             </tr>
                             <tr className='smol'></tr>
                             <tr>
                                 <td className='cell-bold'>Occupation</td>
-                                {record.father_details ? <td className='info-here'>{record.father_details.father_occupation}</td>: ""}
+                                {record.father_details ? <td className='info-here'>{record.father_details.father_occupation}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Employer</td>
-                                {record.father_details ? <td className='info-here'>{record.father_details.father_employer}</td>: ""}
+                                {record.father_details ? <td className='info-here'>{record.father_details.father_employer}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Occupation</td>
-                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_occupation}</td>: ""}
+                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_occupation}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Employer</td>
-                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_employer}</td>: ""}
+                                {record.mother_details ? <td className='info-here'>{record.mother_details.mother_employer}</td>: <span className='info-white'>N/A</span>}
                             </tr>
                             <tr className='smol'></tr>
                             <tr>
                                 <td className='cell-bold'>Annual Income</td>
-                                {record.father_details ? <td className='info-here' colSpan='4'>{record.father_details.father_income}</td>: ""}
+                                {record.father_details ? <td className='info-here' colSpan='4'>{record.father_details.father_income}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Annual Income</td>
-                                {record.mother_details ? <td className='info-here' colSpan='4'>{record.mother_details.mother_income}</td>: ""}
+                                {record.mother_details ? <td className='info-here' colSpan='4'>{record.mother_details.mother_income}</td>: <span className='info-white'>N/A</span>}
                             </tr>
                             <tr className='smol'></tr>
                             <tr>
                                 <td className='cell-bold'>Business Address</td>
-                                {record.father_details ? <td className='huge-info-here' colSpan='4'>{record.father_details.father_business_address}</td>: ""}
+                                {record.father_details ? <td className='huge-info-here' colSpan='4'>{record.father_details.father_business_address}</td>: <span className='info-white'>N/A</span>}
                                 <td className='barrier'>||||</td>
                                 <td className='cell-bold'>Business Address</td>
-                                {record.mother_details ? <td className='huge-info-here' colSpan='4'>{record.mother_details.mother_business_address}</td>: ""}
+                                {record.mother_details ? <td className='huge-info-here' colSpan='4'>{record.mother_details.mother_business_address}</td>: <span className='info-white'>N/A</span>}
                             </tr>
                             <tr><td className='barrier'>||||</td></tr>
+
                         <td className='cell-bold' colSpan='4'>If not living with parents</td>
                         <tr className='smol'></tr>
-                        <tr>
-                            <td className='cell-bold'>Name of Guardian</td>
-                            {record ? <td className='info-here' colSpan='4'> {record.guardian_name} </td> : <span className='info-white'>N/A</span>}
-                            <td className='barrier'>||||</td>
-                            <td className='cell-bold'>Contact Number</td>
-                            {record ? <td className='info-here' colSpan='4'> {record.guardian_contact} </td> : <span className='info-white'>N/A</span>}
-                        </tr>
+                        <tr>&nbsp;</tr>
+                            <tr>
+                                <td className='cell-bold'>Guradian's Name</td>
+                                {record.guardian_details ? <td className='info-here' colSpan='4'>{record.guardian_details.guardian_name}</td>: <span className='info-white'>N/A</span>}
+                            </tr>
+                            <tr className='smol'></tr>
+                            <tr>
+                                <td className='cell-bold'>Birthdate</td>
+                                {record.guardian_details ? <td className='info-here'>{formatDate(record.guardian_details.guardian_birthday)}</td>: <span className='info-white'>N/A</span>}
+                                <td className='barrier'>||||</td>
+                                <td className='cell-bold'>Citizenship</td>
+                                {record.guardian_details ? <td className='info-here'>{record.guardian_details.guardian_citizenship}</td>: <span className='info-white'>N/A</span>}
+                            </tr>
+                            <tr className='smol'></tr>
+                            <tr>
+                                <td className='cell-bold'>Contact Number</td>
+                                {record.guardian_details ? <td className='info-here'>{record.guardian_details.guardian_mobile_no}</td>: <span className='info-white'>N/A</span>}
+                                <td className='barrier'>||||</td>
+                                <td className='cell-bold'>Highest Education Attainment</td>
+                                {record.guardian_details ? <td className='info-here'>{record.guardian_details.guardian_educ_attainment}</td>: <span className='info-white'>N/A</span>}
+                            </tr>
+                            <tr className='smol'></tr>
+                            <tr>
+                                <td className='cell-bold'>Occupation</td>
+                                {record.guardian_details ? <td className='info-here'>{record.guardian_details.guardian_occupation}</td>: <span className='info-white'>N/A</span>}
+                                <td className='barrier'>||||</td>
+                                <td className='cell-bold'>Employer</td>
+                                {record.guardian_details ? <td className='info-here'>{record.guardian_details.guardian_employer}</td>: <span className='info-white'>N/A</span>}
+                            </tr>
+                            <tr className='smol'></tr>
+                            <tr>
+                                <td className='cell-bold'>Annual Income</td>
+                                {record.guardian_details ? <td className='info-here' colSpan='4'>{record.guardian_details.guardian_income}</td>: <span className='info-white'>N/A</span>}
+                            </tr>
+                            <tr className='smol'></tr>
+                            <tr>
+                                <td className='cell-bold'>Business Address</td>
+                                {record.guardian_details ? <td className='huge-info-here' colSpan='4'>{record.guardian_details.guardian_business_address}</td>: <span className='info-white'>N/A</span>}
+                            </tr>
                         <tr className='smol'></tr>
                     </table>
 

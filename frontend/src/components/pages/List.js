@@ -153,8 +153,7 @@ function List () {
                         citizenship: person[i].citizenship,
                         father_details: person[i].father_details,
                         mother_details: person[i].mother_details,
-                        guardian_name: person[i].guardian_name,
-                        guardian_contact: person[i].guardian_contact,
+                        guardian_details: person[i].guardian_details,
                         sibling_details:  person[i].sibling_details,
                         educational_bg: person[i].educational_bg,
                         applicant_link: person[i].applicant_link,
@@ -190,8 +189,7 @@ function List () {
                     citizenship: person.citizenship,
                     father_details: person.father_details,
                     mother_details: person.mother_details,
-                    guardian_name: person.guardian_name,
-                    guardian_contact: person.guardian_contact,
+                    guardian_details: person.guardian_details,
                     sibling_details:  person.sibling_details,
                     educational_bg: person.educational_bg,
                     applicant_link: person.applicant_link,
@@ -301,8 +299,7 @@ function List () {
                 citizenship: person.citizenship,
                 father_details: person.father_details,
                 mother_details: person.mother_details,
-                guardian_name: person.guardian_name,
-                guardian_contact: person.guardian_contact,
+                guardian_details: person.guardian_details,
                 sibling_details: person.sibling_details,
                 educational_bg: person.educational_bg,
                 statement: person.statement,
@@ -505,7 +502,7 @@ function List () {
             {openDelete ? <DeletePopUp
                 person = {assignDelete}
                 type = {viewValue}
-                handleClose={toggleDeletePopup}
+                handleClose = {toggleDeletePopup}
             /> : ""}
             <Footer/>
         </div>

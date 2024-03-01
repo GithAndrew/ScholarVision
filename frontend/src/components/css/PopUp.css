@@ -204,7 +204,6 @@
     overflow-y: auto;
 }
 
-
 .list-cell-order {
     font-size: 100%;
     font-weight: bold;
@@ -215,5 +214,65 @@
 
 .list-cell-order:hover {
     color: #1A1423CC;
+    cursor: pointer;
+}
+
+.upload-popup-box {
+    position: relative;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 30%;
+    height: 325px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 1px #1A1423;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.upload-blue-button {
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 1%;
+    background-color: #255F85;
+    color: #FFFEF2;
+    text-align: center;
+    line-height: normal;
+}
+
+.upload-blue-button:hover {
+    background-color: #1F4F6F;
+    color: #FFFEF2;
+}
+
+.upload-blue-button:link {
+    text-decoration: none;
+}
+
+#file-input {
+    display: none;
+}
+
+.upload-green-button {
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4B7F52;
+    color: #EFEFEF;
+    position: sticky;
+    margin-right: 1%;
+    text-align: center;
+    line-height: normal;
+}
+
+.upload-green-button:hover {
+    background-color: #3C6742;
     cursor: pointer;
 }

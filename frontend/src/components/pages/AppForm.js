@@ -3,12 +3,23 @@ import Footer from '../components/Footer'
 import {React, useEffect, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom'
+import DownloadPopUp from '../components/DownloadPopUp';
 import '../css/AppForm.css'
 
 const AppForm = () => {
 
     let missingFields = [];
     const [allEmails, setAllEmails] = useState([]);
+    const [openDownload, setOpenDownload] = useState(false);
+
+    const downloadConfirmation = () => {
+        toggleDownloadPopup()
+    }
+
+    const toggleDownloadPopup = () => {
+        setOpenDownload(!openDownload);
+    }
+
 
     const sendData = (e) => {
         e.preventDefault();
@@ -40,8 +51,7 @@ const AppForm = () => {
 
             const father_details = getPersonDetails("father");
             const mother_details = getPersonDetails("mother");
-            const guardian_name = getValue("guardianname");
-            const guardian_contact = getValue("guardiannum");
+            const guardian_details = getPersonDetails("guardian");
             const sibling_details = getSiblingDetails();
             const educational_bg = getEducationDetails();
             const statement = getValue("appreason", true);
@@ -72,8 +82,7 @@ const AppForm = () => {
                         citizenship: citizenship,
                         father_details: father_details,
                         mother_details: mother_details,
-                        guardian_name: guardian_name,
-                        guardian_contact: guardian_contact,
+                        guardian_details: guardian_details,
                         sibling_details: sibling_details,
                         educational_bg: educational_bg,
                         statement: statement,
@@ -226,9 +235,7 @@ const AppForm = () => {
             <form className='app-form-body'>
 
             <div className='app-form-buttons'>
-                <button className='buttons'>Upload <br></br> CSV</button>
-                <br></br>
-                <button className='buttons'>Download Blank <br></br> Application Form</button>
+                <button className='buttons' onClick={() => downloadConfirmation()}>Download Blank <br></br> Application Form</button>
                 <br></br>
                 <button className='buttons-g' onClick = {sendData}>Submit <br></br> Application</button>
             </div>
@@ -427,7 +434,51 @@ const AppForm = () => {
                     </div>
                     <br></br>
                     <div className='form-section-1-1'>
-                        <table className='table-form'>
+                    <table className='table-form'>
+                                <tr className='table-form-tr'>
+                                    <th className='table-form-th'>Name of Guardian (if not living with parents)</th>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <td className='table-form-td'><input type = "text" className='parentname' id = "guardianname"  ></input></td>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <th className='table-form-th'>Birthdate</th>
+                                    <th className='table-form-th'>Citizenship</th>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <td className='table-form-td'><input type = "date" id = "guardianbirthdate"  ></input></td>
+                                    <td className='table-form-td'><input type = "text" id = "guardiancitizenship"  ></input></td>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <th className='table-form-th'>Contact Number</th>
+                                    <th className='table-form-th-1'>Highest Education Attainment</th>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <td className='table-form-td'><input type = "number" id = "guardiancontactnum"  ></input></td>
+                                    <td className='table-form-td'><input type = "text" className='parentname' id = "guardianhighesteduatt"  ></input></td>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <th className='table-form-th'>Occupation</th>
+                                    <th className='table-form-th'>Employer</th>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <td className='table-form-td'><input type = "text" id = "guardianoccupation"  ></input></td>
+                                    <td className='table-form-td'><input type = "text" id = "guardianemployer"  ></input></td>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <th className='table-form-th'>Business Address</th>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                <td className='table-form-td'><input type = "text" className='parentname' id = "guardianbusinessaddr"  ></input></td>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                    <th className='table-form-th-1'>Annual Income</th>
+                                </tr>
+                                <tr className='table-form-tr'>
+                                <td className='table-form-td'><input type = "text" id = "guardianannualinc"  ></input></td>
+                                </tr>
+                            </table>
+                        {/* <table className='table-form'>
                             <tr className='table-form-tr'>
                                 <th className='table-form-th'>Name of Guardian (if not living with parents)</th>
                                 <th className='table-form-th'>Contact Number</th>
@@ -436,7 +487,7 @@ const AppForm = () => {
                                 <td className='table-form-td'><input type = "text" className='parentname-1' id = "guardianname"></input></td>
                                 <td className='table-form-td'><input type = "number" id = "guardiannum"></input></td>
                             </tr>
-                        </table>
+                        </table> */}
                     </div>
 
                     <div className='form-section-1-1'>
@@ -549,10 +600,10 @@ const AppForm = () => {
                 <div className='backgrounds'>
                     <h4 className='form-sections'>AGREEMENT</h4>
                     <div className='agreement'>
-                    We hereby certify upon our honor that all the data and information which I have furnished are accurate and complete. I understand that any 
-                    misinformation and/or withholding of information will automatically disqualify me from receiving any financial assistance or subsidy. Furthermore, if 
-                    such misinformation and/or withholding of information on my part is discovered after I have been awarded the scholarship, I will be  to reimburse all the 
-                    financial benefits received. 
+                    On my honor, I certify that the data and information I have provided are true and accurate. 
+                    I am aware that giving false information or concealing information will automatically disqualify me from 
+                    receiving any kind of financial support or subsidy. Furthermore, I will be responsible for reimbursing all 
+                    financial benefits if it is found that I provided false information or withheld information after receiving the scholarship.
                     </div>
                     <label>
                         <input type='checkbox' id='agree'></input>
@@ -561,6 +612,12 @@ const AppForm = () => {
                 </div>
             </div>
         </form>
+
+        {openDownload ? <DownloadPopUp
+            user = "scholar"
+            handleClose = {toggleDownloadPopup}
+        /> : ""}
+
         <Footer/>
         </div>
     )

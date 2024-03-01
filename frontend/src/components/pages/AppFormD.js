@@ -3,12 +3,22 @@ import Footer from '../components/Footer'
 import {React, useState, useEffect} from 'react';
 import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom'
+import DownloadPopUp from '../components/DownloadPopUp';
 import '../css/AppForm.css'
 
 const AppFormDonor = () => {
 
     let missingFields = [];
     const [allEmails, setAllEmails] = useState([]);
+    const [openDownload, setOpenDownload] = useState(false);
+
+    const downloadConfirmation = () => {
+        toggleDownloadPopup()
+    }
+
+    const toggleDownloadPopup = () => {
+        setOpenDownload(!openDownload);
+    }
 
     const sendData = (e) => {
         e.preventDefault();
@@ -204,14 +214,13 @@ const AppFormDonor = () => {
     return (
         <div>
             <Header/>
+            <DownloadPopUp user = "donor"></DownloadPopUp>
             <button className='back-button'><Link to="/Home">BACK</Link></button>
 
             <form className='app-form-body'>
 
             <div className='app-form-buttons'>
-                <button className='buttons'>Upload <br></br> CSV</button>
-                <br></br>
-                <button className='buttons'>Download Blank <br></br> Application Form</button>
+                <button className='buttons' onClick={() => downloadConfirmation()}>Download Blank <br></br> Application Form</button>
                 <br></br>
                 <button className='buttons-g' onClick = {sendData}>Submit <br></br> Application</button>
             </div>
@@ -297,7 +306,7 @@ const AppFormDonor = () => {
                                 <td className='form-subtitle'>Scholarship Details <span className='for-required'>*</span></td>
                                 <tr className='table-form-tr'>
                                     <th className='table-form-th'>Scholarship Name</th>
-                                    <th className='table-form-th'>Year Granted</th>
+                                    <th className='table-form-th'>Years Granted</th>
                                 </tr>
                                 <tr className='table-form-tr'>
                                     <td className='table-form-td'><input type = "text" id = "scholarshipname" required></input></td>
@@ -328,9 +337,9 @@ const AppFormDonor = () => {
                 <div className='backgrounds'>
                     <h4 className='form-sections'>AGREEMENT</h4>
                     <div className='agreement'>
-                    We hereby certify upon our honor that all the data and information which I have furnished are accurate and complete. 
-                    I understand that any misinformation and/or withholding of information will automatically disqualify me from providing any 
-                    financial assistance or subsidy.
+                    On my honor, I certify that the data and information I have provided are true and accurate. 
+                    I am aware that giving false information or concealing information will automatically prevent me 
+                    from offering any kind of financial support or subsidy.
                     </div>
                     <label>
                         <input type='checkbox' id='agree'></input>
@@ -341,8 +350,13 @@ const AppFormDonor = () => {
                 </div>
 
             </form>
-            <Footer/>
 
+            {/* {openDownload ? <DownloadPopUp
+                user = "donor"
+                handleClose = {toggleDownloadPopup}
+            /> : ""} */}
+
+            <Footer/>
         </div>
 
     )
