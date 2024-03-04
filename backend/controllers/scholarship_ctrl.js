@@ -107,7 +107,6 @@ exports.addScholarship = async (req, res) => {
             scholarshipname: body.scholarshipname,
             year: body.year,
             details: body.details,
-            acceptancedate: body.acceptancedate,
             donor_id: body.donor_id
         };
     
@@ -149,7 +148,6 @@ exports.editScholarship = async (req,res) => {
             year: body.year,
             grant: body.grant,
             details: body.details,
-            acceptancedate: body.acceptancedate
         };
     
         var existing = null;

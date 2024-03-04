@@ -174,8 +174,7 @@ exports.addApplicant = async (req, res) => {
         address: body.address,
         father_details: body.father_details,
         mother_details: body.mother_details,
-        guardian_name: body.guardian_name,
-        guardian_contact: body.guardian_contact,
+        guardian_details: body.guardian_details,
         sibling_details: body.sibling_details,
         educational_bg: body.educational_bg,
         statement: body.statement,
@@ -237,8 +236,7 @@ exports.editApplicant = async (req, res) => {
         address: body.address,
         father_details: body.father_details,
         mother_details: body.mother_details,
-        guardian_name: body.guardian_name,
-        guardian_contact: body.guardian_contact,
+        guardian_details: body.guardian_details,
         sibling_details: body.sibling_details,
         educational_bg: body.educational_bg,
         statement: body.statement,
@@ -290,7 +288,6 @@ exports.deleteApplicant = async (req, res) => {
     // }
 
     const idList = req.body.ids;
-    // console.log(idList.split(","))
     let deleted = 0, failed = 0;
     let invalidId = [];
 

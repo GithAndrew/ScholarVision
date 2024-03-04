@@ -133,21 +133,22 @@ exports.sortBy = async (req, res) => {
             console.log("Donor database is empty");
             return res.status(404).send({ message: `No donor in database` });
         } else {
-            return res.status(200).send(donor);
+            if (key[0] === 'grant') {
+                const sortedArr = new Array;
+                const donor = await Donor.getAll();
+                const scholarship = await Scholarship.getAllSorted(parseInt(value));
+                for (i = 0; i < scholarship.length; i++) {
+                    for (j = 0; j < donor.length; j++) {
+                        if (scholarship[i].donor_id == donor[j]._id) {
+                            sortedArr.push(donor[j]);
+                        }
+                    }
+                }
+                return res.status(200).send(sortedArr);
+            } else {
+                return res.status(200).send(donor);
+            }    
         }
-        // if (key[0] === 'grant') {
-        //     const sortedArr = new Array;
-        //     const donor = await Donor.getAll();
-        //     const scholarship = await Scholarship.getAllSorted(parseInt(value));
-        //     for (i = 0; i < scholarship.length; i++) {
-        //         for (j = 0; j < donor.length; j++) {
-        //             if (scholarship[i].donor_id == donor[j]._id) {
-        //                 sortedArr.push(donor[j]);
-        //             }
-        //         }
-        //     }
-        //     return res.status(200).send(sortedArr);
-        // }
     } catch (err) {
         console.log(`Error searching for donor in the DB ${err}`);
         return res.status(500).send({ message: 'Error searching for donor' });
@@ -169,6 +170,8 @@ exports.addDonor = async (req, res) => {
 
     const body = req.body;
 
+    console.log(body)
+
     const newDonor = {
         first_name: body.first_name,
         last_name: body.last_name,
@@ -179,7 +182,6 @@ exports.addDonor = async (req, res) => {
         citizenship: body.citizenship,
         mobile_no: body.mobile_no,
         email: body.email,
-        address: body.address,
         sex: body.sex,
         statement: body.statement,
         upload_id: body.upload_id
@@ -227,7 +229,6 @@ exports.editDonor = async (req, res) => {
             last_name: body.last_name,
             middle_name: body.middle_name,
             suffix: body.suffix,
-            address: body.address,
             mobile_no: body.mobile_no,
             email: body.email,
             birthday: body.birthday,

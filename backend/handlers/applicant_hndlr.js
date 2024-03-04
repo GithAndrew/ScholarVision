@@ -69,8 +69,7 @@ exports.edit = (object) =>{
             applicant.address = object.address
             applicant.father_details = object.father_details
             applicant.mother_details = object.mother_details
-            applicant.guardian_name = object.guardian_name
-            applicant.guardian_contact = object.guardian_contact
+            applicant.guardian_details = object.guardian_details
             applicant.sibling_details = object.sibling_details
             applicant.educational_bg = object.educational_bg
             applicant.statement = object.statement

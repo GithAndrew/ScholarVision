@@ -12,7 +12,6 @@ const DonorSchema = new mongoose.Schema(
         citizenship: {type: String, required: true},
         mobile_no: {type: String, required: true},
         email: {type: String, required: true},
-        address: {type: Object, required: true},
         sex: {type: String, required: true},
         statement: {type: String, required: true},
         upload_id: {type: String}

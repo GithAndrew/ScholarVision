@@ -10,6 +10,7 @@ function DonorPopUp (props) {
     const [scholarships, setScholarship] = useState([]);
 
     const giveScholarship = (scholar, scholarship_id) => {
+        const today = new Date().toLocaleDateString('en-US');
         fetch(apiUrl("/scholar/" + scholar._id), {
             method: "PUT",
             credentials:'include',
@@ -38,11 +39,12 @@ function DonorPopUp (props) {
                 educational_bg: scholar.educational_bg,
                 statement: scholar.statement,
                 upload_id: scholar.upload_id,
+                acceptance_date: today,
                 scholarship_id: scholarship_id
             })
         })
         .then(response => {return response.json()})
-        .then(setTimeout(() => window.location.reload(), 450))
+        // .then(setTimeout(() => window.location.reload(), 450))
     }
 
     useEffect(() => {

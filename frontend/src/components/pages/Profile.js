@@ -10,16 +10,28 @@ import '../css/Profile.css'
 function Profile () {
 
     function formatDate(birthday) {
-        if(birthday !== undefined) {
-            const dateParts = birthday.split('-');
-            const year = parseInt(dateParts[0]);
-            const month = parseInt(dateParts[1]);
-            const day = parseInt(dateParts[2]);
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-            const formattedDate = monthNames[month-1] + ' ' + day + ', ' + year;
-        
-            return formattedDate;
+        if (birthday !== undefined) {
+            if(birthday.includes("/")) {
+                const dateParts = birthday.split('/');
+                const month = parseInt(dateParts[0]);
+                const day = parseInt(dateParts[1]);
+                const year = parseInt(dateParts[2]);
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+                const formattedDate = monthNames[month-1] + ' ' + day + ', ' + year;
+            
+                return formattedDate;    
+            } else {
+                const dateParts = birthday.split('-');
+                const year = parseInt(dateParts[0]);
+                const month = parseInt(dateParts[1]);
+                const day = parseInt(dateParts[2]);
+                const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+                const formattedDate = monthNames[month-1] + ' ' + day + ', ' + year;
+            
+                return formattedDate;
+            }
         }
     }
 

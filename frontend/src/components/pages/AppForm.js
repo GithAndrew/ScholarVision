@@ -11,6 +11,7 @@ const AppForm = () => {
     let missingFields = [];
     const [allEmails, setAllEmails] = useState([]);
     const [openDownload, setOpenDownload] = useState(false);
+    const [counter, setCounter] = useState(0);
 
     const downloadConfirmation = () => {
         toggleDownloadPopup()
@@ -178,7 +179,7 @@ const AppForm = () => {
     
     const getSiblingDetails = () => {
         const siblings = {};
-        for (let i = 1; i <= 5; i++) {
+        for (let i = 1; i <= counter; i++) {
             const prefix = `sibling${i}-`;
             siblings[`sibling${i}`] = {
                 name: getValue(`${prefix}name`),
@@ -202,6 +203,26 @@ const AppForm = () => {
             };
         }
         return education;
+    }
+
+    const addRow = () => {
+        let siblingCounter = 3;
+        const table = document.getElementById('siblings-table');
+
+        const newRow = table.insertRow(-1);
+        const existingRow = table.rows[1];
+
+        for (let i = 0; i < existingRow.cells.length; i++) {
+            const existingCell = existingRow.cells[i];
+            const newCell = newRow.insertCell(i);
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = existingCell.querySelector('input').id.replace(/\d+/g, siblingCounter);
+            newCell.appendChild(input);
+        }
+
+        siblingCounter++;
+        setCounter(siblingCounter);
     }
 
     useEffect(() => {
@@ -481,7 +502,7 @@ const AppForm = () => {
                     </div>
 
                     <div className='form-section-1-1'>
-                        <table className='table-form'>
+                        <table id="siblings-table" className='table-form'>
                             <tr className='table-form-tr'>
                                 <th className='table-form-th-1'>Name of Siblings</th>
                                 <th className='table-form-th'>Age</th>
@@ -503,29 +524,8 @@ const AppForm = () => {
                                 <td className='table-form-td-1'><input type = "text" className='parentname-2' id="sibling2-educ"></input></td>
                                 <td className='table-form-td-1'><input type = "text" id="sibling2-occupation"></input></td>
                             </tr>
-                            <tr className='table-form-tr'>
-                                <td className='table-form-td-1'><input type = "text" id="sibling3-name"></input></td>
-                                <td className='table-form-td-1'><input type = "number" id="sibling3-age"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling3-civilstatus"></input></td>
-                                <td className='table-form-td-1'><input type = "text" className='parentname-2' id="sibling3-educ"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling3-occupation"></input></td>
-                            </tr>
-                            <tr className='table-form-tr'>
-                                <td className='table-form-td-1'><input type = "text" id="sibling4-name"></input></td>
-                                <td className='table-form-td-1'><input type = "number" id="sibling4-age"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling4-civilstatus"></input></td>
-                                <td className='table-form-td-1'><input type = "text" className='parentname-2' id="sibling4-educ"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling4-occupation"></input></td>
-                            </tr>
-                            <tr className='table-form-tr'>
-                                <td className='table-form-td-1'><input type = "text" id="sibling5-name"></input></td>
-                                <td className='table-form-td-1'><input type = "number" id="sibling5-age"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling5-civilstatus"></input></td>
-                                <td className='table-form-td-1'><input type = "text" className='parentname-2' id="sibling5-educ"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling5-occupation"></input></td>
-                            </tr>
-                            
                         </table>
+                        <button id="add-sibling-btn" className='upload-green-button' onClick = {addRow}>Add Sibling</button>
                         
                     </div>
                     

@@ -7,7 +7,6 @@ const ScholarshipSchema = new mongoose.Schema(
         scholarshipname: {type: String, required: true},
         year: {type: String, required: true},
         details: {type: String, required: true},
-        acceptancedate: {type: String},
         donor_id: {type: String, required: true}
 	}
 )

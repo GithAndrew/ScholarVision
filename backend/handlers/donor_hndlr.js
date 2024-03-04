@@ -60,7 +60,6 @@ exports.edit = (object) =>{
             donor.birthday = object.birthday
             donor.birthplace = object.birthplace
             donor.suffix = object.suffix
-            donor.address = object.address
             donor.citizenship = object.citizenship
             donor.mobile_no = object.mobile_no
             donor.sex = object.sex

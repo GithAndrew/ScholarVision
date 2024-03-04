@@ -174,31 +174,33 @@ exports.sortBy = async (req, res) => {
             console.log("Scholar database is empty");
             return res.status(404).send({ message: `No scholar in database` });
         } else {
-            for (let i = 0; i < scholar.length; i++) {
-                if (!scholar[i].scholarship_id) {
-                    withoutScholarship.push(scholar[i]);
+            if (key[0] === 'grant') {
+                const sortedArr = [];
+                const scholar = await Scholar.getAll();
+                const scholarship = await Scholarship.getAllSorted(parseInt(value));
+                for (let i = 0; i < scholarship.length; i++) {
+                    for (let j = 0; j < scholar.length; j++) {
+                        if (scholarship[i]._id == scholar[j].scholarship_id) {
+                            sortedArr.push(scholar[j]);
+                        }
+                    }
+                }
+                return res.status(200).send(sortedArr);
+            } else {
+                for (let i = 0; i < scholar.length; i++) {
+                    if (!scholar[i].scholarship_id) {
+                        withoutScholarship.push(scholar[i]);
+                    } else {
+                        withScholarship.push(scholar[i]);
+                    }
+                }
+                if (value[1] == 'true') {
+                    return res.status(200).send(withScholarship);
                 } else {
-                    withScholarship.push(scholar[i]);
+                    return res.status(200).send(withoutScholarship);
                 }
             }
-            if (value[1] == 'true') {
-                return res.status(200).send(withScholarship);
-            } else {
-                return res.status(200).send(withoutScholarship);
-            }
         }
-        // } else if (key[0] === 'grant') {
-        //     const sortedArr = [];
-        //     const scholar = await Scholar.getAll();
-        //     const scholarship = await Scholarship.getAllSorted(parseInt(value));
-        //     for (let i = 0; i < scholarship.length; i++) {
-        //         for (let j = 0; j < scholar.length; j++) {
-        //             if (scholarship[i]._id == scholar[j].scholarship_id) {
-        //                 sortedArr.push(scholar[j]);
-        //             }
-        //         }
-        //     }
-        //     return res.status(200).send(sortedArr);
     } catch (err) {
         console.log(`Error searching for scholar in the DB ${err}`);
         return res.status(500).send({ message: 'Error searching for scholar' });
@@ -236,13 +238,13 @@ exports.addScholar = async (req, res) => {
         address: body.address,
         father_details: body.father_details,
         mother_details: body.mother_details,
-        guardian_name: body.guardian_name,
-        guardian_contact: body.guardian_contact,
+        guardian_details: body.guardian_details,
         sibling_details: body.sibling_details,
         educational_bg: body.educational_bg,
         statement: body.statement,
         applicant_link: body.applicant_link,
         scholarship_id: body.scholarship_id,
+        acceptance_date: body.acceptance_date,
         upload_id: body.upload_id
     };
 
@@ -302,13 +304,13 @@ exports.editScholar = async (req, res) => {
             address: body.address,
             father_details: body.father_details,
             mother_details: body.mother_details,
-            guardian_name: body.guardian_name,
-            guardian_contact: body.guardian_contact,
+            guardian_details: body.guardian_details,
             sibling_details: body.sibling_details,
             educational_bg: body.educational_bg,
             statement: body.statement,
             applicant_link: body.applicant_link,
             scholarship_id: body.scholarship_id,
+            acceptance_date: body.acceptance_date,
             upload_id: body.upload_id
         };
 

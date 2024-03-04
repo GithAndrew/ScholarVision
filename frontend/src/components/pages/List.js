@@ -7,10 +7,10 @@ import {Link} from 'react-router-dom';
 import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
 import {BsSearch}  from 'react-icons/bs';
 import DonorPopUp from '../components/DonorPopUp';
-import DeletePopUp from '../components/DeletePopUp';
+import ConfirmPopUp from '../components/ConfirmPopUp';
 import AddPopUp from '../components/AddPopUp';
-import '../css/List.css'
 import OrderPopUp from '../components/OrderPopUp';
+import '../css/List.css'
 
 function List () {
     // const location = useLocation();
@@ -18,7 +18,8 @@ function List () {
     // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
     let input;
     const [assignScholar, setAssign] = useState([]);
-    const [assignDelete, setDelete] = useState([]);
+    const [assignConfirm, setAssignConfirm] = useState([]);
+    const [forConfirm, setConfirm] = useState([]);
 
     const [scholarships, setScholarships] = useState([]);
     const [record, setRecord] = useState([]);
@@ -69,12 +70,13 @@ function List () {
         setOpenDonor(!openDonor);
     }
 
-    const deleteConfirmation = (person) => {
-        setDelete(person)
-        toggleDeletePopup()
+    const openConfirmation = (person, toDo) => {
+        setAssignConfirm(person)
+        setConfirm(toDo)
+        toggleConfirmPopup()
     }
 
-    const toggleDeletePopup = () => {
+    const toggleConfirmPopup = () => {
         setOpenDelete(!openDelete);
     }
 
@@ -124,98 +126,6 @@ function List () {
             .then(response => {return response.json()})
             .then((data) => {setRecord(data)})
         }
-    }
-
-    const acceptApplicant = (person) => {
-        const isArray = Array.isArray(person)
-
-        if (isArray) {
-            for (let i = 0; i < person.length; i++){
-                fetch(apiUrl("/scholar"), {
-                    method: "POST",
-                    credentials:'include',
-                    headers:{
-                        'Content-Type':'application/json'
-                    },
-                    body: JSON.stringify({
-                        first_name: person[i].first_name,
-                        last_name: person[i].last_name,
-                        middle_name: person[i].middle_name,
-                        suffix: person[i].suffix,
-                        address: person[i].address,
-                        student_no: person[i].student_no,
-                        graduation_year: person[i].graduation_year,
-                        mobile_no: person[i].mobile_no,
-                        email: person[i].email,
-                        birthday: person[i].birthday,
-                        birthplace: person[i].birthplace,
-                        sex: person[i].sex,
-                        citizenship: person[i].citizenship,
-                        father_details: person[i].father_details,
-                        mother_details: person[i].mother_details,
-                        guardian_details: person[i].guardian_details,
-                        sibling_details:  person[i].sibling_details,
-                        educational_bg: person[i].educational_bg,
-                        applicant_link: person[i].applicant_link,
-                        statement: person[i].statement,
-                        upload_id: person[i].upload_id
-                    })
-                })
-                .then(response => {return response.json()})
-                .then(alert(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
-                .then(deletePerson(person[i]._id))
-            }
-            setTimeout(() => window.location.reload(), 450)
-        } else {
-            fetch(apiUrl("/scholar"), {
-                method: "POST",
-                credentials:'include',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify({
-                    first_name: person.first_name,
-                    last_name: person.last_name,
-                    middle_name: person.middle_name,
-                    suffix: person.suffix,
-                    address: person.address,
-                    student_no: person.student_no,
-                    graduation_year: person.graduation_year,
-                    mobile_no: person.mobile_no,
-                    email: person.email,
-                    birthday: person.birthday,
-                    birthplace: person.birthplace,
-                    sex: person.sex,
-                    citizenship: person.citizenship,
-                    father_details: person.father_details,
-                    mother_details: person.mother_details,
-                    guardian_details: person.guardian_details,
-                    sibling_details:  person.sibling_details,
-                    educational_bg: person.educational_bg,
-                    applicant_link: person.applicant_link,
-                    statement: person.statement,
-                    upload_id: person.upload_id
-                })
-            })
-            .then(response => {return response.json()})
-            .then(alert(`The applicant ${person.first_name} ${person.last_name} is accepted!`))
-            .then(deletePerson(person._id))
-            .then(setTimeout(() => window.location.reload(), 450))
-        }
-    }
-
-    const deletePerson = (id) => {
-        fetch(apiUrl(`/${viewValue}/`), {
-            method: "DELETE",
-            credentials:'include',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body: JSON.stringify({
-                ids: [`${id}`],
-            })
-            
-        }).then(response => {return response.json()})
     }
 
     const handleCheckDeleteChange = (position) => {
@@ -324,6 +234,27 @@ function List () {
         );
     }
 
+    // const addGrant = () => {
+    //    const grantFilterExists = orderFilter.some(item => item.value === 'grant');
+    //     if(!grantFilterExists) {
+    //         orderFilter.splice(orderFilter.length-1, 0, { label: "GRANT", value: "grant" });
+    //         setOrderFilter(orderFilter);
+    //     }
+    // }
+
+    // const removeGrant = () => {
+    //     const filteredOrderFilter = orderFilter.filter(item => item.value !== 'grant');
+    //     setOrderFilter(filteredOrderFilter);
+    // }
+
+    // useEffect(() => {
+    //     if (viewValue === "donor" || viewValue === "scholar?value=true") {
+    //         addGrant();
+    //     } else {
+    //         removeGrant();
+    //     }
+    // }, [viewValue]);
+
     // SOURCE: https://medium.com/@jdhawks/make-fetch-s-happen-5022fcc2ddae
     useEffect(() => {
         Promise.all([
@@ -396,8 +327,8 @@ function List () {
             }
 
             <ul className='record-dropdowns'>
-                {checkedAccept.includes(true) ? <li><button className = 'record-acceptmany-button' onClick={() => acceptApplicant(acceptMany)}>ACCEPT MANY</button></li> : ""}
-                {checkedDelete.includes(true) ? <li><button className = 'record-deletemany-button' onClick={() => deleteConfirmation(deleteMany)}>DELETE MANY</button></li> : ""}
+                {checkedAccept.includes(true) ? <li><button className = 'record-acceptmany-button' onClick={() => openConfirmation(acceptMany, "accept")}>ACCEPT MANY</button></li> : ""}
+                {checkedDelete.includes(true) ? <li><button className = 'record-deletemany-button' onClick={() => openConfirmation(deleteMany, "delete")}>DELETE MANY</button></li> : ""}
                 <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>
                 <li><button className = 'record-print-button'>PRINT</button></li>
                 <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li>
@@ -457,12 +388,12 @@ function List () {
                                     {viewValue === "applicant" ?
                                         <td className='list-cell'>
                                             <div className='list-buttons'>
-                                                <button className='app-green-button' onClick={() => acceptApplicant(person)}>Yes</button>&nbsp;
-                                                <button className='app-red-button' onClick={() => deleteConfirmation(person)}>No</button>
+                                                <button className='app-green-button' onClick={() => openConfirmation(person, "accept")}>Yes</button>&nbsp;
+                                                <button className='app-red-button' onClick={() => openConfirmation(person, "delete")}>No</button>
                                             </div>
                                         </td>
                                     : ""}
-                                    {viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => deleteConfirmation(person)}><AiFillDelete/></td> : ""}
+                                    {viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => openConfirmation(person, "delete")}><AiFillDelete/></td> : ""}
                                     <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedDelete[i]} value = {checkedDelete[i]} onChange={() => handleCheckDeleteChange(i)}></input></td>
                                     <td className='last-list-cell'>...</td>
                                 </tr>
@@ -486,6 +417,7 @@ function List () {
                     }
                 </div>
             }
+            {/* {viewValue === "donor" || viewValue === "scholar?value=true" ? addGrant() : ""} */}
             {orderValue === "newfield" && <OrderPopUp
                 record = {record}
                 orderFilter = {orderFilter}
@@ -499,11 +431,13 @@ function List () {
                 scholar = {assignScholar}
                 handleClose = {toggleDonorPopup}
             /> : ""}
-            {openDelete ? <DeletePopUp
-                person = {assignDelete}
+            {openDelete ? <ConfirmPopUp
+                person = {assignConfirm}
                 type = {viewValue}
-                handleClose = {toggleDeletePopup}
+                toDo = {forConfirm}
+                handleClose = {toggleConfirmPopup}
             /> : ""}
+            
             <Footer/>
         </div>
     )

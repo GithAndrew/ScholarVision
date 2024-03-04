@@ -8,6 +8,19 @@ import '../css/Profile.css'
 
 
 function ProfileScholarship () {
+
+    function formatDate(acceptDay) {
+        const dateParts = acceptDay.split('-');
+        const year = parseInt(dateParts[0]);
+        const month = parseInt(dateParts[1]);
+        const day = parseInt(dateParts[2]);
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        const formattedDate = monthNames[month-1] + ' ' + day + ', ' + year;
+    
+        return formattedDate;
+    }
+
     const [record, setRecord] = useState([]);
     const {type, id} = useParams();
     const [scholarships, setScholarship] = useState([])
@@ -104,10 +117,10 @@ function ProfileScholarship () {
                                     <td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td>
                                 </tr>
                                 <tr className='smol'></tr>
-                                <tr>
+                                {record.acceptance_date ? <tr>
                                     <td className='cell-bold'>Date of Acceptance</td>
-                                    <td className='info-here'>XXXX</td>
-                                </tr>
+                                     <td className='info-here'> {formatDate(record.acceptance_date)} </td> 
+                                </tr> : ""}
                                 <tr className='smol'></tr>
                                 <tr>
                                     <td className='cell-bold'>Year Granted</td>
