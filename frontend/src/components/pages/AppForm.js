@@ -25,9 +25,9 @@ const AppForm = () => {
         e.preventDefault();
     
         const tempEmail = getValue("emailaddress", true);
-        const notuniqueEmail = !allEmails.includes(tempEmail);
+        const uniqueEmail = !allEmails.includes(tempEmail);
 
-        if (notuniqueEmail) {
+        if (uniqueEmail) {
             const last_name = getValue("surname", true);
             const first_name = getValue("firstname", true);
             const middle_name = getValue("middlename");
@@ -218,7 +218,7 @@ const AppForm = () => {
         .then(([dataApps, dataAccepted, dataScholars]) => {
             const emails = dataApps.map(app => app.email)
                 .concat(dataAccepted.map(acc => acc.email))
-                .concat(dataScholars.map(sch => sch.email));          
+                .concat(dataScholars.map(sch => sch.email));
             setAllEmails(emails);
         })
         .catch(error => {
@@ -478,16 +478,6 @@ const AppForm = () => {
                                 <td className='table-form-td'><input type = "text" id = "guardianannualinc"  ></input></td>
                                 </tr>
                             </table>
-                        {/* <table className='table-form'>
-                            <tr className='table-form-tr'>
-                                <th className='table-form-th'>Name of Guardian (if not living with parents)</th>
-                                <th className='table-form-th'>Contact Number</th>
-                            </tr>
-                            <tr className='table-form-tr'>
-                                <td className='table-form-td'><input type = "text" className='parentname-1' id = "guardianname"></input></td>
-                                <td className='table-form-td'><input type = "number" id = "guardiannum"></input></td>
-                            </tr>
-                        </table> */}
                     </div>
 
                     <div className='form-section-1-1'>
@@ -616,6 +606,7 @@ const AppForm = () => {
         {openDownload ? <DownloadPopUp
             user = "scholar"
             handleClose = {toggleDownloadPopup}
+            allEmails = {allEmails}
         /> : ""}
 
         <Footer/>

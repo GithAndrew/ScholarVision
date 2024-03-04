@@ -56,7 +56,7 @@ function ProfileFamily () {
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}
                     <table className='profile-table'>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                         <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile`}>Personal & Contact</Link></button></td></tr>
                         <tr><td><button className='profile-button-current'>Family Background</button></td></tr>
                         {type !== "donor" ? 
@@ -69,7 +69,7 @@ function ProfileFamily () {
                 <div className='profile-container'>
                     <header className='profile-header'>PARENTS</header>
                     <table className='personal-table'>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                             <tr>
                                 <td className='cell-bold'>Father's Name</td>
                                 {record.father_details ? <td className='info-here' colSpan='4'>{record.father_details.father_name}</td>: <span className='info-white'>N/A</span>}
@@ -139,9 +139,9 @@ function ProfileFamily () {
 
                         <td className='cell-bold' colSpan='4'>If not living with parents</td>
                         <tr className='smol'></tr>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                             <tr>
-                                <td className='cell-bold'>Guradian's Name</td>
+                                <td className='cell-bold'>Guardian's Name</td>
                                 {record.guardian_details ? <td className='info-here' colSpan='4'>{record.guardian_details.guardian_name}</td>: <span className='info-white'>N/A</span>}
                             </tr>
                             <tr className='smol'></tr>
@@ -183,7 +183,7 @@ function ProfileFamily () {
 
                     <header className='profile-header'>SIBLINGS</header>
                     <table className='personal-table'>
-                    <tr>&nbsp;</tr>
+                    <tr className='smol'>&nbsp;</tr>
                     <tr>
                         <td className='cell-bold'>Name of Siblings</td>
                         <td className='barrier'>||||</td>

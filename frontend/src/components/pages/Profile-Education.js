@@ -41,7 +41,7 @@ function ProfileEducation () {
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}
                     <table className='profile-table'>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                         <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile`}>Personal & Contact</Link></button></td></tr>
                         {type !== "donor" ? 
                             <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile-Family`}>Family Background</Link></button></td></tr>
@@ -54,7 +54,7 @@ function ProfileEducation () {
                 <div className='profile-container'>
                     <header className='profile-header'>EDUCATION</header>
                     <table className='personal-table'>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                         <tr>
                             <td className='cell-bold'>Education Level</td>
                             <td className='barrier'>||||</td>

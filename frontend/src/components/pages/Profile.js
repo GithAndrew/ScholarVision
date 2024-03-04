@@ -49,8 +49,6 @@ function Profile () {
         });
     }, [type, id]);
 
-    console.log(record.scholarship_id)
-
     return (
         <div>
             <Header/>
@@ -76,7 +74,7 @@ function Profile () {
                 <div className='profile-container'>
                     <header className='profile-header'>PERSONAL BACKGROUND</header>
                     <table className='personal-table'>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                         <tr>
                         <td className='cell-bold'>Last Name</td>
                         <td className='info-here'>{record.last_name}</td>
@@ -119,7 +117,7 @@ function Profile () {
                     </table>
                     <header className='profile-header'>CONTACT INFORMATION</header>
                     <table className='personal-table'>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                         <tr>
                         <td className='cell-bold'>Contact Number</td>
                         <td className='info-here'>{record.mobile_no}</td>
@@ -130,7 +128,7 @@ function Profile () {
                         <tr className='smol'></tr>
                         <tr>
                         <td className='cell-bold'>Address</td>
-                        {record.address ?
+                        {record.address && type !== "donor" ?
                             <td className='huge-info-here' colSpan='8'> {record.address.street}, {record.address.subd}, {record.address.brgy}, {record.address.city}, {record.address.province}, {record.address.postal_code} </td>
                         : <td className='huge-info-here' colSpan='8'> <span className='info-white'>N/A</span> </td>} 
                         </tr>

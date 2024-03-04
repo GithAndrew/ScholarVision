@@ -398,7 +398,7 @@ function List () {
             <ul className='record-dropdowns'>
                 {checkedAccept.includes(true) ? <li><button className = 'record-acceptmany-button' onClick={() => acceptApplicant(acceptMany)}>ACCEPT MANY</button></li> : ""}
                 {checkedDelete.includes(true) ? <li><button className = 'record-deletemany-button' onClick={() => deleteConfirmation(deleteMany)}>DELETE MANY</button></li> : ""}
-                {/* <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li> */}
+                <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>
                 <li><button className = 'record-print-button'>PRINT</button></li>
                 <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li>
                 <li><DropDown value = {orderValue} options = {orderFilter} onChange={orderChange}/></li>

@@ -24,9 +24,9 @@ const AppFormDonor = () => {
         e.preventDefault();
     
         const tempEmail = getValue("emailaddress", true);
-        const notuniqueEmail = !allEmails.includes(tempEmail);
+        const uniqueEmail = !allEmails.includes(tempEmail);
 
-        if (notuniqueEmail) {
+        if (uniqueEmail) {
             const last_name = getValue("surname", true);
             const first_name = getValue("firstname", true);
             const middle_name = getValue("middlename");
@@ -36,15 +36,6 @@ const AppFormDonor = () => {
             const suffix = getValue("suffix");
             const citizenship = getValue("citizenship", true);
             const mobile_no = getValue("contactnum", true);
-
-            const address = {
-                street: getValue("streetname", true),
-                subd: getValue("subdivision", true),
-                brgy: getValue("barangay", true),
-                city: getValue("city", true),
-                province: getValue("province", true),
-                postal_code: getValue("postalcode", true)
-            };
 
             getValue("scholarshipname", true);
             getValue("grantyear", true);
@@ -67,7 +58,6 @@ const AppFormDonor = () => {
                         first_name: first_name,
                         middle_name: middle_name,
                         suffix: suffix,
-                        address: address,
                         mobile_no: mobile_no,
                         email: tempEmail,
                         birthday: birthday,
@@ -174,7 +164,6 @@ const AppFormDonor = () => {
     }
 
     const sendScholarship = (donorData) => {
-        console.log(donorData)
         fetch(apiUrl("/scholarship"), {
             method: "POST",
             credentials: 'include',
@@ -214,7 +203,6 @@ const AppFormDonor = () => {
     return (
         <div>
             <Header/>
-            <DownloadPopUp user = "donor"></DownloadPopUp>
             <button className='back-button'><Link to="/Home">BACK</Link></button>
 
             <form className='app-form-body'>
@@ -351,10 +339,11 @@ const AppFormDonor = () => {
 
             </form>
 
-            {/* {openDownload ? <DownloadPopUp
+            {openDownload ? <DownloadPopUp
                 user = "donor"
                 handleClose = {toggleDownloadPopup}
-            /> : ""} */}
+                allEmails = {allEmails}
+            /> : ""}
 
             <Footer/>
         </div>

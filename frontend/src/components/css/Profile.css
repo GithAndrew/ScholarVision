@@ -121,6 +121,7 @@
 
 .info-white {
     color: #FFFEF2;
+    user-select: none;
 }
 
 .huge-info-here {
@@ -132,4 +133,5 @@
 
 .barrier {
     color: #EFEFEF;
+    user-select: none;
 }

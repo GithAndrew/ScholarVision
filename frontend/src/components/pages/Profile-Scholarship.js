@@ -47,7 +47,7 @@ function ProfileScholarship () {
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}
                     <table className='profile-table'>
-                        <tr>&nbsp;</tr>
+                        <tr className='smol'>&nbsp;</tr>
                         <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile`}>Personal & Contact</Link></button></td></tr>
                         {type !== "donor" ? 
                             <tr><td><button className='profile-button'><Link to={`/${type}/${id}/Profile-Family`}>Family Background</Link></button></td></tr>
@@ -64,7 +64,7 @@ function ProfileScholarship () {
                     {type === "donor" ? scholarships.map((scholarship) => (
                         record._id === scholarship.donor_id ? (
                             <table className='personal-table' key={scholarship.id}>
-                                <tr>&nbsp;</tr>
+                                <tr className='smol'>&nbsp;</tr>
                                 <tr>
                                     <td className='cell-bold'>Scholarship Name</td>
                                     <td className='info-here'>{scholarship.scholarshipname}</td>
@@ -97,7 +97,7 @@ function ProfileScholarship () {
                     type === "scholar" ? scholarships.map((scholarship) => (
                         record.scholarship_id === scholarship._id ? (
                             <table className='personal-table' key={scholarship.id}>
-                                <tr>&nbsp;</tr>
+                                <tr className='smol'>&nbsp;</tr>
                                 <tr>
                                     <td className='cell-bold'>Scholarship Name</td>
                                     <td className='info-here'>{scholarship.scholarshipname}</td>
