@@ -82,11 +82,6 @@ function ProfileScholarship () {
                                 </tr>
                                 <tr className='smol'></tr>
                                 <tr>
-                                    <td className='cell-bold'>Date of Acceptance</td>
-                                    <td className='info-here'>XXXX</td>
-                                </tr>
-                                <tr className='smol'></tr>
-                                <tr>
                                     <td className='cell-bold'>Year Granted</td>
                                     <td className='info-here'>{scholarship.year}</td>
                                 </tr>

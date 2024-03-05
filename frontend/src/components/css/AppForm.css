@@ -3,13 +3,12 @@
     overflow-y: scroll;
     overflow-x: hidden;
     width: 100%;
-    height: 90%;
     display: flex;
     justify-content:space-around;
-    padding-top: 3%;
+    top: 70px;
     position: fixed;
     font-family: "Inter", sans-serif;
-    padding-bottom: 5%;
+    bottom: 40px;
 }
 
 .app-form-buttons {
@@ -196,9 +195,16 @@
     background-color: #3C6742;
 }
 
-label {
+label.upload-label {
+    padding: 1.5px;
     cursor: pointer;
     background-color: #EFEFEF;
+    color: #6D6D6D
+}
+
+label.upload-label:hover {
+    cursor: pointer;
+    background-color: #E0E0E0;
     color: #6D6D6D
 }
 
@@ -225,7 +231,8 @@ label {
     width: 150px;
     height: 150px;
     display: block;
-    border: 2px solid #1A1423;
+    border-radius: 8px;
+    box-shadow: 0 0 4px #1A1423;
 }
 
 .for-required {

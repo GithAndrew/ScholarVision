@@ -44,7 +44,7 @@ function DonorPopUp (props) {
             })
         })
         .then(response => {return response.json()})
-        // .then(setTimeout(() => window.location.reload(), 450))
+        .then(setTimeout(() => window.location.reload(), 450))
     }
 
     useEffect(() => {

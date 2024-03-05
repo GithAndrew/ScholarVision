@@ -16,7 +16,6 @@ const AppForm = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [counter, setCounter] = useState(0);
     const [picID, setPicID] = useState();
-    const [imageFile, setImageFile] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
 
     const handleShowAlert = (message) => {
@@ -37,6 +36,7 @@ const AppForm = () => {
     }
 
     const openImageFile = (e) => {
+        console.log("AYOKO NA")
         const reader = new FileReader();
         reader.onload = () => {
             const img = new Image();
@@ -44,11 +44,10 @@ const AppForm = () => {
                 if (img.width !== img.height) {
                     handleShowAlert('Please upload a square image.');
                     setImageSrc(null);
-                    setImageFile(null);
                 } else {
                     setImageSrc(reader.result);
                     const data = new FormData();
-                    data.append("image", imageFile);
+                    data.append("image", e.target.files[0]);
             
                     fetch(apiUrl("/upload"), {
                       method: "POST",
@@ -61,7 +60,6 @@ const AppForm = () => {
             };
             img.src = reader.result;
         };
-        setImageFile(e.target.files[0])
         reader.readAsDataURL(e.target.files[0]);
     }
 
@@ -145,7 +143,7 @@ const AppForm = () => {
                     console.error('Error submitting application:', error);
                 });
             }
-            // setTimeout(() => window.location.reload(), 450)
+            setTimeout(() => window.location.reload(), 450)
         } else {
             handleShowAlert("Inputted email address already exists!");
         }
@@ -328,7 +326,7 @@ const AppForm = () => {
                                             </div>
                                         )}
                                         <div className='upload-photo-box'>
-                                            <label htmlFor="upload-photo">Upload Picture<br></br>(1x1 or 2x2)</label>
+                                            <label htmlFor="upload-photo" className="upload-label">Upload Picture<br></br>(1x1 or 2x2)</label>
                                             <input type="file" id="upload-photo" accept=".png,.jpg" onChange={openImageFile}/>
                                         </div>
                                     </th>

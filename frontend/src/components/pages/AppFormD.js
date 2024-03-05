@@ -15,7 +15,6 @@ const AppFormDonor = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [picID, setPicID] = useState();
-    const [imageFile, setImageFile] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
 
     const handleShowAlert = (message) => {
@@ -41,36 +40,31 @@ const AppFormDonor = () => {
             const img = new Image();
             img.onload = () => {
                 if (img.width !== img.height) {
-                    alert('Please upload a square image.');
+                    handleShowAlert('Please upload a square image.');
                     setImageSrc(null);
-                    setImageFile(null);
                 } else {
                     setImageSrc(reader.result);
+                    const data = new FormData();
+                    data.append("image", e.target.files[0]);
+            
+                    fetch(apiUrl("/upload"), {
+                      method: "POST",
+                      body: data,
+                    }).then((response) => response.json())
+                    .then((result) => {
+                        setPicID(result.id);
+                    });
                 }
             };
             img.src = reader.result;
         };
-        setImageFile(e.target.files[0])
         reader.readAsDataURL(e.target.files[0]);
-
-        if (imageFile) {
-            const data = new FormData();
-            data.append("image", imageFile);
-    
-            fetch(apiUrl("/upload"), {
-              method: "POST",
-              body: data,
-            }).then((response) => response.json())
-            .then((result) => {
-                setPicID(result.id);
-            });
-        }
     }
 
     const sendData = (e) => {
         e.preventDefault();
 
-        if (imageFile === null) {
+        if (picID === null) {
             handleShowAlert('No image set!');
             return
         }
@@ -284,7 +278,7 @@ const AppFormDonor = () => {
                                             </div>
                                         )}
                                         <div className='upload-photo-box'>
-                                            <label htmlFor="upload-photo">Upload Picture<br></br>(1x1 or 2x2)</label>
+                                            <label htmlFor="upload-photo" className="upload-label">Upload Picture<br></br>(1x1 or 2x2)</label>
                                             <input type="file" id="upload-photo" accept=".png,.jpg" onChange={openImageFile}/>
                                         </div>
                                     </th>
@@ -322,29 +316,6 @@ const AppFormDonor = () => {
                                     <td className='table-form-td'><input type = "number" id = "contactnum" required></input></td>
                                     <td className='table-form-td'><input type = "email" id = "emailaddress" required></input></td>
                                 </tr>
-                                <td className='form-subtitle'>Address <span className='for-required'>*</span></td>
-                                <tr className='table-form-tr'>
-                                    <th className='table-form-th'>Street Name, House No.</th>
-                                    <th className='table-form-th'>Subdivision</th>
-                                    <th className='table-form-th'>Barangay</th>
-                                </tr>
-                                <tr className='table-form-tr'>
-                                    <td className='table-form-td'><input type = "text"  id = "streetname" required></input></td>
-                                    <td className='table-form-td'><input type = "text" id = "subdivision"></input></td>
-                                    <td className='table-form-td'><input type = "text"  id = "barangay" required></input></td>
-                                </tr>
-
-                                <tr className='table-form-tr'>
-                                    <th className='table-form-th'>City</th>
-                                    <th className='table-form-th'>Province</th>
-                                    <th className='table-form-th'>Postal Code</th>
-                                </tr>
-                                <tr className='table-form-tr'>
-                                    <td className='table-form-td'><input type = "text" id = "city" required></input></td>
-                                    <td className='table-form-td'><input type = "text" id = "province" required></input></td>
-                                    <td className='table-form-td'><input type = "number" id = "postalcode" required></input></td>
-                                </tr>
-
                                 <td className='form-subtitle'>Scholarship Details <span className='for-required'>*</span></td>
                                 <tr className='table-form-tr'>
                                     <th className='table-form-th'>Scholarship Name</th>
