@@ -4,6 +4,7 @@ import {React, useEffect, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom'
 import DownloadPopUp from '../components/DownloadPopUp';
+import Alert from '../components/Alert';
 import '../css/AppForm.css'
 
 const AppForm = () => {
@@ -11,7 +12,21 @@ const AppForm = () => {
     let missingFields = [];
     const [allEmails, setAllEmails] = useState([]);
     const [openDownload, setOpenDownload] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
     const [counter, setCounter] = useState(0);
+    const [picID, setPicID] = useState();
+    const [imageFile, setImageFile] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
+
+    const handleShowAlert = (message) => {
+        setAlertMessage(message);
+        toggleAlertPopUp()
+    };
+
+    const toggleAlertPopUp = () => {
+        setShowAlert(!showAlert);
+    };
 
     const downloadConfirmation = () => {
         toggleDownloadPopup()
@@ -21,10 +36,43 @@ const AppForm = () => {
         setOpenDownload(!openDownload);
     }
 
+    const openImageFile = (e) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+                if (img.width !== img.height) {
+                    handleShowAlert('Please upload a square image.');
+                    setImageSrc(null);
+                    setImageFile(null);
+                } else {
+                    setImageSrc(reader.result);
+                    const data = new FormData();
+                    data.append("image", imageFile);
+            
+                    fetch(apiUrl("/upload"), {
+                      method: "POST",
+                      body: data,
+                    }).then((response) => response.json())
+                    .then((result) => {
+                        setPicID(result.id);
+                    });
+                }
+            };
+            img.src = reader.result;
+        };
+        setImageFile(e.target.files[0])
+        reader.readAsDataURL(e.target.files[0]);
+    }
 
     const sendData = (e) => {
         e.preventDefault();
-    
+
+        if (picID === undefined) {
+            handleShowAlert('No image set!');
+            return
+        }
+
         const tempEmail = getValue("emailaddress", true);
         const uniqueEmail = !allEmails.includes(tempEmail);
 
@@ -87,19 +135,19 @@ const AppForm = () => {
                         sibling_details: sibling_details,
                         educational_bg: educational_bg,
                         statement: statement,
-                        upload_id: ""
+                        upload_id: picID
                     })
                 })
                 .then(response => response.json())
                 .then(allEmails.push(tempEmail))
-                .then(alert(`Application for ${first_name} ${last_name} accepted!`))
+                .then(handleShowAlert(`Application for ${first_name} ${last_name} accepted!`))
                 .catch(error => {
                     console.error('Error submitting application:', error);
                 });
             }
-            setTimeout(() => window.location.reload(), 450)
+            // setTimeout(() => window.location.reload(), 450)
         } else {
-            alert("Inputted email address already exists!");
+            handleShowAlert("Inputted email address already exists!");
         }
     }
 
@@ -110,7 +158,7 @@ const AppForm = () => {
         if (id === 'agree') {
             if (document.getElementById(id).checked === false) {
                 missingFields.push(id);
-                alert("Check the agreement.");
+                handleShowAlert("Check the agreement.");
                 return;
             }
         }
@@ -120,7 +168,7 @@ const AppForm = () => {
         if (id === "emailaddress") {
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailRegex.test(value)) {
-                alert("Not a valid email!");
+                handleShowAlert("Not a valid email!");
                 missingFields.push(id);
                 return;
             }
@@ -129,7 +177,7 @@ const AppForm = () => {
         if (id === "contactnum") {
             const contactnumRegex = /^09\d{9}$/;
             if (!contactnumRegex.test(value)) {
-                alert("Phone number must have the format 09XXXXXXXXX");
+                handleShowAlert("Phone number must have the format 09XXXXXXXXX");
                 missingFields.push(id);
                 return;
             }
@@ -159,7 +207,7 @@ const AppForm = () => {
             if (id === "sex") {showID = "Sex"}
             if (id === "citizenship") {showID = "Citizenship"}
             if (id === "appreason") {showID = "Personal Statement"}
-            alert(`Missing the value for ${showID}!`);
+            handleShowAlert(`Missing the value for ${showID}!`);
         } else {
             return value;
         }
@@ -273,11 +321,15 @@ const AppForm = () => {
                                     <th className='table-form-th'>Surname <span className='for-required'>*</span></th>
                                     <th className='table-form-th'>First Name <span className='for-required'>*</span></th>
                                     <th className='table-form-th'>Middle Name</th>
-                                    <th rowSpan="6">
+                                    <th rowSpan="14">
+                                        {imageSrc && (
+                                            <div className='uploaded-image'>
+                                                <img src={imageSrc} alt="Uploaded" />
+                                            </div>
+                                        )}
                                         <div className='upload-photo-box'>
-                                            <label htmlFor="upload-photo">Upload Picture Here<br></br>(1x1 or 2x2)</label>
-                                            <input type="file" name="photo" id="upload-photo"/>
-                                            <button type="submit" className='submit-button'>Submit Photo</button>
+                                            <label htmlFor="upload-photo">Upload Picture<br></br>(1x1 or 2x2)</label>
+                                            <input type="file" id="upload-photo" accept=".png,.jpg" onChange={openImageFile}/>
                                         </div>
                                     </th>
                                 </tr>
@@ -608,6 +660,10 @@ const AppForm = () => {
             handleClose = {toggleDownloadPopup}
             allEmails = {allEmails}
         /> : ""}
+        {showAlert ? <Alert 
+            message={alertMessage} 
+            handleClose={toggleAlertPopUp} 
+        />: ""}
 
         <Footer/>
         </div>

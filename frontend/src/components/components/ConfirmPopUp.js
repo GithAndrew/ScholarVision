@@ -1,6 +1,8 @@
 import Header from './Header'
 import Footer from './Footer'
+import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
+import Alert from '../components/Alert';
 
 function ConfirmPopUp (props) {
     const type = props.type;
@@ -9,10 +11,21 @@ function ConfirmPopUp (props) {
 
     const isArray = Array.isArray(toAccess)
 
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+    const handleShowAlert = (message) => {
+        setAlertMessage(message);
+        toggleAlertPopUp()
+    };
+
+    const toggleAlertPopUp = () => {
+        setShowAlert(!showAlert);
+    };
+
     const acceptApplicant = (person) => {
         if (isArray) {
             for (let i = 0; i < person.length; i++){
-                console.log(person[i])
                 fetch(apiUrl("/scholar"), {
                     method: "POST",
                     credentials:'include',
@@ -44,7 +57,7 @@ function ConfirmPopUp (props) {
                     })
                 })
                 .then(response => {return response.json()})
-                .then(alert(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
+                .then(handleShowAlert(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
                 .then(deleteApplicant(person[i]._id))
             }
             setTimeout(() => window.location.reload(), 450)
@@ -80,7 +93,7 @@ function ConfirmPopUp (props) {
                 })
             })
             .then(response => {return response.json()})
-            .then(alert(`The applicant ${person.first_name} ${person.last_name} is accepted!`))
+            .then(handleShowAlert(`The applicant ${person.first_name} ${person.last_name} is accepted!`))
             .then(deleteApplicant(person._id))
             .then(setTimeout(() => window.location.reload(), 450))
         }
@@ -147,6 +160,11 @@ function ConfirmPopUp (props) {
                     </div>
                 </div>
             </div>
+            {showAlert ? <Alert 
+                message={alertMessage} 
+                handleClose={toggleAlertPopUp} 
+            />: ""}
+
             <Footer/>
         </div>
     )

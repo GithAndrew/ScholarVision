@@ -203,7 +203,9 @@ label {
 }
 
 .upload-photo-box {
-    background-color: #C05746;
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    background-color: #4B7F52;
     color: white;
     text-align: center;
     padding: 10px 10px;
@@ -213,6 +215,17 @@ label {
 #upload-photo {
     position: absolute;
     z-index: -1;
+}
+
+.uploaded-image {
+    margin-bottom: 10px;
+}
+
+.uploaded-image img {
+    width: 150px;
+    height: 150px;
+    display: block;
+    border: 2px solid #1A1423;
 }
 
 .for-required {

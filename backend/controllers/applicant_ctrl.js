@@ -183,7 +183,7 @@ exports.addApplicant = async (req, res) => {
     };
 
     try {
-        const existing = await Applicant.getOne({ student_no: newApplicant.student_no });
+        const existing = await Applicant.getOne({ email: newApplicant.email });
         if (existing) {
             return res.status(400).send({ message: "Applicant already exists" });
         }

@@ -1,0 +1,44 @@
+.alert {
+    position: fixed;
+    top: 110px;
+    left: 50%;
+    width: 600px;
+    padding: 20px;
+    transform: translate(-50%, 0%);
+    background-color: #FFFEF2;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-shadow: 0 0 10px #10142A80;
+    z-index: 9999;
+}
+
+.alert-label {
+    font-family: "Inter", sans-serif;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.alert-message {
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.alert-button {
+    align-self: flex-end;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 10px;
+    background-color: #255F85;
+    color: #FFFEF2;
+    cursor: pointer;
+    font-weight: bold;
+    width: 80px;
+}
+
+.alert-button :hover {
+    background-color: #1F4F6F;
+}

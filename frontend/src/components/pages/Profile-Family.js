@@ -1,11 +1,10 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Avatar from '../images/Avatar.jpg'
 import {React, useState, useEffect} from 'react';
 import {apiUrl} from '../../apiUrl';
 import {Link, useParams} from 'react-router-dom';
+import Avatar from '../images/Avatar.jpg'
 import '../css/Profile.css'
-
 
 function ProfileFamily () {
     const [record, setRecord] = useState([]);
@@ -63,7 +62,7 @@ function ProfileFamily () {
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
-                    <img className="profile-pic" src={Avatar} alt="logo"/>
+                    {record.upload_id ? <img className="profile-pic" src={require(`../images/${record.upload_id}`)} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
                     {record.first_name ? 
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}

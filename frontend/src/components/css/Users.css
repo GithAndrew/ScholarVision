@@ -1,4 +1,4 @@
-.view-users-body{
+.view-users-body {
     background-color: #FFFEF2;
     width: 100%;
     height:100%;
@@ -6,7 +6,7 @@
     top:60px;
 }
 
-.user-tile{
+.user-tile {
     width: 43%;
     border-color: #9E9E9E;
     border-style: solid;
@@ -22,24 +22,24 @@
     border-radius: 10px;
 }
 
-.user-tile:hover{
+.user-tile:hover {
     background-color: #EBEBEB;
 }
 
-.user-name{
+.user-name {
     font-family: "Inter", sans-serif;
     font-weight: bold;
     padding-right: 5px;
 }   
 
-.user-name span{
+.user-name span {
     font-family: "Inter";
     font-weight: 300;
     font-size: 14px;
     padding-top: 10px;
 }
 
-.user-odd-tile{
+.user-odd-tile {
     width:43%;
     border-color: #9E9E9E;
     border-style: solid;
@@ -53,18 +53,18 @@
     border-radius: 10px;
 }
 
-.user-odd-tile:hover{
+.user-odd-tile:hover {
     background-color: #EBEBEB;
 }
 
-.no-users{
+.no-users {
     text-align: center;
     font-family: Optima;
     margin-top: 10%;
     font-size: 18px;
 }
 
-.no-users button{
+.no-users button {
     background-color: white;
     border:1px solid gray;
     outline:none;
@@ -73,11 +73,11 @@
     cursor: pointer;
 }
 
-.no-users button:hover{
+.no-users button:hover {
     background-color: #EBEBEB;
 }
 
-.delete-button{
+.delete-button {
     border:none;
     outline:none;
     width: auto;
@@ -93,19 +93,19 @@
     cursor:pointer;
 }
 
-.delete-button:hover{
+.delete-button:hover {
     background-color: #C05746;
     color: white;
 }
 
-.tile-page{
+.tile-page {
     width: 67%;
     margin-top: 15px;
     margin-left: 17.8%;
     margin-bottom: 18%;
 }
 
-.user-dp{
+.user-dp {
     margin-right: 15px;
     object-fit: cover;
     width: 55px;
@@ -113,7 +113,7 @@
     border-radius: 4px;
 }
 
-.add-user-button{
+.add-user-button {
     background-color: #C05746;
     color: #FFFEF2;
     padding: 5px 9px;
@@ -126,6 +126,6 @@
     font-family: "Inter", sans-serif;
 }
 
-.add-user-button:hover{
+.add-user-button:hover {
     background-color: #A74839;
 }

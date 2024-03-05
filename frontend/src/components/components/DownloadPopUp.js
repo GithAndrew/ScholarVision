@@ -4,6 +4,7 @@ import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
 import scholartemplate from '../components/Scholar Application.xlsx';
 import donortemplate from '../components/Donor Application.xlsx';
+import Alert from '../components/Alert';
 import '../css/PopUp.css'
 
 function DownloadPopUp (props) {
@@ -11,6 +12,17 @@ function DownloadPopUp (props) {
     const [csvFile, setFile] = useState();
     const [appData, setAppData] = useState({});
     const allEmails = props.allEmails;
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+    const handleShowAlert = (message) => {
+        setAlertMessage(message);
+        toggleAlertPopUp()
+    };
+
+    const toggleAlertPopUp = () => {
+        setShowAlert(!showAlert);
+    };
 
     const setCSVFile = (e) => {
         setFile(e.target.files[0])
@@ -41,12 +53,12 @@ function DownloadPopUp (props) {
 
             if (props.user === "scholar") {
                 if (row[1] === "SCHOLARVISION DONOR INFORMATION") {
-                    alert("Wrong Excel file!")
+                    handleShowAlert("Wrong Excel file!")
                     return
                 }
                 
                 if (row[1].includes("*") && row[3] === "") {
-                    alert(`Missing value for ${row[1].replace(" *","")}!`)
+                    handleShowAlert(`Missing value for ${row[1].replace(" *","")}!`)
                     return
                 }
 
@@ -98,12 +110,12 @@ function DownloadPopUp (props) {
 
             if (props.user === "donor") {
                 if (row[1] === "SCHOLARVISION APPLICANT INFORMATION") {
-                    alert("Wrong Excel file!")
+                    handleShowAlert("Wrong Excel file!")
                     return
                 }
 
                 if (row[1].includes("*") && row[2] === "") {
-                    alert(`Missing value for ${row[1].replace(" *","")}!`)
+                    handleShowAlert(`Missing value for ${row[1].replace(" *","")}!`)
                     return
                 }
     
@@ -181,12 +193,12 @@ function DownloadPopUp (props) {
                 })
             })
             .then(response => response.json())
-            .then(alert(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
+            .then(handleShowAlert(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
         } else {
-            alert("Inputted email address already exists!");
+            handleShowAlert("Inputted email address already exists!");
         }
     }
 
@@ -230,13 +242,13 @@ function DownloadPopUp (props) {
             })
             .then(response => response.json())
             .then(getDonorData)
-            .then(alert(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
+            .then(handleShowAlert(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
             .then()
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
             setTimeout(() => window.location.reload(), 450)
-        } else {alert("Inputted email address already exists!")}
+        } else {handleShowAlert("Inputted email address already exists!")}
     }
 
     const getDonorData = () => {
@@ -255,8 +267,6 @@ function DownloadPopUp (props) {
     }
 
     const sendScholarship = (donorData) => {
-        console.log(donorData)
-        console.log(appData)
         fetch(apiUrl("/scholarship"), {
             method: "POST",
             credentials: 'include',
@@ -299,6 +309,10 @@ function DownloadPopUp (props) {
 
                 </div>
             </div>
+            {showAlert ? <Alert 
+                message={alertMessage} 
+                handleClose={toggleAlertPopUp} 
+            />: ""}
 
             <Footer/>
         </div>

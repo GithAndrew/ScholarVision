@@ -24,7 +24,6 @@ function OrderPopUp (props) {
         }
     }
 
-    console.log(props.orderFilter)
 
     return (
         <div>

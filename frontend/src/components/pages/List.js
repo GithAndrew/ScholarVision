@@ -10,6 +10,7 @@ import DonorPopUp from '../components/DonorPopUp';
 import ConfirmPopUp from '../components/ConfirmPopUp';
 import AddPopUp from '../components/AddPopUp';
 import OrderPopUp from '../components/OrderPopUp';
+import Alert from '../components/Alert';
 import '../css/List.css'
 
 function List () {
@@ -37,6 +38,18 @@ function List () {
 
     const [viewValue, setViewValue] = useState("applicant");
     const [orderValue, setOrderValue] = useState("");
+
+    const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+    const handleShowAlert = (message) => {
+        setAlertMessage(message);
+        toggleAlertPopUp()
+    };
+
+    const toggleAlertPopUp = () => {
+        setShowAlert(!showAlert);
+    };
 
     const viewFilter = [
         {label:'SCHOLAR', value:'scholar?value=true'},
@@ -178,12 +191,12 @@ function List () {
         // https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 
         if (value === '') {
-            alert("No link inputted!");
+            handleShowAlert("No link inputted!");
             return;
         }
 
         if (!urlPattern.test(value)) {
-            alert("Not a valid link!");
+            handleShowAlert("Not a valid link!");
             return;
         }
 
@@ -218,7 +231,7 @@ function List () {
             })
         })
         .then(response => {return response.json()})
-        .then(alert("Link submitted!"))
+        .then(handleShowAlert("Link submitted!"))
         .then(setTimeout(() => window.location.reload(), 450))
     }
 
@@ -437,6 +450,10 @@ function List () {
                 toDo = {forConfirm}
                 handleClose = {toggleConfirmPopup}
             /> : ""}
+            {showAlert ? <Alert 
+                message={alertMessage} 
+                handleClose={toggleAlertPopUp} 
+            />: ""}
             
             <Footer/>
         </div>
