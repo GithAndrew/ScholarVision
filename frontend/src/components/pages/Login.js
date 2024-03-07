@@ -1,60 +1,118 @@
 import SVLogo from '../images/SVLogo.png'
 import SchoolLogo from '../images/SchoolLogo.png'
-import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import {useEffect} from 'react';
+import {apiUrl} from '../../apiUrl';
+import useStore from '../../authHook';
 import Footer from '../components/Footer'
+import scholartemplate from '../components/Scholar Application.xlsx';
 import '../css/Login.css'
 
-
 function Login() {
+
+    const navigate = useNavigate();
+    const { user, isAuthenticated, setAuth } = useStore();
+    console.log(user, isAuthenticated)
+
+    useEffect(() => {
+        function sendToken(token){
+            fetch((apiUrl("/user/")), {
+                method: "POST",
+                credentials: "include", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    token: token,
+                }),
+    
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                if(data.success === true){
+                    navigate("/dashboard");
+                }
+                
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        }
+    
+        function handleCallbackResponse(response){
+            sendToken(response.credential)
+        }    
+        
+        /* global google */
+        google.accounts.id.initialize({
+          client_id: "327180859592-tp33fd8q78iqg55d962i5cotuqgm0glp.apps.googleusercontent.com",
+          callback: handleCallbackResponse
+        });
+    
+        google.accounts.id.renderButton(
+          document.getElementById("signInDiv"),
+          { theme: "standard", size: "large", width: "393px", text: "Log In"}
+        )
+        const googleSignInButton = document.getElementById("signInDiv");
+        googleSignInButton.classList.add("signInDiv");
+    },[navigate]);
+
+    useEffect(()=>{
+        fetch((apiUrl("/user/isLogin")), {
+            method: "GET",
+            credentials:'include',
+            withCredentials: true,
+            headers:{
+                'Content-Type':'application/json'
+            },
+        }).then(response => {return response.json()})
+        .then((data)=> {
+            setAuth(data.User, data.status);
+            if(data.status === true){
+                navigate("/dashboard")
+            }
+        })
+    },[navigate, setAuth]);
+
+
     return (
-      <div className="limiter">
-        <header className='login-header'>
-          <img className="login-logo" src={SVLogo} alt="logo" />
-          <img className="login-logo" src={SchoolLogo} alt="logo" />
-          <div className="text">
-            <p className='header-text'><span style={{fontSize: '1.5em'}}>Name of School</span><span style={{fontStyle: 'italic'}}> Scholar Database</span></p>
+        <div className="limiter">
+          <header className='login-header'>
+            <img className="login-logo" src={SVLogo} alt="logo" />
+            <img className="login-logo" src={SchoolLogo} alt="logo" />
+            <div className="text">
+              <p className='header-text'><span style={{fontSize: '1.5em'}}>Name of School</span><span style={{fontStyle: 'italic'}}> Scholar Database</span></p>
+            </div>
+          </header>
+  
+          <div className = 'login-info'>
+              <h2 className='sv-title'>SCHOLARVISION</h2>
+              <p className='sv-desc'> A <span style={{fontWeight: 'bold'}}>Content Management System</span> template that can be dynamically used by schools for their own scholarship databases.</p>
+              <a href={scholartemplate} className='apply-button' download> APPLY NOW </a>
           </div>
-        </header>
+    
+          <div className="container-login100">
+            <div className="wrap-login100">
+              <form className="login100-form validate-form">
+                <span className="login100-form-title p-b-43">
+                  <h2>User Login</h2>
+                </span>
 
-        <div className = 'login-info'>
-            <h2 className='sv-title'>SCHOLARVISION</h2>
-            <p className='sv-desc'> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut liquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <a className='apply-button' href='a' download> APPLY NOW </a>
-        </div>
+                <div id="signInDiv" class="customGPlusSignIn">
+                    <span class="icon"></span>
+                    <span class="buttonText">Google</span>
+                </div>
+    
+                {/* <label htmlFor="signInDiv" className="login-label">
+                <button id='signInDiv'></button></label> */}
+              </form>
   
-        <div className="container-login100">
-          <div className="wrap-login100">
-            <form className="login100-form validate-form">
-              <span className="login100-form-title p-b-43">
-                <h2>User Login</h2>
-              </span>
-  
-              <div className="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-                <input className="input100" type="text" name="email" />
-                <span className="focus-input100"></span>
-                <span className="label-input100">Email</span>
-              </div>
-  
-              <div className="wrap-input100 validate-input" data-validate="Password is required">
-                <input className="input100" type="password" name="pass" />
-                <span className="focus-input100"></span>
-                <span className="label-input100">Password</span>
-              </div>
-  
-              <div className="container-login100-form-btn">
-                <button className="login100-form-btn">
-                  <Link to="/Home">Login</Link>
-                </button>
-              </div>
-            </form>
-
-            <div className="login100-more" >
+              <div className="login100-more"></div>
             </div>
           </div>
+          <Footer></Footer>
         </div>
-        <Footer></Footer>
-      </div>
-    );
-  }
-    
-export default Login;
+      );
+    }
+      
+  export default Login;

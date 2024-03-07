@@ -65,8 +65,8 @@
 }
 
 .no-users button {
-    background-color: white;
-    border:1px solid gray;
+    background-color: #FFFEF2;
+    border:1px solid #9E9E9E;
     outline:none;
     padding: 10px 15px ;
     border-radius: 5px;

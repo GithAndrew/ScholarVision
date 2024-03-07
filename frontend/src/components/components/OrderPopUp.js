@@ -24,7 +24,6 @@ function OrderPopUp (props) {
         }
     }
 
-
     return (
         <div>
             <Header/>
