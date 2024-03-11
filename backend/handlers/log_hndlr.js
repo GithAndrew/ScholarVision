@@ -19,7 +19,7 @@ exports.create = (user,action,description) => {
             date: new Date().toLocaleDateString(undefined, {hour:'numeric', minute:'numeric', second:'numeric'}),
         }
 
-        const newLog = new UserLog(object);
+        const newLog = new Log(object);
 
         newLog.save((err, log) => {
             if(err) { reject(err); }

@@ -113,9 +113,14 @@ function List () {
         input = e.target.value;
     }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    // https://www.tutorialspoint.com/enter-key-press-event-in-javascript
+    const handleKeyDown = (e) => {
+        if (e.keyCode === 13) {
+            handleSubmit();
+        }
+    };
 
+    const handleSubmit = () => {
         let inputLink = ""
 
         if (input !== '' && input !== undefined && viewValue === "donor") {inputLink = (apiUrl(`/donor/search?name=${input}`))}
@@ -351,7 +356,7 @@ function List () {
             {record.length !== 0 ?
                 <div className='scholar-container'>
                     <div className='list-search-container'>
-                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record" value={input} onChange={handleUserInput} required></input>
+                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record" value={input} onChange={handleUserInput} onKeyDown={handleKeyDown} required></input>
                         <BsSearch className='list-search-icon' onClick={handleSubmit}/>
                     </div>
                     <table className='list-table'>

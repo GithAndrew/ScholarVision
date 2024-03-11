@@ -1,27 +1,50 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import {useEffect} from 'react';
+import {apiUrl} from '../../apiUrl';
+import useStore from '../../authHook';
 import SVLogo from '../images/SVLogo.png'
 import SchoolLogo from '../images/SchoolLogo.png'
-import ProfilePic from '../images/drewllibee.jpg'
 import '../css/Header.css';
 
-class Header extends React.Component{
-    render(){
-        return(
-            <header className='main-header'>
+const Header = () => {
+
+    const navigate = useNavigate();
+    const { user, isAuthenticated } = useStore();
+
+    const logout = () => {
+        fetch(apiUrl("/user"), {
+            method: "DELETE",
+            credentials:'include',
+            headers:{
+                'Content-Type':'application/json'
+            },
+        }).then(response => {return response.json()})
+    }
+
+    useEffect(()=> {
+        if(isAuthenticated === false){
+            navigate("/")
+        }
+    },[navigate, isAuthenticated]);
+
+    return(
+        <header className='main-header'>
             <img className="main-logo" src={SVLogo} alt="logo"/>
             <img className="main-logo" src={SchoolLogo} alt="logo"/>
             <div>
                 <span><p className='header-text'><Link to="/Home"><span style={{fontSize: '1.5em'}}>Name of School</span><span style={{fontStyle: 'italic'}}> Scholar Database</span></Link></p></span>
             </div>
-            <div className='header-div-right'>
-                <p className='rightmost-text'>Role</p>
-            </div>
-                <img className="main-logo-right" src={ProfilePic} alt="logo"/>
-                <Link to="/"><button className='logout'> LOG OUT  </button></Link>
-            </header>
-        );
-    }
+            {user ?
+                <div className='header-div-right'>
+                    <p className='rightmost-text'>{user.first_name} {user.last_name}</p>
+                </div>
+            : ""}
+            {user ? <img className="main-logo-right" src={user.picture} alt="logo"/> : ""}
+            {user ? <Link to="/"><button className='logout' onClick={logout}> LOG OUT </button></Link> : ""}
+        </header>
+    );
 }
 
 export default Header

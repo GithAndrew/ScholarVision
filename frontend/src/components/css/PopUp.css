@@ -276,3 +276,18 @@
     background-color: #3C6742;
     cursor: pointer;
 }
+
+.edit-popup-box {
+    position: relative;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 30%;
+    height: 300px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 1px #1A1423;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+}

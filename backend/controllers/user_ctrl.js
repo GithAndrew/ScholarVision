@@ -22,10 +22,10 @@ exports.login = async (req, res) => {
         if (!existing) {
             if (userobject.hd && userobject.hd == 'up.edu.ph') {
                 newUser.role = 'e.guest';
-            }      
+            }
         } else {
             const tokenPayload = {_id: existing._id};
-            const token = jwt.sign(tokenPayload, process.env.SECRET_ACCESS_TOKEN);
+            const token = jwt.sign(tokenPayload, `${process.env.JWT_SECRET_KEY}`);
             const response = {
                 success: true,
                 token
@@ -42,7 +42,7 @@ exports.login = async (req, res) => {
     try {
         const user = await User.create(newUser);
         const tokenPayload = {_id: user._id};
-        const token = jwt.sign(tokenPayload, process.env.SECRET_ACCESS_TOKEN);
+        const token = jwt.sign(tokenPayload, `${process.env.JWT_SECRET_KEY}`);
         const response = {
             success: true,
             token
@@ -55,11 +55,11 @@ exports.login = async (req, res) => {
     }
 };
 
-exports.checkifloggedin = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        console.log('Unauthorized access');
-        return res.status(200).send({ message: 'Unauthorized access', status: false });
-    }
+exports.isLogin = async (req, res) => {
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     console.log('Unauthorized access');
+    //     return res.status(200).send({ message: 'Unauthorized access', status: false });
+    // }
 
     let tokenDetails = await utils.verifyToken(req);
 
@@ -73,11 +73,51 @@ exports.checkifloggedin = async (req, res) => {
     return res.status(tokenDetails.code).send({ User: { _id, email, first_name, last_name, picture, role }, status: true });
 };
 
-exports.changeRole = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        res.status(401).send({ message: "Unauthorized access" });
-        return;
+exports.search = async (req, res) => {
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+
+    // const token = await utils.verifyToken(req);
+
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
+
+    let search = req.query.name;
+    let result = new Array();
+    try {
+        if (search === '') {
+            return res.status(200).send({ result });
+        }
+        let user = await User.getAll();
+        if (!user) {
+            console.log("User database is empty");
+            return res.status(400).send({ message: `No user in database` });
+        } else {
+            search = search.toLowerCase();
+            for (let i = 0; i < user.length; i++) {
+                const fname = user[i].first_name.toLowerCase();
+                const lname = user[i].last_name.toLowerCase();
+                if (fname.match(search) || lname.match(search)) {
+                    result.push(user[i]);
+                }
+            }
+            return res.status(200).send({ result });
+        }
+    } catch (err) {
+        console.log(`Error searching for user in the DB ${err}`);
+        return res.status(500).send({ message: 'Error searching for user' });
     }
+}
+
+exports.changeRole = async (req, res) => {
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
 
     const token = await utils.verifyToken(req);
 
@@ -86,16 +126,16 @@ exports.changeRole = async (req, res) => {
         return;
     }
 
-    if (token.user.role == 'admin' || token.user.role == 'member') {
+    // if (token.user.role == 'admin' || token.user.role == 'member') {
         const email = req.body.email;
         const newRole = req.body.role;
         try {
             const existing = await User.getOne({ email: email });
             if (existing) {
-                if (existing.role == 'admin') {
-                    console.log("Unauthorized Access");
-                    return res.status(401).send({ message: "Unauthorized access" });
-                }
+                // if (existing.role == 'admin') {
+                //     console.log("Unauthorized Access");
+                //     return res.status(401).send({ message: "Unauthorized access" });
+                // }
                 const user = {
                     email: existing.email,
                     first_name: existing.first_name,
@@ -111,10 +151,10 @@ exports.changeRole = async (req, res) => {
             console.log(err);
             return res.status(500).send({ message: `Error changing user's role` });
         }
-    } else {
-        console.log("Unauthorized Access");
-        return res.status(401).send({ message: "Unauthorized access" });
-    }
+    // } else {
+    //     console.log("Unauthorized Access");
+    //     return res.status(401).send({ message: "Unauthorized access" });
+    // }
 };
 
 exports.findAll = async (req, res) => {
@@ -146,6 +186,6 @@ exports.findAll = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
-    console.log("logged out");
+    console.log("User logged out.");
     res.clearCookie('authToken').send();
 };

@@ -5,6 +5,6 @@ exports.models = {
     Scholarship : require('./scholarship_mdl'),
     Applicant : require('./applicant_mdl'),
     Deleted: require('./deleted_mdl'),
-    UserLog: require('./log_mdl'),
+    Log: require('./log_mdl'),
     Upload: require('./upload_mdl')
 }

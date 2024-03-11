@@ -77,7 +77,7 @@
     background-color: #EBEBEB;
 }
 
-.delete-button {
+.edit-button {
     border:none;
     outline:none;
     width: auto;
@@ -93,9 +93,9 @@
     cursor:pointer;
 }
 
-.delete-button:hover {
-    background-color: #C05746;
-    color: white;
+.edit-button:hover {
+    background-color: #255F85;
+    color: #FFFEF2;
 }
 
 .tile-page {

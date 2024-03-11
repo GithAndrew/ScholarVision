@@ -1,22 +1,20 @@
 const mongoose = require("mongoose")
 const utils = require('./utils')
 
-const DonorSchema = new mongoose.Schema(
-    {
-        first_name: {type: String, required: true},
-        last_name: {type: String, required: true},
-        middle_name: {type: String, required: false},
-        birthday: {type: String, required: true},
-        birthplace: {type: String, required: true},
-        suffix: {type: String, required: false},
-        citizenship: {type: String, required: true},
-        mobile_no: {type: String, required: true},
-        email: {type: String, required: true},
-        sex: {type: String, required: true},
-        statement: {type: String, required: true},
-        upload_id: {type: String}
-    }
-)
+const DonorSchema = new mongoose.Schema({
+    first_name: {type: String, required: true},
+    last_name: {type: String, required: true},
+    middle_name: {type: String, required: false},
+    birthday: {type: String, required: true},
+    birthplace: {type: String, required: true},
+    suffix: {type: String, required: false},
+    citizenship: {type: String, required: true},
+    mobile_no: {type: String, required: true},
+    email: {type: String, required: true},
+    sex: {type: String, required: true},
+    statement: {type: String, required: true},
+    upload_id: {type: String}
+})
 
 DonorSchema.pre("save", function(next){
     const donor = this;
