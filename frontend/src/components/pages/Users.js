@@ -1,14 +1,21 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {React, useState, useEffect} from 'react';
-import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom';
-import {BsSearch}  from 'react-icons/bs';
+import {apiUrl} from '../../apiUrl';
+import useStore from '../../authHook';
 import EditPopUp from '../components/EditPopUp';
-// import DeletePopUp from './DeletePopUp';
+import {BsSearch}  from 'react-icons/bs';
 import '../css/Users.css'
 
 function Users () {
+
+    localStorage.setItem('currentLocation', window.location.pathname);
+    const { user } = useStore();
+    let userRole = "";
+    if (user) {userRole = user.role;}
+    console.log(userRole)
+
     let input;
     const [users, setUsers] = useState([]);
     const [editPerson, setEditPerson] = useState("");
@@ -84,7 +91,7 @@ function Users () {
 
             <header className='list-header'>ACCOUNTS</header>
             <ul className='record-dropdowns'>
-                <li><button className = 'record-print-button' onClick={toggleEdit}>EDIT</button></li>
+                <li><button className = 'record-add-button' onClick={toggleEdit}>EDIT</button></li>
             </ul>
 
             {users.length !== 0 ?
@@ -95,16 +102,16 @@ function Users () {
                     </div>
                     <div className="view-users-body">
                         <div className='tile-page' >
-                            {users.map((user, i) => (
+                            {users.map((person, i) => (
                                 <div key={i}>
                                     <div className={i % 2 === 0 ? "user-tile" : "user-odd-tile"}>
                                         <img src={user.picture} className='user-dp' alt='profile'/>
                                         <div className='user-name'>
-                                            {user.first_name} {user.last_name} <br/>
-                                            <span>{user.email}</span> <br/>
-                                            <span>{user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span>
+                                            {person.first_name} {person.last_name} <br/>
+                                            <span>{person.email}</span> <br/>
+                                            <span>{person.role.charAt(0).toUpperCase() + person.role.slice(1)}</span>
                                         </div>
-                                        {forEdit ? <button className="edit-button" onClick={() => editUser(user, user.role)}>Edit Role</button> : ""}
+                                        {forEdit ? <button className="edit-button" onClick={() => editUser(person, person.role)}>Edit Role</button> : ""}
                                     </div>
                                 </div>
                             ))}

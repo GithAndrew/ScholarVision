@@ -1,14 +1,15 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import {React, useEffect, useState} from 'react';
-import {apiUrl} from '../../apiUrl';
-import {Link} from 'react-router-dom'
-import DownloadPopUp from '../components/DownloadPopUp';
 import Alert from '../components/Alert';
+import {React, useEffect, useState} from 'react';
+import {Link} from 'react-router-dom'
+import {apiUrl} from '../../apiUrl';
+import DownloadPopUp from '../components/DownloadPopUp';
 import '../css/AppForm.css'
 
 const AppForm = () => {
 
+    localStorage.setItem('currentLocation', window.location.pathname);
     let missingFields = [];
     const [allEmails, setAllEmails] = useState([]);
     const [openDownload, setOpenDownload] = useState(false);
@@ -18,7 +19,7 @@ const AppForm = () => {
     const [picID, setPicID] = useState();
     const [imageSrc, setImageSrc] = useState(null);
 
-    const handleShowAlert = (message) => {
+    const showMessage = (message) => {
         setAlertMessage(message);
         toggleAlertPopUp()
     };
@@ -42,7 +43,7 @@ const AppForm = () => {
             const img = new Image();
             img.onload = () => {
                 if (img.width !== img.height) {
-                    handleShowAlert('Please upload a square image.');
+                    showMessage('Please upload a square image.');
                     setImageSrc(null);
                 } else {
                     setImageSrc(reader.result);
@@ -67,7 +68,7 @@ const AppForm = () => {
         e.preventDefault();
 
         if (picID === undefined) {
-            handleShowAlert('No image set!');
+            showMessage('No image set!');
             return
         }
 
@@ -138,14 +139,14 @@ const AppForm = () => {
                 })
                 .then(response => response.json())
                 .then(allEmails.push(tempEmail))
-                .then(handleShowAlert(`Application for ${first_name} ${last_name} accepted!`))
+                .then(showMessage(`Application for ${first_name} ${last_name} accepted!`))
                 .catch(error => {
                     console.error('Error submitting application:', error);
                 });
             }
             setTimeout(() => window.location.reload(), 450)
         } else {
-            handleShowAlert("Inputted email address already exists!");
+            showMessage("Inputted email address already exists!");
         }
     }
 
@@ -156,7 +157,7 @@ const AppForm = () => {
         if (id === 'agree') {
             if (document.getElementById(id).checked === false) {
                 missingFields.push(id);
-                handleShowAlert("Check the agreement.");
+                showMessage("Check the agreement.");
                 return;
             }
         }
@@ -166,7 +167,7 @@ const AppForm = () => {
         if (id === "emailaddress") {
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailRegex.test(value)) {
-                handleShowAlert("Not a valid email!");
+                showMessage("Not a valid email!");
                 missingFields.push(id);
                 return;
             }
@@ -175,7 +176,7 @@ const AppForm = () => {
         if (id === "contactnum") {
             const contactnumRegex = /^09\d{9}$/;
             if (!contactnumRegex.test(value)) {
-                handleShowAlert("Phone number must have the format 09XXXXXXXXX");
+                showMessage("Phone number must have the format 09XXXXXXXXX");
                 missingFields.push(id);
                 return;
             }
@@ -205,7 +206,7 @@ const AppForm = () => {
             if (id === "sex") {showID = "Sex"}
             if (id === "citizenship") {showID = "Citizenship"}
             if (id === "appreason") {showID = "Personal Statement"}
-            handleShowAlert(`Missing the value for ${showID}!`);
+            showMessage(`Missing the value for ${showID}!`);
         } else {
             return value;
         }

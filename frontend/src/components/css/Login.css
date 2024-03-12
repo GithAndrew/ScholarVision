@@ -4,6 +4,12 @@
   box-sizing: border-box;
 }
 
+body, html {
+  height: 100%;
+  font-family: Inter, sans-serif;
+  overflow: hidden;
+}
+
 .login-header {
   display: flex;
   padding: 20px;
@@ -155,4 +161,18 @@
 
 #signInDiv::shadow .content span {
   font-size: 16px;
+}
+
+button {
+  outline: none !important;
+  border: none;
+  background: transparent;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+iframe {
+  border: none !important;
 }

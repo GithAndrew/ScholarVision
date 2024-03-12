@@ -4,6 +4,7 @@ import {React} from 'react';
 import {apiUrl} from '../../apiUrl';
 
 function EditPopUp (props) {
+    
     const email = props.person.email;
 
     const editList = ['guest', 'admin', 'scholar', 'donor', 'member', 'applicant']

@@ -1,10 +1,12 @@
 import Header from './Header'
 import Footer from './Footer'
+import Alert from '../components/Alert';
 import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
-import Alert from '../components/Alert';
+import '../css/PopUp.css'
 
 function ConfirmPopUp (props) {
+
     const type = props.type;
     const toAccess = props.person;
     const toDo = props.toDo;
@@ -14,7 +16,7 @@ function ConfirmPopUp (props) {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
 
-    const handleShowAlert = (message) => {
+    const showMessage = (message) => {
         setAlertMessage(message);
         toggleAlertPopUp()
     };
@@ -57,7 +59,7 @@ function ConfirmPopUp (props) {
                     })
                 })
                 .then(response => {return response.json()})
-                .then(handleShowAlert(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
+                .then(showMessage(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
                 .then(deleteApplicant(person[i]._id))
             }
             setTimeout(() => window.location.reload(), 450)
@@ -93,7 +95,7 @@ function ConfirmPopUp (props) {
                 })
             })
             .then(response => {return response.json()})
-            .then(handleShowAlert(`The applicant ${person.first_name} ${person.last_name} is accepted!`))
+            .then(showMessage(`The applicant ${person.first_name} ${person.last_name} is accepted!`))
             .then(deleteApplicant(person._id))
             .then(setTimeout(() => window.location.reload(), 450))
         }

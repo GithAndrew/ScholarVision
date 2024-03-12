@@ -1,12 +1,20 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {React, useState, useEffect} from 'react';
-import {apiUrl} from '../../apiUrl';
 import {Link, useParams} from 'react-router-dom';
+import {apiUrl} from '../../apiUrl';
+import useStore from '../../authHook';
 import Avatar from '../images/Avatar.jpg'
 import '../css/Profile.css'
 
 function ProfileFamily () {
+
+    localStorage.setItem('currentLocation', window.location.pathname);
+    const { user } = useStore();
+    let userRole = "";
+    if (user) {userRole = user.role;}
+    console.log(userRole)
+
     const [record, setRecord] = useState([]);
     const {type, id} = useParams();
 

@@ -1,7 +1,5 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import {useNavigate} from 'react-router-dom';
-import {useEffect} from 'react';
+import {React, useEffect} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
 import useStore from '../../authHook';
 import SVLogo from '../images/SVLogo.png'
@@ -41,7 +39,7 @@ const Header = () => {
                     <p className='rightmost-text'>{user.first_name} {user.last_name}</p>
                 </div>
             : ""}
-            {user ? <img className="main-logo-right" src={user.picture} alt="logo"/> : ""}
+            {user ? <img className="main-pic-right" src={user.picture} alt="Profile Pic"/> : ""}
             {user ? <Link to="/"><button className='logout' onClick={logout}> LOG OUT </button></Link> : ""}
         </header>
     );

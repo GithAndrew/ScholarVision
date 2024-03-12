@@ -1,10 +1,18 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {Link} from 'react-router-dom';
-import {BsSearch, BsTrash}  from 'react-icons/bs';
+import useStore from '../../authHook';
 // import DeletePopUp from './DeletePopUp';
+import {BsSearch, BsTrash}  from 'react-icons/bs';
 
 function Logs () {
+    
+    localStorage.setItem('currentLocation', window.location.pathname);
+    const { user } = useStore();
+    let userRole = "";
+    if (user) {userRole = user.role;}
+    console.log(userRole)
+    
     return (
         <div>
             <Header/>

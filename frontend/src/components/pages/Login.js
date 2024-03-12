@@ -1,10 +1,10 @@
-import SVLogo from '../images/SVLogo.png'
-import SchoolLogo from '../images/SchoolLogo.png'
-import {useNavigate} from 'react-router-dom';
+import Footer from '../components/Footer'
 import {useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
 import useStore from '../../authHook';
-import Footer from '../components/Footer'
+import SVLogo from '../images/SVLogo.png'
+import SchoolLogo from '../images/SchoolLogo.png'
 import scholartemplate from '../components/Scholar Application.xlsx';
 import '../css/Login.css'
 
@@ -68,7 +68,8 @@ function Login() {
         .then((data)=> {
             setAuth(data.User, data.status);
             if(data.status === true){
-                navigate("/Home")
+              const previousLocation = localStorage.getItem('currentLocation') || '/Home';
+              navigate(previousLocation);
             }
         })
     },[navigate, setAuth]);

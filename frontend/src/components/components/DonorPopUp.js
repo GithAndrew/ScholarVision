@@ -5,6 +5,7 @@ import {apiUrl} from '../../apiUrl';
 import '../css/PopUp.css'
 
 function DonorPopUp (props) {
+    
     const scholar = props.scholar
     const [donor, setDonor] = useState([]);
     const [scholarships, setScholarship] = useState([]);

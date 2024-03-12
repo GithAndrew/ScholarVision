@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9;
+    z-index: 5;
 }
 
 .donor-popup-box{
@@ -151,7 +151,7 @@
 .add-label {
     font-family: "Inter", sans-serif;
     text-align: center;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bolder;
     margin-bottom: 15px;
     position: sticky;
@@ -290,4 +290,18 @@
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
+}
+
+.add-checkbox {
+    margin-bottom: 10px;
+}
+
+.add-sub {
+    font-family: "Inter", sans-serif;
+    color: #474747;
+    font-style: italic;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bolder;
+    margin-right: 5px;
 }

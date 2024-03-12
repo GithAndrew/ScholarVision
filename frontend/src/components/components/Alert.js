@@ -2,6 +2,7 @@ import React from 'react';
 import '../css/Alert.css'
 
 const CustomAlert = (props) => {
+    
     return (
         <div className="popup-wrapper">
             <div className="alert">

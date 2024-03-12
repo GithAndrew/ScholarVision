@@ -1,22 +1,29 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import Alert from '../components/Alert';
 import {React, useState, useEffect} from 'react';
-import {apiUrl} from '../../apiUrl';
 import {Link} from 'react-router-dom';
+import {apiUrl} from '../../apiUrl';
+import useStore from '../../authHook';
 // import {Link, useLocation} from 'react-router-dom';
 import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
 import {BsSearch}  from 'react-icons/bs';
-import DonorPopUp from '../components/DonorPopUp';
-import ConfirmPopUp from '../components/ConfirmPopUp';
 import AddPopUp from '../components/AddPopUp';
+import ConfirmPopUp from '../components/ConfirmPopUp';
+import DonorPopUp from '../components/DonorPopUp';
 import OrderPopUp from '../components/OrderPopUp';
-import Alert from '../components/Alert';
 import '../css/List.css'
 
 function List () {
     // const location = useLocation();
     // console.log(location)
     // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
+    localStorage.setItem('currentLocation', window.location.pathname);
+    const { user } = useStore();
+    let userRole = "";
+    if (user) {userRole = user.role;}
+    console.log(userRole)
+
     let input;
     const [assignScholar, setAssign] = useState([]);
     const [assignConfirm, setAssignConfirm] = useState([]);
@@ -27,8 +34,11 @@ function List () {
 
     const [openDonor, setOpenDonor] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
-    const [openAdd, setAddField] = useState(false);
     const [openOrder, setOpenOrder] = useState(false);
+
+    const [openAdd, setAddField] = useState(false);
+    const [field, setField] = useState();
+    const [requiredField, setRequiredField] = useState(false);
 
     // https://www.freecodecamp.org/news/how-to-work-with-multiple-checkboxes-in-react
     const [checkedDelete, setcheckedDelete] = useState([]);
@@ -36,13 +46,14 @@ function List () {
     const [checkedAccept, setcheckedAccept] = useState([]);
     const [acceptMany, setAcceptMany] = useState([]);
 
-    const [viewValue, setViewValue] = useState("applicant");
+    const [viewValue, setViewValue] = useState("donor");
     const [orderValue, setOrderValue] = useState("");
 
     const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
+    const [alertMessage, setAlertMessage] = useState("");
 
-    const handleShowAlert = (message) => {
+
+    const showMessage = (message) => {
         setAlertMessage(message);
         toggleAlertPopUp()
     };
@@ -196,16 +207,22 @@ function List () {
         // https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 
         if (value === '') {
-            handleShowAlert("No link inputted!");
+            showMessage("No link inputted!");
             return;
         }
 
         if (!urlPattern.test(value)) {
-            handleShowAlert("Not a valid link!");
+            showMessage("Not a valid link!");
             return;
         }
 
-        fetch(apiUrl("/" + [viewValue] + "/" + person._id),{
+        let fetchLink = apiUrl(`/${viewValue}/${person._id}`)
+
+        if (viewValue !== "applicant") {
+            fetchLink = `/scholar/${person._id}`
+        }
+
+        fetch(apiUrl(fetchLink),{
             method: "PUT",
             credentials:'include',
             headers:{
@@ -236,8 +253,36 @@ function List () {
             })
         })
         .then(response => {return response.json()})
-        .then(handleShowAlert("Link submitted!"))
+        .then(showMessage("Link submitted!"))
         .then(setTimeout(() => window.location.reload(), 450))
+    }
+
+    const newField = (userInput, required) => {
+        if (userInput) {
+            toggleAddPopup()
+            setField(userInput)
+            setRequiredField(required)
+        } else {
+            showMessage("No input!")
+        }
+    }
+
+    const validateNewField = () => {
+        let newFieldsArr = []
+        for (let i = 0; i < record.length; i++) {
+            const element = document.getElementById(`new_field${i}`);
+            const value = element ? element.value : '';
+            if (requiredField && value === '') {
+                showMessage(`Missing input for ${record[i].first_name} ${record[i].last_name}!`)
+                break
+            }
+            newFieldsArr.push(value)
+        }
+
+        for (let j = 0; j < newFieldsArr.length; j++) {
+            console.log(newFieldsArr[j])
+            // enter to backend the new field and arr
+        }
     }
 
     const DropDown = ({value, options, onChange}) => {
@@ -347,8 +392,8 @@ function List () {
             <ul className='record-dropdowns'>
                 {checkedAccept.includes(true) ? <li><button className = 'record-acceptmany-button' onClick={() => openConfirmation(acceptMany, "accept")}>ACCEPT MANY</button></li> : ""}
                 {checkedDelete.includes(true) ? <li><button className = 'record-deletemany-button' onClick={() => openConfirmation(deleteMany, "delete")}>DELETE MANY</button></li> : ""}
-                <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>
-                <li><button className = 'record-print-button'>PRINT</button></li>
+                {field ? <li><button className = 'record-enter-button' onClick={() => validateNewField()}>ENTER FIELD</button></li> : <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>}
+                {field ? <li><button className = 'record-cancel-button' onClick={() => setField()}>CANCEL ADDING</button></li> : ""}
                 <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li>
                 <li><DropDown value = {orderValue} options = {orderFilter} onChange={orderChange}/></li>
             </ul>
@@ -371,11 +416,11 @@ function List () {
                             {viewValue === "applicant" ? <th className='list-head'>ACCEPT?</th> : ""}
                             {viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
                             <th className='list-head'><AiFillDelete className='red-trash'></AiFillDelete> </th>
-                            <th className='list-head'></th>
+                            {field ? <th className='barrier'>&nbsp;</th> : ""}
+                            {field ? <th className='list-head'>ADD {field.toUpperCase()}</th> : <th className='list-head'></th>}
                         </tr>
                         <tr className='smol'></tr>
                         {record.map((person, i) => {
-                            let app_files = "app_link" + i
                             return (
                                 <tr className='list-row' key = {i}>
                                     {viewValue === 'scholar?value=true' || viewValue === 'scholar?value=false' ? 
@@ -398,8 +443,8 @@ function List () {
                                             )
                                         })
                                     : ""}
-                                    {(viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='email-color'>link</a> </td> :
-                                        viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {app_files} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
+                                    {(viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='app-link'>link</a> </td> :
+                                        viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {`app_link${i}`} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
                                     : ""}
                                     {viewValue === "scholar?value=false" ? <td className='list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
                                     {viewValue === "applicant" ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedAccept[i]} value = {checkedAccept[i]} onChange={() => handleCheckAcceptChange(i)}></input></td> : ""}
@@ -413,7 +458,9 @@ function List () {
                                     : ""}
                                     {viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => openConfirmation(person, "delete")}><AiFillDelete/></td> : ""}
                                     <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedDelete[i]} value = {checkedDelete[i]} onChange={() => handleCheckDeleteChange(i)}></input></td>
-                                    <td className='last-list-cell'>...</td>
+                                    {field ? <td className='table-barrier'>||||</td> : ""}
+                                    {field ? <td className='list-cell'><input type='text' className='link-input' id = {`new_field${i}`} placeholder={`Enter ${field.toLowerCase()}.`}></input></td> : <td className='last-list-cell'>...</td>}
+                                    {field ? <td className='last-table-barrier'>||||</td> : ""}
                                 </tr>
                             );
                         })}
@@ -435,14 +482,14 @@ function List () {
                     }
                 </div>
             }
-            {/* {viewValue === "donor" || viewValue === "scholar?value=true" ? addGrant() : ""} */}
             {orderValue === "newfield" && <OrderPopUp
                 record = {record}
                 orderFilter = {orderFilter}
-                handleClose = {toggleOrderPopup}
                 addView = {updateOrderFilter}
+                handleClose = {toggleOrderPopup}
             />}
             {openAdd ? <AddPopUp
+                addField = {newField}
                 handleClose = {toggleAddPopup}
             /> : ""}
             {openDonor ? <DonorPopUp
