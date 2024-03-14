@@ -92,3 +92,17 @@ exports.delete = (query) => {
         })
     })
 }
+
+exports.addfield = (object) =>{
+    return new Promise((resolve, reject) => {
+        Applicant.findOne({ _id: object.id }, (err, applicant) => {
+            if(err) { reject(err); }
+            applicant.newFields = object.newFields
+            
+            applicant.save((err, applicant) => {
+                if(err) { reject(err); }
+                resolve(applicant);
+            });
+        });
+    });
+}

@@ -62,7 +62,7 @@ function ConfirmPopUp (props) {
                 .then(showMessage(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
                 .then(deleteApplicant(person[i]._id))
             }
-            setTimeout(() => window.location.reload(), 450)
+            setTimeout(() => window.location.reload(), 750)
         } else {
             fetch(apiUrl("/scholar"), {
                 method: "POST",
@@ -97,7 +97,7 @@ function ConfirmPopUp (props) {
             .then(response => {return response.json()})
             .then(showMessage(`The applicant ${person.first_name} ${person.last_name} is accepted!`))
             .then(deleteApplicant(person._id))
-            .then(setTimeout(() => window.location.reload(), 450))
+            .then(setTimeout(() => window.location.reload(), 750))
         }
     }
 
@@ -116,6 +116,7 @@ function ConfirmPopUp (props) {
     }
 
     const deletePerson = (id) => {
+        console.log(id)
         if (isArray) {
             for (let i = 0; i < id.length; i++){
                 fetch(apiUrl("/" + [type]), {

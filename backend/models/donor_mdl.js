@@ -13,7 +13,8 @@ const DonorSchema = new mongoose.Schema({
     email: {type: String, required: true},
     sex: {type: String, required: true},
     statement: {type: String, required: true},
-    upload_id: {type: String}
+    upload_id: {type: String},
+    newFields: {type: mongoose.Schema.Types.Mixed}
 })
 
 DonorSchema.pre("save", function(next){

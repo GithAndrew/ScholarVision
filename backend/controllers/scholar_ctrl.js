@@ -11,7 +11,7 @@ exports.findScholar = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -48,7 +48,7 @@ exports.findAll = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -100,7 +100,7 @@ exports.search = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -154,7 +154,7 @@ exports.sortBy = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -168,7 +168,15 @@ exports.sortBy = async (req, res) => {
     let withoutScholarship = [];
 
     try {
-        const toSort = key[0];
+        scholarGetAll = await Scholar.getAll();
+        let newFields = [];
+        if (scholarGetAll && scholarGetAll.length > 0 && scholarGetAll[0].newFields) {
+            newFields = Object.keys(scholarGetAll[0].newFields);
+        }
+        let toSort = key[0];
+        if (newFields.includes(key[0])) {
+            toSort = `newFields.${key[0]}`;
+        }
         const scholar = await Scholar.getAllSorted({ [toSort]: parseInt(value) });
         if (!scholar) {
             console.log("Scholar database is empty");
@@ -213,7 +221,7 @@ exports.addScholar = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -245,7 +253,8 @@ exports.addScholar = async (req, res) => {
         applicant_link: body.applicant_link,
         scholarship_id: body.scholarship_id,
         acceptance_date: body.acceptance_date,
-        upload_id: body.upload_id
+        upload_id: body.upload_id,
+        newFields: body.newFields
     };
 
     console.log(body)
@@ -262,7 +271,7 @@ exports.addScholar = async (req, res) => {
 
     try {
         const scholar = await Scholar.create(newScholar);
-        // await Log.create(token.user, 'create', `scholar ${scholar._id}`);
+        await Log.create(token.user, 'create', `accepted scholar ${scholar.first_name} ${scholar.last_name}`);
         console.log(`New scholar: \n ${scholar}`);
         return res.status(201).send({ message: 'New scholar successfully added' });
     } catch(err) {
@@ -277,7 +286,7 @@ exports.editScholar = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -311,7 +320,8 @@ exports.editScholar = async (req, res) => {
             applicant_link: body.applicant_link,
             scholarship_id: body.scholarship_id,
             acceptance_date: body.acceptance_date,
-            upload_id: body.upload_id
+            upload_id: body.upload_id,
+            newFields: body.newFields
         };
 
         try {
@@ -335,7 +345,7 @@ exports.editScholar = async (req, res) => {
 
         try {
             const edit = await Scholar.edit(scholar);
-            // await Log.create(token.user, 'edit', `scholar ${edit._id}`);
+            await Log.create(token.user, 'edit', `edited scholar ${edit.first_name} ${edit.last_name}`);
             console.log(`Edited scholar ${edit}`);
             return res.status(200).send({ message: 'Scholar successfully edited' });
         } catch(err) {
@@ -354,7 +364,7 @@ exports.deleteScholar = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -390,7 +400,7 @@ exports.deleteScholar = async (req, res) => {
                     scholar = await Scholar.getOne({ _id: idList[i] });
                     if (scholar) {
                         await Delete.create("scholar", scholar);
-                        // await Log.create(token.user, 'delete', `scholar ${scholar._id}`);
+                        await Log.create(token.user, 'delete', `deleted scholar ${scholar.first_name} ${scholar.last_name}`);
                         await Scholar.delete({ _id: idList[i] });
                         console.log('Successfully deleted scholar with id:', idList[i]);
                         validId.push(idList[i]);
@@ -419,6 +429,68 @@ exports.deleteScholar = async (req, res) => {
         }
     // } else {
     //     console.log("Cannot delete: ", token.user.role);
+    //     return res.status(401).send({ message: "Unauthorized access" });
+    // }
+}
+
+exports.addField = async (req, res) => {
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+
+    const token = await utils.verifyToken(req);
+
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
+
+    // if (token.user.role === 'admin' || token.user.role === 'member') {
+        const body = req.body;
+
+        const scholar = {
+            id: req.params.id,
+            newFields: body.newFields
+        };
+
+        try {
+            mongoose.Types.ObjectId(scholar.id);
+        } catch (err) {
+            console.log('Invalid id');
+            return res.status(400).send({ message: 'Invalid id' });
+        }
+
+        var existing = null;
+        try {
+            existing = await Scholar.getOne({ _id: scholar.id });
+            if (!existing) {
+                console.log("Scholar not found");
+                return res.status(404).send({ message: 'Scholar not found' });
+            }
+        } catch(err) {
+            console.log(`Error looking for scholar in DB. Error: ${err}`);
+            return res.status(500).send({ message: 'Error searching for scholar in database' });
+        }
+
+        const mergedNewFields = { ...existing.newFields, ...scholar.newFields };
+
+        const existingScholar = {
+            id: req.params.id,
+            newFields : mergedNewFields
+        }
+
+        try {
+            const edit = await Scholar.addfield(existingScholar);
+            await Log.create(token.user, 'edit', `edited scholar ${edit.first_name} ${edit.last_name}`);
+            console.log(`Edited scholar ${edit}`);
+            return res.status(200).send({ message: 'Scholar successfully edited' });
+        } catch(err) {
+            console.log(`Unable to edit scholar. Error: ${err}`);
+            return res.status(500).send({ message: 'Error editing scholar' });
+        }
+    // } else {
+    //     console.log("Unauthorized access");
     //     return res.status(401).send({ message: "Unauthorized access" });
     // }
 }

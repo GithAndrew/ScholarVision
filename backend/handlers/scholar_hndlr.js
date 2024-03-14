@@ -66,7 +66,8 @@ exports.edit = (object) =>{
             scholar.scholarship_id = object.scholarship_id
             scholar.acceptance_date = object.acceptance_date
             scholar.applicant_link = object.applicant_link
-            scholar.upload_id = object.upload_id
+            scholar.upload_id = object.upload_id,
+            scholar.newFields = object.newFields
             
             scholar.save((err, scholar) => {
                 if(err) { reject(err); }
@@ -83,4 +84,18 @@ exports.delete = (query) => {
             else { resolve(result); }
         })
     })
+}
+
+exports.addfield = (object) =>{
+    return new Promise((resolve, reject) => {
+        Scholar.findOne({ _id: object.id }, (err, scholar) => {
+            if(err) { reject(err); }
+            scholar.newFields = object.newFields
+            
+            scholar.save((err, scholar) => {
+                if(err) { reject(err); }
+                resolve(scholar);
+            });
+        });
+    });
 }

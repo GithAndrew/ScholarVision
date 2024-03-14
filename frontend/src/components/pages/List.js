@@ -46,7 +46,7 @@ function List () {
     const [checkedAccept, setcheckedAccept] = useState([]);
     const [acceptMany, setAcceptMany] = useState([]);
 
-    const [viewValue, setViewValue] = useState("donor");
+    const [viewValue, setViewValue] = useState("applicant");
     const [orderValue, setOrderValue] = useState("");
 
     const [showAlert, setShowAlert] = useState(false);
@@ -219,10 +219,10 @@ function List () {
         let fetchLink = apiUrl(`/${viewValue}/${person._id}`)
 
         if (viewValue !== "applicant") {
-            fetchLink = `/scholar/${person._id}`
+            fetchLink = apiUrl(`/scholar/${person._id}`)
         }
 
-        fetch(apiUrl(fetchLink),{
+        fetch(fetchLink, {
             method: "PUT",
             credentials:'include',
             headers:{
@@ -249,12 +249,13 @@ function List () {
                 educational_bg: person.educational_bg,
                 statement: person.statement,
                 upload_id: person.upload_id,
-                applicant_link: document.getElementById(current_link).value
+                applicant_link: document.getElementById(current_link).value,
+                scholarship_id: person.scholarship_id
             })
         })
         .then(response => {return response.json()})
         .then(showMessage("Link submitted!"))
-        .then(setTimeout(() => window.location.reload(), 450))
+        .then(setTimeout(() => window.location.reload(), 750))
     }
 
     const newField = (userInput, required) => {
@@ -280,9 +281,28 @@ function List () {
         }
 
         for (let j = 0; j < newFieldsArr.length; j++) {
-            console.log(newFieldsArr[j])
-            // enter to backend the new field and arr
+            let fetchLink = apiUrl(`/${viewValue}/${record[j]._id}`)
+
+            if(viewValue !== "applicant") {
+                fetchLink = apiUrl(`/scholar/${record[j]._id}`)
+            }
+
+            const requestBody = {
+                newFields: {[field]: newFieldsArr[j]}
+            };
+
+            fetch(fetchLink,{
+                method: "POST",
+                credentials:'include',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => {return response.json()})
         }
+        showMessage(`Added new field ${field}!`)
+        setTimeout(() => window.location.reload(), 750)
     }
 
     const DropDown = ({value, options, onChange}) => {
@@ -426,7 +446,7 @@ function List () {
                                     {viewValue === 'scholar?value=true' || viewValue === 'scholar?value=false' ? 
                                         <td className='first-list-cell'><Link to={`/scholar/${person._id}/Profile`}>{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>
                                     : <td className='first-list-cell'><Link to={`/${viewValue}/${person._id}/Profile`}>{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>}
-                                    <td className='list-cell'><a href={`mailto: andrew.teope4@gmail.com`} className='email-color'>{person.email}</a></td>
+                                    <td className='list-cell'><a href={`mailto: ${person.email}`} className='email-color'>{person.email}</a></td>
                                     {viewValue !== "donor" ? <td className='list-cell'>{person.graduation_year}</td> : ""}
                                     {viewValue === "scholar?value=true" || viewValue === "donor" ?
                                         scholarships.map((scholarship) => {
@@ -469,8 +489,8 @@ function List () {
             :
                 <div className='scholar-container'>
                     <div className='list-search-container'>
-                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record"required></input>
-                        <BsSearch className='list-search-icon'/>
+                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record" value={input} onChange={handleUserInput} onKeyDown={handleKeyDown} required></input>
+                        <BsSearch className='list-search-icon' onClick={handleSubmit}/>
                     </div>
 
                     {viewValue === 'scholar?value=true' ? <p className='none-found'>No scholars in system!</p> : 

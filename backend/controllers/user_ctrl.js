@@ -30,7 +30,7 @@ exports.login = async (req, res) => {
                 success: true,
                 token
             };
-            await Log.create(existing, 'login', `user ${existing._id} logged in`);
+            await Log.create(existing, 'login', `user ${existing.first_name} ${existing.last_name} logged in`);
             return res.status(200).cookie('authToken', token, { maxAge: 60 * 60 * 1000, httpOnly: true }).send(response);
         }
     } catch (err) {
@@ -47,7 +47,7 @@ exports.login = async (req, res) => {
             success: true,
             token
         };
-        await Log.create(user, 'login', `user ${user._id} logged in`);
+        await Log.create(user, 'login', `user ${user.first_name} ${user.last_name} logged in`);
         return res.status(200).cookie('authToken', token, { maxAge: 60 * 60 * 1000, httpOnly: true }).send(response);
     } catch (err) {
         console.log(`Unable to add new user. Error: ${err}`);
@@ -79,7 +79,7 @@ exports.search = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -163,7 +163,7 @@ exports.findAll = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });

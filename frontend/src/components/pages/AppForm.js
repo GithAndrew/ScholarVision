@@ -16,7 +16,7 @@ const AppForm = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [counter, setCounter] = useState(0);
-    const [picID, setPicID] = useState();
+    const [picID, setPicID] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
 
     const showMessage = (message) => {
@@ -144,7 +144,7 @@ const AppForm = () => {
                     console.error('Error submitting application:', error);
                 });
             }
-            setTimeout(() => window.location.reload(), 450)
+            setTimeout(() => window.location.reload(), 750)
         } else {
             showMessage("Inputted email address already exists!");
         }

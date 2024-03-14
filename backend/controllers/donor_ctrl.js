@@ -11,7 +11,7 @@ exports.findDonor = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -47,7 +47,7 @@ exports.findAll = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -74,7 +74,7 @@ exports.search = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -115,7 +115,7 @@ exports.sortBy = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -127,7 +127,15 @@ exports.sortBy = async (req, res) => {
     const value = Object.values(orderby);
 
     try {
-        const toSort = key[0];
+        donorGetAll = await Donor.getAll();
+        let newFields = [];
+        if (donorGetAll && donorGetAll.length > 0 && donorGetAll[0].newFields) {
+            newFields = Object.keys(donorGetAll[0].newFields);
+        }
+        let toSort = key[0];
+        if (newFields.includes(key[0])) {
+            toSort = `newFields.${key[0]}`;
+        }
         const donor = await Donor.getAllSorted({ [toSort]: parseInt(value) });
         if (!donor) {
             console.log("Donor database is empty");
@@ -161,7 +169,7 @@ exports.addDonor = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -184,7 +192,8 @@ exports.addDonor = async (req, res) => {
         email: body.email,
         sex: body.sex,
         statement: body.statement,
-        upload_id: body.upload_id
+        upload_id: body.upload_id,
+        newFields: body.newFields
     };
 
     try {
@@ -199,7 +208,7 @@ exports.addDonor = async (req, res) => {
 
     try {
         const donor = await Donor.create(newDonor);
-        // await Log.create(token.user, 'create', `donor ${donor._id}`);
+        await Log.create(token.user, 'create', `added donor ${donor.first_name} ${donor.last_name}`);
         console.log(`New donor: \n ${donor}`);
         return res.status(201).send({ message: 'New donor successfully added' });
     } catch (err) {
@@ -214,7 +223,7 @@ exports.editDonor = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -236,7 +245,8 @@ exports.editDonor = async (req, res) => {
             citizenship: body.citizenship,
             sex: body.sex,
             statement: body.statement,
-            upload_id: body.upload_id
+            upload_id: body.upload_id,
+            newFields: body.newFields
         };
 
         try {
@@ -260,7 +270,7 @@ exports.editDonor = async (req, res) => {
 
         try {
             const edit = await Donor.edit(donor);
-            await Log.create(token.user, 'edit', `donor ${edit._id}`);
+            await Log.create(token.user, 'edit', `edited donor ${edit.first_name} ${edit.last_name}`);
             console.log(`Edited donor ${edit}`);
             return res.status(200).send({ message: 'Donor successfully edited' });
         } catch {
@@ -279,7 +289,7 @@ exports.deleteDonor = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -315,7 +325,7 @@ exports.deleteDonor = async (req, res) => {
                     donor = await Donor.getOne({ _id: idList[i] });
                     if (donor) {
                         await Delete.create("donor", donor);
-                        // await Log.create(token.user, 'delete', `donor ${donor._id}`);
+                        await Log.create(token.user, 'delete', `deleted donor ${donor.first_name} ${donor.last_name}`);
                         await Donor.delete({ _id: idList[i] });
                         console.log('Successfully deleted donor with id:', idList[i]);
                         validId[deleted] = idList[i];
@@ -348,5 +358,67 @@ exports.deleteDonor = async (req, res) => {
     // } else {
     //     console.log("cannot delete: ", token.user.role);
     //     return res.status(401).send({ message: 'Unauthorized Access' });
+    // }
+}
+
+exports.addField = async (req, res) => {
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+
+    const token = await utils.verifyToken(req);
+
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
+
+    // if (token.user.role === 'admin' || token.user.role === 'member') {
+        const body = req.body;
+
+        const donor = {
+            id: req.params.id,
+            newFields: body.newFields
+        };
+
+        try {
+            mongoose.Types.ObjectId(donor.id);
+        } catch (err) {
+            console.log('Invalid id');
+            return res.status(400).send({ message: 'Invalid id' });
+        }
+
+        var existing = null;
+        try {
+            existing = await Donor.getOne({ _id: donor.id });
+            if (!existing) {
+                console.log("Donor not found");
+                return res.status(404).send({ message: 'Donor not found' });
+            }
+        } catch(err) {
+            console.log(`Error looking for donor in DB. Error: ${err}`);
+            return res.status(500).send({ message: 'Error searching for donor in database' });
+        }
+
+        const mergedNewFields = { ...existing.newFields, ...donor.newFields };
+
+        const existingDonor = {
+            id: req.params.id,
+            newFields : mergedNewFields
+        }
+
+        try {
+            const edit = await Donor.addfield(existingDonor);
+            await Log.create(token.user, 'edit', `edited donor ${edit.first_name} ${edit.last_name}`);
+            console.log(`Edited donor ${edit}`);
+            return res.status(200).send({ message: 'Donor successfully edited' });
+        } catch(err) {
+            console.log(`Unable to edit donor. Error: ${err}`);
+            return res.status(500).send({ message: 'Error editing donor' });
+        }
+    // } else {
+    //     console.log("Unauthorized access");
+    //     return res.status(401).send({ message: "Unauthorized access" });
     // }
 }

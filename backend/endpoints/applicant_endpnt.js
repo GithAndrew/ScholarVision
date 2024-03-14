@@ -5,6 +5,7 @@ const Applicant = Router();
 
 Applicant.post('/', ApplicantController.addApplicant);
 Applicant.put('/:id', ApplicantController.editApplicant);
+Applicant.post('/:id', ApplicantController.addField);
 Applicant.delete('/', ApplicantController.deleteApplicant);
 Applicant.get('/search', ApplicantController.search);
 Applicant.get('/orderby', ApplicantController.sortBy);

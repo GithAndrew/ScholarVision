@@ -10,7 +10,7 @@ exports.findApplicant = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -48,7 +48,7 @@ exports.findAll = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -76,7 +76,7 @@ exports.search = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -117,7 +117,7 @@ exports.sortBy = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -129,8 +129,16 @@ exports.sortBy = async (req, res) => {
     const value = Object.values(orderby);
 
     try {
-        const toSort = key[0];
-        const applicant = await Applicant.getAllSorted({ [toSort]: parseInt(value) });
+        applicantGetAll = await Applicant.getAll();
+        let newFields = [];
+        if (applicantGetAll && applicantGetAll.length > 0 && applicantGetAll[0].newFields) {
+            newFields = Object.keys(applicantGetAll[0].newFields);
+        }
+        let toSort = key[0];
+        if (newFields.includes(key[0])) {
+            toSort = `newFields.${key[0]}`;
+        }
+        const applicant = await Applicant.getAllSorted({ [`${toSort}`]: parseInt(value) });
         if (!applicant) {
             console.log("Applicant database is empty");
             return res.status(404).send({ message: `No applicant in database` });
@@ -151,7 +159,7 @@ exports.addApplicant = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -194,7 +202,7 @@ exports.addApplicant = async (req, res) => {
 
     try {
         const applicant = await Applicant.create(newApplicant);
-        // await Log.create(token.user, 'create', `applicant ${applicant._id}`);
+        await Log.create(token.user, 'create', `added applicant ${applicant.first_name} ${applicant.last_name}`);
         console.log(`New applicant: \n ${applicant}`);
         return res.status(201).send({ message: 'New applicant successfully added' });
     } catch (err) {
@@ -209,7 +217,7 @@ exports.editApplicant = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -265,7 +273,7 @@ exports.editApplicant = async (req, res) => {
 
     try {
         const edit = await Applicant.edit(applicant);
-        // await Log.create(token.user, 'edit', `applicant ${edit._id}`);
+        await Log.create(token.user, 'edit', `edited applicant ${edit.first_name} ${edit.last_name}`);
         console.log(`Edited applicant ${edit}`);
         return res.status(200).send({ message: 'Applicant successfully edited' });
     } catch(err) {
@@ -280,7 +288,7 @@ exports.deleteApplicant = async (req, res) => {
     //     return;
     // }
 
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
 
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -315,7 +323,7 @@ exports.deleteApplicant = async (req, res) => {
                 applicant = await Applicant.getOne({ _id: idList[i] });
                 if (applicant) {
                     await Delete.create("applicant", applicant);
-                    // await Log.create(token.user, 'delete', `applicant ${applicant._id}`);
+                    await Log.create(token.user, 'delete', `deleted applicant ${applicant.first_name} ${applicant.last_name}`);
                     await Applicant.delete({ _id: idList[i] });
                     console.log('Successfully deleted applicant with id:', idList[i]);
                     deleted++;
@@ -341,4 +349,66 @@ exports.deleteApplicant = async (req, res) => {
         console.log(`Error deleting applicants ${err}`);
         res.status(500).send({ message: 'Error deleting applicants' });
     }
+}
+
+exports.addField = async (req, res) => {
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     res.status(401).send({ message: "Unauthorized access" });
+    //     return;
+    // }
+
+    const token = await utils.verifyToken(req);
+
+    // if (!token.status) {
+    //     res.status(token.code).send({ message: token.message });
+    //     return;
+    // }
+
+    // if (token.user.role === 'admin' || token.user.role === 'member') {
+        const body = req.body;
+
+        const applicant = {
+            id: req.params.id,
+            newFields: body.newFields
+        };
+
+        try {
+            mongoose.Types.ObjectId(applicant.id);
+        } catch (err) {
+            console.log('Invalid id');
+            return res.status(400).send({ message: 'Invalid id' });
+        }
+
+        var existing = null;
+        try {
+            existing = await Applicant.getOne({ _id: applicant.id });
+            if (!existing) {
+                console.log("Applicant not found");
+                return res.status(404).send({ message: 'Applicant not found' });
+            }
+        } catch(err) {
+            console.log(`Error looking for applicant in DB. Error: ${err}`);
+            return res.status(500).send({ message: 'Error searching for applicant in database' });
+        }
+
+        const mergedNewFields = { ...existing.newFields, ...applicant.newFields };
+
+        const existingApplicant = {
+            id: req.params.id,
+            newFields : mergedNewFields
+        }
+
+        try {
+            const edit = await Applicant.addfield(existingApplicant);
+            await Log.create(token.user, 'edit', `edited applicant ${edit.first_name} ${edit.last_name}`);
+            console.log(`Edited applicant ${edit}`);
+            return res.status(200).send({ message: 'Applicant successfully edited' });
+        } catch(err) {
+            console.log(`Unable to edit applicant. Error: ${err}`);
+            return res.status(500).send({ message: 'Error editing applicant' });
+        }
+    // } else {
+    //     console.log("Unauthorized access");
+    //     return res.status(401).send({ message: "Unauthorized access" });
+    // }
 }

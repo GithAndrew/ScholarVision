@@ -15,7 +15,7 @@ const AppFormDonor = () => {
     const [openDownload, setOpenDownload] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const [picID, setPicID] = useState();
+    const [picID, setPicID] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
 
     const showMessage = (message) => {
@@ -47,7 +47,7 @@ const AppFormDonor = () => {
                     setImageSrc(reader.result);
                     const data = new FormData();
                     data.append("image", e.target.files[0]);
-            
+
                     fetch(apiUrl("/upload"), {
                       method: "POST",
                       body: data,
@@ -123,7 +123,7 @@ const AppFormDonor = () => {
                     console.error('Error submitting application:', error);
                 });
             }
-            setTimeout(() => window.location.reload(), 450)
+            setTimeout(() => window.location.reload(), 750)
         } else {
             showMessage("Inputted email address already exists!");
         }

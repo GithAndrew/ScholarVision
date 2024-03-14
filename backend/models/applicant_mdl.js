@@ -22,7 +22,8 @@ const ApplicantSchema = new mongoose.Schema({
     educational_bg: {type: Object},
     statement: {type: String},
     applicant_link: {type: String},
-    upload_id: {type: String}
+    upload_id: {type: String},
+    newFields: {type: mongoose.Schema.Types.Mixed}
 })
 
 ApplicantSchema.pre("save", function(next){

@@ -11,13 +11,23 @@ function OrderPopUp (props) {
     let newAttribute = ""
 
     const orderFilter = props.orderFilter.map(({ value }) => value)
+    console.log(orderFilter)
 
     for (let i = 1; i < attributesObj.length; i++) {
-        const isObject = typeof attributesVal[i] === 'object';
+        const isObject = typeof attributesVal[i] === 'object' && attributesObj[i] !== "newFields";
         const isSpecificValue = attributesObj[i].includes("_v") || attributesObj[i].includes("id") || attributesObj[i].includes("guardian");
 
         if (isObject || isSpecificValue) {continue}
         if (!orderFilter.includes(attributesObj[i])) {
+            if(attributesObj[i] === 'newFields') {
+                for (let j = 0; j < Object.keys(attributesVal[i]).length; j++) {
+                    const key = Object.keys(attributesVal[i])[j];
+                    if (!orderFilter.includes(key)) {
+                        attributes.push(key.charAt(0).toUpperCase() + key.slice(1));                    
+                    }
+                }
+                continue
+            }
             variables.push(attributesObj[i])
             newAttribute = attributesObj[i].replace('_', ' ').replace('no', 'Number').replace('name','Name');
             attributes.push(newAttribute.charAt(0).toUpperCase() + newAttribute.slice(1));

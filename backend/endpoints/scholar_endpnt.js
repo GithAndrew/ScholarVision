@@ -5,6 +5,7 @@ const Scholar = Router();
 
 Scholar.post('/', ScholarController.addScholar);
 Scholar.put('/:id', ScholarController.editScholar);
+Scholar.post('/:id', ScholarController.addField);
 Scholar.delete('/', ScholarController.deleteScholar);
 Scholar.get('/search', ScholarController.search);
 Scholar.get('/orderby', ScholarController.sortBy);

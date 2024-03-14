@@ -66,6 +66,7 @@ exports.edit = (object) =>{
             donor.email = object.email
             donor.statement = object.statement
             donor.upload_id = object.upload_id
+            donor.newFields = object.newFields
 
             donor.save((err, donor) => {
                 if(err) { reject(err); }
@@ -82,4 +83,18 @@ exports.delete = (query) => {
             else { resolve(result); }
         })
     })
+}
+
+exports.addfield = (object) =>{
+    return new Promise((resolve, reject) => {
+        Donor.findOne({ _id: object.id }, (err, donor) => {
+            if(err) { reject(err); }
+            donor.newFields = object.newFields
+            
+            donor.save((err, donor) => {
+                if(err) { reject(err); }
+                resolve(donor);
+            });
+        });
+    });
 }

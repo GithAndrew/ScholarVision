@@ -10,7 +10,7 @@ exports.findScholarship = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -46,7 +46,7 @@ exports.findAll = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -91,7 +91,7 @@ exports.addScholarship = async (req, res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -112,7 +112,7 @@ exports.addScholarship = async (req, res) => {
     
         try {
             const scholarship = await Scholarship.create(newScholarship);
-            // await Log.create(token.user, 'create', `scholarship ${scholarship._id}`)
+            await Log.create(token.user, 'create', `added scholarship ${scholarship.scholarshipname}`);
             console.log(`New Scholarship: \n ${scholarship}`);
             return res.status(201).send({ message: 'New Scholarship successfully added' });
         } catch(err) {
@@ -131,7 +131,7 @@ exports.editScholarship = async (req,res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -164,7 +164,7 @@ exports.editScholarship = async (req,res) => {
     
         try {
             const edit = await Scholarship.edit(scholarship);
-            await Log.create(token.user, 'edit', `scholarship ${edit._id}`);
+            await Log.create(token.user, 'edit', `edited scholarship ${edit.scholarshipname}`);
             console.log(`Edited scholarship ${edit}`);
             return res.status(200).send({ message: 'Scholarship successfully edited' });
         } catch (err) {
@@ -184,7 +184,7 @@ exports.deleteScholarship = async (req,res) => {
     //     return;
     // }
   
-    // const token = await utils.verifyToken(req);
+    const token = await utils.verifyToken(req);
     
     // if (!token.status) {
     //     res.status(token.code).send({ message: token.message });
@@ -220,7 +220,7 @@ exports.deleteScholarship = async (req,res) => {
                     scholarship = await Scholarship.getOne({_id: idList[i]});
                     if (scholarship) {
                         await Delete.create("scholarship", scholarship);
-                        // await Log.create(token.user, 'delete', `scholarship ${scholarship._id}`);
+                        await Log.create(token.user, 'delete', `scholarship ${scholarship.scholarshipname}`);
                         await Scholarship.delete({_id: idList[i]});
                         console.log('Successfully deleted scholarship with id:', idList[i]);
                         validId[deleted] = idList[i];

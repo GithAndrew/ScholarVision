@@ -24,7 +24,8 @@ const ScholarSchema = new mongoose.Schema({
     applicant_link: {type: String},
     scholarship_id: {type: String},
     acceptance_date: {type: Date},
-    upload_id: {type: String}
+    upload_id: {type: String},
+    newFields: {type: mongoose.Schema.Types.Mixed}
 })
 
 ScholarSchema.pre("save", function(next){

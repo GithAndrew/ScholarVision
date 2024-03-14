@@ -42,7 +42,15 @@ function Profile () {
     }
 
     const [record, setRecord] = useState([]);
+    let attributes = [];
     const {type, id} = useParams();
+
+    if (record["newFields"]) {
+        const keys = Object.keys(record["newFields"]);
+        keys.forEach(key => {attributes.push(key);});
+    }
+
+    console.log(attributes)
 
     useEffect(() => {
         Promise.all([
@@ -179,6 +187,20 @@ function Profile () {
                         </tr>
                         <tr className='smol'></tr>
                     </table>
+                    {record.newFields ? <header className='profile-header'>ADDITIONAL INFORMATION</header> : ""}
+                    {record.newFields ? 
+                        <table className='personal-table'>
+                            <tr className='smol'>&nbsp;</tr>
+                            {attributes.map((attribute) => (
+                                <tr>
+                                    <td className='cell-bold'>{attribute.charAt(0).toUpperCase() + attribute.slice(1)}</td>
+                                    <td className='info-here'>{record.newFields[attribute]}</td>
+                                    <td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td>
+                                </tr>
+                            ))}
+                            <tr className='smol'></tr>
+                        </table>
+: ""}
                 </div>
                 <Footer/>
         </div>
