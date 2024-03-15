@@ -39,8 +39,7 @@ function Logs () {
             .then(response => {return response.json()})
             .then((data) => {setLogs(data.result)})
         } else {
-            fetch(apiUrl(`/logs`),
-            {
+            fetch(apiUrl(`/logs`), {
                 method: "GET",
                 credentials:'include'
             })
@@ -51,7 +50,7 @@ function Logs () {
 
     useEffect(() => {
         Promise.all([
-            fetch(apiUrl(`/logs`))
+            fetch(apiUrl(`/logs`), {credentials:'include'})
         ])
         .then(([resLogs]) => {
             return Promise.all([

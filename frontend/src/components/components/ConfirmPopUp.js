@@ -55,6 +55,7 @@ function ConfirmPopUp (props) {
                         educational_bg: person[i].educational_bg,
                         applicant_link: person[i].applicant_link,
                         statement: person[i].statement,
+                        newFields: person[i].newFields,
                         upload_id: person[i].upload_id
                     })
                 })
@@ -91,6 +92,7 @@ function ConfirmPopUp (props) {
                     educational_bg: person.educational_bg,
                     applicant_link: person.applicant_link,
                     statement: person.statement,
+                    newFields: person.newFields,
                     upload_id: person.upload_id
                 })
             })

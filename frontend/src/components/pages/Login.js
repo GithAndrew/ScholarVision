@@ -18,7 +18,7 @@ function Login() {
         function sendToken(token){
             fetch((apiUrl("/user/")), {
                 method: "POST",
-                credentials: "include", 
+                credentials: 'include', 
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -60,7 +60,6 @@ function Login() {
         fetch((apiUrl("/user/isLogin")), {
             method: "GET",
             credentials:'include',
-            withCredentials: true,
             headers:{
                 'Content-Type':'application/json'
             },
@@ -79,8 +78,9 @@ function Login() {
         <header className='login-header'>
           <img className="login-logo" src={SVLogo} alt="logo" />
           <img className="login-logo" src={SchoolLogo} alt="logo" />
-          <div className="text">
-            <p className='header-text'><span style={{fontSize: '1.5em'}}>Name of School</span><span style={{fontStyle: 'italic'}}> Scholar Database</span></p>
+          <div>
+            <p className='login-header-text'>Name of School</p>
+            <p className='login-subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
           </div>
         </header>
 
@@ -94,7 +94,7 @@ function Login() {
           <div className="login-wrap">
             <form className="login-form">
               <span className="login-form-title">
-                <h2>User Login</h2>
+                <h2 className='user-login'>User Login</h2>
               </span>
   
                 <div id="signInDiv" class="customGPlusSignIn">

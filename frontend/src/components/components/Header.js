@@ -32,7 +32,8 @@ const Header = () => {
             <img className="main-logo" src={SVLogo} alt="logo"/>
             <img className="main-logo" src={SchoolLogo} alt="logo"/>
             <div>
-                <span><p className='header-text'><Link to="/Home"><span style={{fontSize: '1.5em'}}>Name of School</span><span style={{fontStyle: 'italic'}}> Scholar Database</span></Link></p></span>
+                <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">Name of School</Link></p>
+                <p className='subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
             </div>
             {user ?
                 <div className='header-div-right'>

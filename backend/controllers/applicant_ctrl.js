@@ -5,17 +5,18 @@ const Delete = require('../handlers/deleted_hndlr');
 const utils = require('./utils');
 
 exports.findApplicant = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
+    console.log("app.findApplicant")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     console.log(`applicant id: ${req.params.id}`);
     const id = req.params.id;
@@ -43,17 +44,18 @@ exports.findApplicant = async (req, res) => {
 }
 
 exports.findAll = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
+    console.log("app.findAll")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let applicant;
     try {
@@ -71,17 +73,18 @@ exports.findAll = async (req, res) => {
 }
 
 exports.search = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
+    console.log("app.search")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let search = req.query.name;
     let result = new Array();
@@ -112,17 +115,18 @@ exports.search = async (req, res) => {
 }
 
 exports.sortBy = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
-  
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
+
+    console.log("app.sortBy")
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let orderby = req.query;
     const key = Object.keys(orderby);
@@ -152,19 +156,20 @@ exports.sortBy = async (req, res) => {
 }
 
 exports.addApplicant = async (req, res) => {
-    const body = req.body;
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
-
+    console.log("app.addApplicant")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
+
+    const body = req.body;
 
     const newApplicant = {
         last_name: body.last_name,
@@ -212,17 +217,18 @@ exports.addApplicant = async (req, res) => {
 }
 
 exports.editApplicant = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
+    console.log("app.editApplicant")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     const body = req.body;
     console.log(`applicant id: ${req.params.id}`);
@@ -283,17 +289,18 @@ exports.editApplicant = async (req, res) => {
 }
 
 exports.deleteApplicant = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
+    console.log("app.deleteApplicant")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     const idList = req.body.ids;
     let deleted = 0, failed = 0;
@@ -352,19 +359,20 @@ exports.deleteApplicant = async (req, res) => {
 }
 
 exports.addField = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
+    console.log("app.addField")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
-    // if (token.user.role === 'admin' || token.user.role === 'member') {
+    if (token.user.role === 'admin' || token.user.role === 'member') {
         const body = req.body;
 
         const applicant = {
@@ -407,8 +415,8 @@ exports.addField = async (req, res) => {
             console.log(`Unable to edit applicant. Error: ${err}`);
             return res.status(500).send({ message: 'Error editing applicant' });
         }
-    // } else {
-    //     console.log("Unauthorized access");
-    //     return res.status(401).send({ message: "Unauthorized access" });
-    // }
+    } else {
+        console.log("Unauthorized access");
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
 }

@@ -53,6 +53,7 @@ const AppForm = () => {
                     fetch(apiUrl("/upload"), {
                       method: "POST",
                       body: data,
+                      credentials:'include'
                     }).then((response) => response.json())
                     .then((result) => {
                         setPicID(result.id);
@@ -274,9 +275,9 @@ const AppForm = () => {
 
     useEffect(() => {
         Promise.all([
-            fetch(apiUrl(`/applicant`)),
-            fetch(apiUrl(`/scholar?value=false`)),
-            fetch(apiUrl(`/scholar?value=true`))
+            fetch(apiUrl(`/applicant`), {credentials:'include'}),
+            fetch(apiUrl(`/scholar?value=false`), {credentials:'include'}),
+            fetch(apiUrl(`/scholar?value=true`), {credentials:'include'})
         ])
         .then(([resApps, resAccepted, resScholars]) => {
             return Promise.all([

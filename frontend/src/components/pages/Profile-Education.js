@@ -20,8 +20,8 @@ function ProfileEducation () {
 
     useEffect(() => {
         Promise.all([
-            type === "applicant" ? fetch(apiUrl(`/applicant/${id}`)) : null,
-            type === 'scholar' ? fetch(apiUrl(`/scholar/${id}`)) : null
+            type === "applicant" ? fetch(apiUrl(`/applicant/${id}`), {credentials:'include'}) : null,
+            type === 'scholar' ? fetch(apiUrl(`/scholar/${id}`), {credentials:'include'}) : null
         ])
         .then(([resApps, resScholars]) => {
             return Promise.all([

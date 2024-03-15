@@ -51,6 +51,7 @@ const AppFormDonor = () => {
                     fetch(apiUrl("/upload"), {
                       method: "POST",
                       body: data,
+                      credentials: 'include'
                     }).then((response) => response.json())
                     .then((result) => {
                         setPicID(result.id);
@@ -197,7 +198,7 @@ const AppFormDonor = () => {
 
     const getDonorData = () => {
         Promise.all([
-            fetch(apiUrl(`/donor`))
+            fetch(apiUrl(`/donor`), {credentials:'include'})
         ])
         .then(([resDonors]) => {
             return Promise.all([resDonors.json()]);
@@ -231,7 +232,7 @@ const AppFormDonor = () => {
     
     useEffect(() => {
         Promise.all([
-            fetch(apiUrl(`/donor`))
+            fetch(apiUrl(`/donor`), {credentials:'include'})
         ])
         .then(([resDonors]) => {
             return Promise.all([

@@ -57,8 +57,7 @@ function Users () {
             .then(response => {return response.json()})
             .then((data) => {setUsers(data.result)})
         } else {
-            fetch(apiUrl(`/user`),
-            {
+            fetch(apiUrl(`/user`), {
                 method: "GET",
                 credentials:'include'
             })
@@ -69,7 +68,7 @@ function Users () {
 
     useEffect(() => {
         Promise.all([
-            fetch(apiUrl(`/user`))
+            fetch(apiUrl(`/user`), {credentials:'include'})
         ])
         .then(([resUsers]) => {
             return Promise.all([

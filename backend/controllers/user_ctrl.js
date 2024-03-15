@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 exports.login = async (req, res) => {
+    console.log("user.login")
     const userobject = jwt_decode(req.body.token);
 
     const newUser = {
@@ -61,6 +62,7 @@ exports.isLogin = async (req, res) => {
     //     return res.status(200).send({ message: 'Unauthorized access', status: false });
     // }
 
+    // console.log("user.isLogin")
     let tokenDetails = await utils.verifyToken(req);
 
     if (!tokenDetails.status) {
@@ -78,6 +80,8 @@ exports.search = async (req, res) => {
     //     res.status(401).send({ message: "Unauthorized access" });
     //     return;
     // }
+
+    console.log("user.search")
 
     const token = await utils.verifyToken(req);
 
@@ -119,6 +123,7 @@ exports.changeRole = async (req, res) => {
     //     return;
     // }
 
+    console.log("user.changeRole")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -163,6 +168,7 @@ exports.findAll = async (req, res) => {
     //     return;
     // }
 
+    console.log("user.findAll")
     const token = await utils.verifyToken(req);
 
     // if (!token.status) {

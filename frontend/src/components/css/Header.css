@@ -23,6 +23,15 @@
     padding-right: 20px;
 }
 
+.header-text {
+    font-family: "Inter", sans-serif;
+    color: #FFFEF2;
+    text-align: left;
+    font-size: 40px;
+    font-weight: bold;
+    margin: 0;
+}
+
 .header-text :link {
     font-family: "Inter", sans-serif;
     color: #FFFEF2;
@@ -36,6 +45,14 @@
 .header-text :visited {
     color: #FFFEF2;
     text-decoration: none;
+}
+
+.subheader-text {
+    font-family: "Inter", sans-serif;
+    color: #FFFEF2;
+    text-align: left;
+    font-size: 20px;
+    margin: 0;
 }
 
 .header-div-right {

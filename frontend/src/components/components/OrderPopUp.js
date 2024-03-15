@@ -15,7 +15,7 @@ function OrderPopUp (props) {
 
     for (let i = 1; i < attributesObj.length; i++) {
         const isObject = typeof attributesVal[i] === 'object' && attributesObj[i] !== "newFields";
-        const isSpecificValue = attributesObj[i].includes("_v") || attributesObj[i].includes("id") || attributesObj[i].includes("guardian");
+        const isSpecificValue = attributesObj[i].includes("_v") || attributesObj[i].includes("id") || attributesObj[i].includes("guardian") || attributesObj[i].includes("link");
 
         if (isObject || isSpecificValue) {continue}
         if (!orderFilter.includes(attributesObj[i])) {

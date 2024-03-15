@@ -18,6 +18,9 @@ function List () {
     // const location = useLocation();
     // console.log(location)
     // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
+    const [viewValue, setViewValue] = useState('');
+    // const [viewValue, setViewValue] = localStorage.getItem('viewValue')
+    // console.log(viewValue)
     localStorage.setItem('currentLocation', window.location.pathname);
     const { user } = useStore();
     let userRole = "";
@@ -46,12 +49,17 @@ function List () {
     const [checkedAccept, setcheckedAccept] = useState([]);
     const [acceptMany, setAcceptMany] = useState([]);
 
-    const [viewValue, setViewValue] = useState("applicant");
+    // const [viewValue, setViewValue] = useState("applicant");
     const [orderValue, setOrderValue] = useState("");
 
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
 
+    let attributes = [];
+    if (record[0] && record[0]["newFields"]) {
+        const keys = Object.keys(record[0]["newFields"]);
+        keys.forEach(key => {attributes.push(key);});
+    }
 
     const showMessage = (message) => {
         setAlertMessage(message);
@@ -79,6 +87,7 @@ function List () {
 
     const viewChange = (selectedValue) => {
         setViewValue(selectedValue);
+        localStorage.setItem('viewValue', selectedValue);
     }
 
     const orderChange = (selectedValue) => {
@@ -147,8 +156,7 @@ function List () {
             .then(response => {return response.json()})
             .then((data) => {setRecord(data.result)})
         } else {
-            fetch(apiUrl(`/${viewValue}`),
-            {
+            fetch(apiUrl(`/${viewValue}`), {
                 method: "GET",
                 credentials:'include'
             })
@@ -283,12 +291,12 @@ function List () {
         for (let j = 0; j < newFieldsArr.length; j++) {
             let fetchLink = apiUrl(`/${viewValue}/${record[j]._id}`)
 
-            if(viewValue !== "applicant") {
+            if(viewValue.includes("scholar")) {
                 fetchLink = apiUrl(`/scholar/${record[j]._id}`)
             }
 
             const requestBody = {
-                newFields: {[field]: newFieldsArr[j]}
+                newFields: {[field.toLowerCase()]: newFieldsArr[j]}
             };
 
             fetch(fetchLink,{
@@ -341,15 +349,15 @@ function List () {
     // SOURCE: https://medium.com/@jdhawks/make-fetch-s-happen-5022fcc2ddae
     useEffect(() => {
         Promise.all([
-            orderValue !== '' && viewValue === "donor" ? fetch(apiUrl(`/donor/orderby?${orderValue}=1`)) : null,
-            orderValue !== '' && viewValue === "applicant" ? fetch(apiUrl(`/applicant/orderby?${orderValue}=1`)) : null,
-            orderValue !== '' && viewValue === "scholar?value=false" ? fetch(apiUrl(`/scholar/orderby?${orderValue}=1&value=false`)) : null,
-            orderValue !== '' && viewValue === "scholar?value=true" ? fetch(apiUrl(`/scholar/orderby?${orderValue}=1&value=true`)) : null,
-            viewValue === "donor" ? fetch(apiUrl(`/donor`)) : null,
-            viewValue === "applicant" ? fetch(apiUrl(`/applicant`)) : null,
-            viewValue === "scholar?value=false" ? fetch(apiUrl(`/scholar?value=false`)) : null,
-            viewValue === "scholar?value=true" ? fetch(apiUrl(`/scholar?value=true`)) : null,
-            fetch(apiUrl(`/scholarship`))
+            orderValue !== '' && viewValue === "donor" ? fetch(apiUrl(`/donor/orderby?${orderValue}=1`), {credentials:'include'}) : null,
+            orderValue !== '' && viewValue === "applicant" ? fetch(apiUrl(`/applicant/orderby?${orderValue}=1`), {credentials:'include'}) : null,
+            orderValue !== '' && viewValue === "scholar?value=false" ? fetch(apiUrl(`/scholar/orderby?${orderValue}=1&value=false`), {credentials:'include'}) : null,
+            orderValue !== '' && viewValue === "scholar?value=true" ? fetch(apiUrl(`/scholar/orderby?${orderValue}=1&value=true`), {credentials:'include'}) : null,
+            viewValue === "donor" ? fetch(apiUrl(`/donor`), {credentials:'include'}) : null,
+            viewValue === "applicant" ? fetch(apiUrl(`/applicant`), {credentials:'include'}) : null,
+            viewValue === "scholar?value=false" ? fetch(apiUrl(`/scholar?value=false`), {credentials:'include'}) : null,
+            viewValue === "scholar?value=true" ? fetch(apiUrl(`/scholar?value=true`), {credentials:'include'}) : null,
+            fetch(apiUrl(`/scholarship`), {credentials:'include'})
         ])
         .then(([resDonorsO, resAppsO, resAcceptedO, resScholarsO, resDonors, resApps, resAccepted, resScholars, resScholarships]) => {
             return Promise.all([
@@ -391,6 +399,14 @@ function List () {
         }
     }, [record])
 
+    useEffect(() => {
+        const storedValue = localStorage.getItem('viewValue');
+        console.log(storedValue)
+        if (storedValue) {
+            setViewValue(storedValue);
+        }
+    }, []);
+
     return (
         <div>
             <Header/>
@@ -430,6 +446,7 @@ function List () {
                             <th className='list-head'>EMAIL</th>
                             {viewValue !== "donor" ? <th className='list-head'>GRADUATION YEAR</th> : ""}
                             {viewValue === "donor" || viewValue === "scholar?value=true" ? <th className='list-head'>SCHOLARSHIP DETAILS</th> : ""}
+                            {attributes.map((attribute) => (<th className='list-head'>{attribute.toUpperCase()}</th>))}
                             {viewValue !== "donor" ? <th className='list-head'>LINKS</th> : ""}
                             {viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
                             {viewValue === "applicant" ? <th className='list-head'><AiFillCheckCircle className='green-check'></AiFillCheckCircle></th> : ""}
@@ -463,6 +480,7 @@ function List () {
                                             )
                                         })
                                     : ""}
+                                    {person.newFields ? attributes.map((attribute) => (<td className='list-cell'>{person.newFields[attribute]}</td>)) : ""}
                                     {(viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='app-link'>link</a> </td> :
                                         viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {`app_link${i}`} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
                                     : ""}

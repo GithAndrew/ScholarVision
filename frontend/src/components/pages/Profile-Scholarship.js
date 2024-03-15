@@ -33,9 +33,9 @@ function ProfileScholarship () {
 
     useEffect(() => {
         Promise.all([
-            type === "donor" ? fetch(apiUrl(`/donor/${id}`)) : null,
-            type === "scholar" ? fetch(apiUrl(`/scholar/${id}`)) : null,
-            fetch(apiUrl(`/scholarship`))
+            type === "donor" ? fetch(apiUrl(`/donor/${id}`), {credentials:'include'}) : null,
+            type === "scholar" ? fetch(apiUrl(`/scholar/${id}`), {credentials:'include'}) : null,
+            fetch(apiUrl(`/scholarship`), {credentials:'include'})
         ])
         .then(([resDonors, resScholars, resScholarship]) => {
             return Promise.all([

@@ -42,21 +42,19 @@ function Profile () {
     }
 
     const [record, setRecord] = useState([]);
-    let attributes = [];
     const {type, id} = useParams();
+    let attributes = [];
 
     if (record["newFields"]) {
         const keys = Object.keys(record["newFields"]);
         keys.forEach(key => {attributes.push(key);});
     }
 
-    console.log(attributes)
-
     useEffect(() => {
         Promise.all([
-            type === "donor" ? fetch(apiUrl(`/donor/${id}`)) : null,
-            type === "applicant" ? fetch(apiUrl(`/applicant/${id}`)) : null,
-            type === 'scholar' ? fetch(apiUrl(`/scholar/${id}`)) : null
+            type === "donor" ? fetch(apiUrl(`/donor/${id}`), {credentials:'include'}) : null,
+            type === "applicant" ? fetch(apiUrl(`/applicant/${id}`), {credentials:'include'}) : null,
+            type === 'scholar' ? fetch(apiUrl(`/scholar/${id}`), {credentials:'include'}) : null
         ])
         .then(([resDonors, resApps, resScholars]) => {
             return Promise.all([
@@ -71,6 +69,7 @@ function Profile () {
                 let uploadID = dataDonors.upload_id.split(".")[0]
                 fetch(apiUrl(`/upload/${uploadID}`), {
                     method: "GET",
+                    credentials: 'include'
                 }).then((response) => response.json())
                 .catch(error => {
                     console.error("Error fetching data:", error);
@@ -81,6 +80,7 @@ function Profile () {
                 let uploadID = dataApps.upload_id.split(".")[0];
                 fetch(apiUrl(`/upload/${uploadID}`), {
                     method: "GET",
+                    credentials: 'include'
                 }).then((response) => response.json())
                 .catch(error => {
                     console.error("Error fetching data:", error);
@@ -91,6 +91,7 @@ function Profile () {
                 let uploadID = dataScholars.upload_id.split(".")[0];
                 fetch(apiUrl(`/upload/${uploadID}`), {
                     method: "GET",
+                    credentials: 'include'
                 }).then((response) => response.json())
                 .catch(error => {
                     console.error("Error fetching data:", error);
