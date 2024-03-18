@@ -1,4 +1,4 @@
-import {React, useEffect} from 'react';
+import {React, useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
 import useStore from '../../authHook';
@@ -10,6 +10,8 @@ const Header = () => {
 
     const navigate = useNavigate();
     const { user, isAuthenticated } = useStore();
+    const [school, setSchool] = useState([]);
+    const storedValue = localStorage.getItem('mainSchool');
 
     const logout = () => {
         fetch(apiUrl("/user"), {
@@ -21,18 +23,45 @@ const Header = () => {
         }).then(response => {return response.json()})
     }
 
-    useEffect(()=> {
-        if(isAuthenticated === false){
-            navigate("/")
-        }
-    },[navigate, isAuthenticated]);
+    useEffect(() => {
+        Promise.all([
+            fetch(apiUrl(`/school/${storedValue}`), {credentials:'include'})
+        ])
+        .then(([resSchools]) => {
+            return Promise.all([
+                resSchools.json()
+            ]);
+        })
+        .then(([dataSchools]) => {
+            setSchool(dataSchools);
+            let uploadID = dataSchools.upload_id.split(".")[0]
+            fetch(apiUrl(`/upload/${uploadID}`), {
+                method: "GET",
+                credentials: 'include'
+            }).then((response) => response.json())
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });    
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+    }, [storedValue]);
+
+    // useEffect(()=> {
+    //     if(isAuthenticated === false){
+    //         navigate("/")
+    //     }
+    // },[navigate, isAuthenticated]);
 
     return(
         <header className='main-header'>
             <img className="main-logo" src={SVLogo} alt="logo"/>
-            <img className="main-logo" src={SchoolLogo} alt="logo"/>
+            {school.upload_id ? <img className="main-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>}
             <div>
-                <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">Name of School</Link></p>
+                {school.school_name ? <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">{school.school_name}</Link></p> : 
+                    <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">Name of School</Link></p>
+                }
                 <p className='subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
             </div>
             {user ?

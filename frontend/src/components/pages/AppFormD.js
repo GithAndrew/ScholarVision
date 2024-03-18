@@ -117,8 +117,11 @@ const AppFormDonor = () => {
                     })
                 })
                 .then(response => response.json())
+                .then(data => {
+                    sendScholarship(data.donor._id);
+                })
                 .then(allEmails.push(tempEmail))
-                .then(getDonorData)
+                // .then(getDonorData)
                 .then(showMessage(`Application for ${first_name} ${last_name} accepted!`))
                 .catch(error => {
                     console.error('Error submitting application:', error);
@@ -196,20 +199,20 @@ const AppFormDonor = () => {
         }
     };
 
-    const getDonorData = () => {
-        Promise.all([
-            fetch(apiUrl(`/donor`), {credentials:'include'})
-        ])
-        .then(([resDonors]) => {
-            return Promise.all([resDonors.json()]);
-        })
-        .then(([dataDonors]) => {
-            sendScholarship(dataDonors[dataDonors.length-1])
-        })
-        .catch(error => {
-            console.error("Error fetching data:", error);
-        });
-    }
+    // const getDonorData = () => {
+    //     Promise.all([
+    //         fetch(apiUrl(`/donor`), {credentials:'include'})
+    //     ])
+    //     .then(([resDonors]) => {
+    //         return Promise.all([resDonors.json()]);
+    //     })
+    //     .then(([dataDonors]) => {
+    //         sendScholarship(dataDonors[dataDonors.length-1])
+    //     })
+    //     .catch(error => {
+    //         console.error("Error fetching data:", error);
+    //     });
+    // }
 
     const sendScholarship = (donorData) => {
         fetch(apiUrl("/scholarship"), {

@@ -3,5 +3,6 @@ exports.endpoints = {
     User: require('./user_endpnt'),
     Donor: require('./donor_endpnt'),
     Scholarship: require('./scholarship_endpnt'),
-    Applicant : require('./applicant_endpnt')
+    Applicant : require('./applicant_endpnt'),
+    School: require('./school_endpnt')
 }

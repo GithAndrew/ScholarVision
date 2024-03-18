@@ -6,5 +6,6 @@ exports.models = {
     Applicant : require('./applicant_mdl'),
     Deleted: require('./deleted_mdl'),
     Log: require('./log_mdl'),
-    Upload: require('./upload_mdl')
+    Upload: require('./upload_mdl'),
+    School: require('./school_mdl')
 }

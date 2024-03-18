@@ -5,7 +5,6 @@ import {React, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
 import useStore from '../../authHook';
-// import {Link, useLocation} from 'react-router-dom';
 import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
 import {BsSearch}  from 'react-icons/bs';
 import AddPopUp from '../components/AddPopUp';
@@ -15,12 +14,6 @@ import OrderPopUp from '../components/OrderPopUp';
 import '../css/List.css'
 
 function List () {
-    // const location = useLocation();
-    // console.log(location)
-    // const [viewValue, setViewValue] = useState(location.state ? location.state.viewValue : "scholar?value=true");
-    const [viewValue, setViewValue] = useState('');
-    // const [viewValue, setViewValue] = localStorage.getItem('viewValue')
-    // console.log(viewValue)
     localStorage.setItem('currentLocation', window.location.pathname);
     const { user } = useStore();
     let userRole = "";
@@ -49,7 +42,7 @@ function List () {
     const [checkedAccept, setcheckedAccept] = useState([]);
     const [acceptMany, setAcceptMany] = useState([]);
 
-    // const [viewValue, setViewValue] = useState("applicant");
+    const [viewValue, setViewValue] = useState("");
     const [orderValue, setOrderValue] = useState("");
 
     const [showAlert, setShowAlert] = useState(false);
@@ -401,7 +394,6 @@ function List () {
 
     useEffect(() => {
         const storedValue = localStorage.getItem('viewValue');
-        console.log(storedValue)
         if (storedValue) {
             setViewValue(storedValue);
         }

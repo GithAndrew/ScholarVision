@@ -1,11 +1,9 @@
-// dependencies
 const express = require('express')
 const cookieParser = require("cookie-parser");
 const Router = require('./router');
 const formData = require('express-form-data');
 require("dotenv").config();
 
-// initialize express app
 exports.start = () => {
     const app = express();
     app.use(formData.parse());

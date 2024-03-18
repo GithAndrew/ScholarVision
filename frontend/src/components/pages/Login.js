@@ -1,5 +1,5 @@
 import Footer from '../components/Footer'
-import {useEffect} from 'react';
+import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
 import useStore from '../../authHook';
@@ -13,6 +13,9 @@ function Login() {
     const navigate = useNavigate();
     const { user, isAuthenticated, setAuth } = useStore();
     console.log(user, isAuthenticated)
+
+    const [school, setSchool] = useState([]);
+    const storedValue = localStorage.getItem('mainSchool');
 
     useEffect(() => {
         function sendToken(token){
@@ -73,13 +76,40 @@ function Login() {
         })
     },[navigate, setAuth]);
 
+    useEffect(() => {
+      Promise.all([
+          fetch(apiUrl(`/school/${storedValue}`), {credentials:'include'})
+      ])
+      .then(([resSchools]) => {
+          return Promise.all([
+              resSchools.json()
+          ]);
+      })
+      .then(([dataSchools]) => {
+          setSchool(dataSchools);
+          let uploadID = dataSchools.upload_id.split(".")[0]
+          fetch(apiUrl(`/upload/${uploadID}`), {
+              method: "GET",
+              credentials: 'include'
+          }).then((response) => response.json())
+          .catch(error => {
+              console.error("Error fetching data:", error);
+          });    
+      })
+      .catch(error => {
+          console.error("Error fetching data:", error);
+      });
+  }, [storedValue]);
+
     return (
       <div className="login-limiter">
         <header className='login-header'>
           <img className="login-logo" src={SVLogo} alt="logo" />
-          <img className="login-logo" src={SchoolLogo} alt="logo" />
+          {school.upload_id ? <img className="login-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>}
           <div>
-            <p className='login-header-text'>Name of School</p>
+            {school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
+              <p className='login-header-text'style={{fontSize: '1.5em'}}>Name of School</p>
+            }
             <p className='login-subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
           </div>
         </header>
@@ -110,5 +140,5 @@ function Login() {
       </div>
     );
   }
-    
+
 export default Login;

@@ -37,7 +37,6 @@ const AppForm = () => {
     }
 
     const openImageFile = (e) => {
-        console.log("AYOKO NA")
         const reader = new FileReader();
         reader.onload = () => {
             const img = new Image();
@@ -374,7 +373,6 @@ const AppForm = () => {
                                 <tr className='table-form-tr'>
                                     <td className='table-form-td'><input type = "text" id = "studentno" required></input></td>
                                     <td className='table-form-td'><input type = "number" id= "gradyear" required></input></td>
-
                                 </tr>
                                 <td className='form-subtitle'>Address <span className='for-required'>*</span></td>
                                 <tr className='table-form-tr'>

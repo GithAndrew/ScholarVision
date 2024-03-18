@@ -5,5 +5,6 @@ exports.handlers = {
     ScholarshipHandler: require('./scholarship_hndlr'),
     ApplicantHandler: require('./applicant_hndlr'),
     UserLogHandler: require('./log_hndlr'),
-    UploadHander: require('./upload_hndlr')
+    UploadHandler: require('./upload_hndlr'),
+    SchoolHandler: require('./school_hndlr')
 }

@@ -1,21 +1,20 @@
-const { Upload } = require('../models/index_mdl').models;
+const { School } = require('../models/index_mdl').models;
 
 exports.getOne = (query, next) => {
     return new Promise((resolve, reject) => {
-        Upload.findOne(query, (err, imgdata) => {
+        School.findOne(query, (err, school) => {
             if(err) { reject(err); }
-            resolve(imgdata);
+            resolve(school);
         });
     });
 }
 
 exports.create = (object) => {
     return new Promise((resolve,reject) => {
-        const upload = new Upload(object)
-        upload.save((err, upload) => {
+        const mainSchool = new School(object);
+        mainSchool.save((err, school) => {
             if(err) { reject(err); }
-            else { resolve(upload); }
+            else { resolve(school); }
         });
     });
 }
-

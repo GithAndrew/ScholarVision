@@ -6,4 +6,5 @@ exports.controllers = {
     ApplicantController : require('./applicant_ctrl'),
     LogController : require('./utils'),
     UploadController : require('./upload_ctrl'),
+    SchoolController: require('./school_ctrl')
 }

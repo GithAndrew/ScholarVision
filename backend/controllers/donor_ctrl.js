@@ -216,7 +216,7 @@ exports.addDonor = async (req, res) => {
         const donor = await Donor.create(newDonor);
         await Log.create(token.user, 'create', `added donor ${donor.first_name} ${donor.last_name}`);
         console.log(`New donor: \n ${donor}`);
-        return res.status(201).send({ message: 'New donor successfully added' });
+        return res.status(201).send({ message: 'New donor successfully added', donor: donor });
     } catch (err) {
         console.log(`Unable to create new donor. Error: ${err}`);
         return res.status(500).send({ message: "Error creating new donor" });

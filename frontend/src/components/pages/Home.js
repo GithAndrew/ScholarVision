@@ -2,6 +2,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {Link} from 'react-router-dom';
 import useStore from '../../authHook';
+import SchoolPopUp from '../components/SchoolPopUp';
 import '../css/Home.css'
 
 function Home () {
@@ -9,7 +10,6 @@ function Home () {
     const { user } = useStore();
     let userRole = "";
     if (user) {userRole = user.role;}
-    console.log(userRole)
 
     const handleButtonClick = (linkTo) => {
         localStorage.setItem('viewValue', linkTo);
@@ -18,6 +18,7 @@ function Home () {
     return (
         <div>
             <Header/>
+            <SchoolPopUp></SchoolPopUp>
             <p className='home-main-text'> ABOUT THE DATABASE </p>
             <p className='home-main-desc'> <span style={{fontWeight: 'bold'}}>ScholarVision</span> is a <span style={{fontWeight: 'bold'}}>Content Management System</span> template that can be dynamically used by schools for their own scholarship databases.</p>
             <hr className='horizontal-line'></hr>
