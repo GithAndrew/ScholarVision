@@ -47,7 +47,7 @@ function Login() {
         
         /* global google */
         google.accounts.id.initialize({
-          client_id: "327180859592-tp33fd8q78iqg55d962i5cotuqgm0glp.apps.googleusercontent.com",
+          client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
           callback: handleCallbackResponse
         });
     

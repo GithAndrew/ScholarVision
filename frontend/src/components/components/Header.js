@@ -48,11 +48,11 @@ const Header = () => {
         });
     }, [storedValue]);
 
-    // useEffect(()=> {
-    //     if(isAuthenticated === false){
-    //         navigate("/")
-    //     }
-    // },[navigate, isAuthenticated]);
+    useEffect(()=> {
+        if(isAuthenticated === false){
+            navigate("/")
+        }
+    },[navigate, isAuthenticated]);
 
     return(
         <header className='main-header'>
@@ -60,7 +60,7 @@ const Header = () => {
             {school.upload_id ? <img className="main-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>}
             <div>
                 {school.school_name ? <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">{school.school_name}</Link></p> : 
-                    <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">Name of School</Link></p>
+                    <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">School Name</Link></p>
                 }
                 <p className='subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
             </div>

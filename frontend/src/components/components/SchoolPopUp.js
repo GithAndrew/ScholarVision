@@ -182,7 +182,7 @@ function SchoolPopUp (props) {
                         <table id="system-user-table" className='table-form'>
                             <thead>
                                 <tr className='table-form-tr'>
-                                    <th className='table-form-th-1'>Email of Users</th>
+                                    <th className='table-form-th-1'>Email of Scholar Committee Members</th>
                                     <th><button id="add-systemUser-btn" className='school-green-button' onClick={addRow}>Add User</button></th>
                                 </tr>
                             </thead>
