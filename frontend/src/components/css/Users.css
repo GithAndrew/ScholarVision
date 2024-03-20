@@ -106,6 +106,7 @@
 }
 
 .user-dp {
+    user-select: none;
     margin-right: 15px;
     object-fit: cover;
     width: 55px;

@@ -6,6 +6,7 @@ import useStore from '../../authHook';
 import SVLogo from '../images/SVLogo.png'
 import SchoolLogo from '../images/SchoolLogo.png'
 import scholartemplate from '../components/Scholar Application.xlsx';
+import SchoolPopUp from '../components/SchoolPopUp';
 import '../css/Login.css'
 
 function Login() {
@@ -27,6 +28,7 @@ function Login() {
                 },
                 body: JSON.stringify({
                     token: token,
+                    school: storedValue
                 }),
     
             })
@@ -86,15 +88,18 @@ function Login() {
           ]);
       })
       .then(([dataSchools]) => {
-          setSchool(dataSchools);
-          let uploadID = dataSchools.upload_id.split(".")[0]
-          fetch(apiUrl(`/upload/${uploadID}`), {
-              method: "GET",
-              credentials: 'include'
-          }).then((response) => response.json())
-          .catch(error => {
-              console.error("Error fetching data:", error);
-          });    
+          if (dataSchools.message === "school not found") {setSchool("")}
+          else {
+            setSchool(dataSchools);
+            let uploadID = dataSchools.upload_id.split(".")[0]
+            fetch(apiUrl(`/upload/${uploadID}`), {
+                method: "GET",
+                credentials: 'include'
+            }).then((response) => response.json())
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+          }
       })
       .catch(error => {
           console.error("Error fetching data:", error);
@@ -105,7 +110,7 @@ function Login() {
       <div className="login-limiter">
         <header className='login-header'>
           <img className="login-logo" src={SVLogo} alt="logo" />
-          {school.upload_id ? <img className="login-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>}
+          {school.upload_id ? <img className="login-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="login-logo" src={SchoolLogo} alt="logo"/>}
           <div>
             {school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
               <p className='login-header-text'style={{fontSize: '1.5em'}}>Name of School</p>
@@ -127,7 +132,7 @@ function Login() {
                 <h2 className='user-login'>User Login</h2>
               </span>
   
-                <div id="signInDiv" class="customGPlusSignIn">
+                <div id="signInDiv">
                     <span class="icon"></span>
                     <span class="buttonText">Google</span>
                 </div>
@@ -136,6 +141,7 @@ function Login() {
             <div className="login-more" ></div>
           </div>
         </div>
+        {school ? "" : <SchoolPopUp></SchoolPopUp>}
         <Footer/>
       </div>
     );

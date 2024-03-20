@@ -15,7 +15,7 @@ const AppForm = () => {
     const [openDownload, setOpenDownload] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-    const [counter, setCounter] = useState(0);
+    const [counter, setCounter] = useState(1);
     const [picID, setPicID] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
 
@@ -253,7 +253,7 @@ const AppForm = () => {
     }
 
     const addRow = () => {
-        let siblingCounter = 3;
+        let siblingCounter = counter + 1;
         const table = document.getElementById('siblings-table');
 
         const newRow = table.insertRow(-1);
@@ -268,7 +268,6 @@ const AppForm = () => {
             newCell.appendChild(input);
         }
 
-        siblingCounter++;
         setCounter(siblingCounter);
     }
 
@@ -566,13 +565,6 @@ const AppForm = () => {
                                 <td className='table-form-td-1'><input type = "text" id="sibling1-civilstatus"></input></td>
                                 <td className='table-form-td-1'><input type = "text" className='parentname-2' id="sibling1-educ"></input></td>
                                 <td className='table-form-td-1'><input type = "text" id="sibling1-occupation"></input></td>
-                            </tr>
-                            <tr className='table-form-tr'>
-                                <td className='table-form-td-1'><input type = "text" id="sibling2-name"></input></td>
-                                <td className='table-form-td-1'><input type = "number" id="sibling2-age"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling2-civilstatus"></input></td>
-                                <td className='table-form-td-1'><input type = "text" className='parentname-2' id="sibling2-educ"></input></td>
-                                <td className='table-form-td-1'><input type = "text" id="sibling2-occupation"></input></td>
                             </tr>
                         </table>
                         <button id="add-sibling-btn" className='upload-green-button' onClick = {addRow}>Add Sibling</button>

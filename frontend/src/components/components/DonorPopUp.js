@@ -42,6 +42,7 @@ function DonorPopUp (props) {
                 upload_id: scholar.upload_id,
                 acceptance_date: today,
                 applicant_link: scholar.applicant_link,
+                newFields: scholar.newFields,
                 scholarship_id: scholarship_id
             })
         })

@@ -27,6 +27,8 @@ function List () {
 
     const [scholarships, setScholarships] = useState([]);
     const [record, setRecord] = useState([]);
+    const [originalRecord, setOriginalRecord] = useState([]);
+    const [combinedLength, setCombinedLength] = useState(0);
 
     const [openDonor, setOpenDonor] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
@@ -263,11 +265,33 @@ function List () {
         if (userInput) {
             toggleAddPopup()
             setField(userInput)
+
+            if (viewValue === "applicant" || viewValue.includes("scholar")){
+                Promise.all([
+                    fetch(apiUrl(`/applicant`), {credentials:'include'}),
+                    fetch(apiUrl(`/scholar`), {credentials:'include'})
+                ])
+                .then(([resApps, resScholars]) => {
+                    return Promise.all([
+                        resApps ? resApps.json() : null,
+                        resScholars ? resScholars.json() : null
+                    ]);
+                })
+                .then(([dataApps, dataScholars]) => {
+                    setCombinedLength([dataApps.length, dataScholars.length])
+                    const combinedData = [ ...dataApps, ...dataScholars ];
+                    setRecord(combinedData);
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+            }
             setRequiredField(required)
         } else {
             showMessage("No input!")
         }
     }
+
 
     const validateNewField = () => {
         let newFieldsArr = []
@@ -284,8 +308,12 @@ function List () {
         for (let j = 0; j < newFieldsArr.length; j++) {
             let fetchLink = apiUrl(`/${viewValue}/${record[j]._id}`)
 
-            if(viewValue.includes("scholar")) {
-                fetchLink = apiUrl(`/scholar/${record[j]._id}`)
+            if (viewValue.includes("scholar") || viewValue === "applicant") {
+                if (j < combinedLength[0]) {
+                    fetchLink = apiUrl(`/applicant/${record[j]._id}`)
+                } else {
+                    fetchLink = apiUrl(`/scholar/${record[j]._id}`)
+                }
             }
 
             const requestBody = {
@@ -305,6 +333,11 @@ function List () {
         showMessage(`Added new field ${field}!`)
         setTimeout(() => window.location.reload(), 750)
     }
+
+    const handleCancelAdding = () => {
+        setField();
+        setRecord(originalRecord);
+    };
 
     const DropDown = ({value, options, onChange}) => {
         return (
@@ -367,15 +400,15 @@ function List () {
         })
         .then(([dataDonorsO, dataAppsO, dataAcceptedO, dataScholarsO, dataDonors, dataApps, dataAccepted, dataScholars, dataScholarship]) => {
             if (orderValue !== '') {
-                if (viewValue === "donor") {setRecord(dataDonorsO);}
-                if (viewValue === "applicant") {setRecord(dataAppsO);}
-                if (viewValue === "scholar?value=false") {setRecord(dataAcceptedO);}
-                if (viewValue === "scholar?value=true") {setRecord(dataScholarsO);}
+                if (viewValue === "donor") {setRecord(dataDonorsO); setOriginalRecord(dataDonorsO);}
+                if (viewValue === "applicant") {setRecord(dataAppsO); setOriginalRecord(dataAppsO);}
+                if (viewValue === "scholar?value=false") {setRecord(dataAcceptedO); setOriginalRecord(dataAcceptedO);}
+                if (viewValue === "scholar?value=true") {setRecord(dataScholarsO); setOriginalRecord(dataScholarsO);}
             } else {
-                if (viewValue === "donor") {setRecord(dataDonors);}
-                if (viewValue === "applicant") {setRecord(dataApps);}
-                if (viewValue === "scholar?value=false") {setRecord(dataAccepted);}
-                if (viewValue === "scholar?value=true") {setRecord(dataScholars);}    
+                if (viewValue === "donor") {setRecord(dataDonors); setOriginalRecord(dataDonors);}
+                if (viewValue === "applicant") {setRecord(dataApps); setOriginalRecord(dataApps);}
+                if (viewValue === "scholar?value=false") {setRecord(dataAccepted); setOriginalRecord(dataAccepted);}
+                if (viewValue === "scholar?value=true") {setRecord(dataScholars); setOriginalRecord(dataScholars);}
             }
             setScholarships(dataScholarship);
         })
@@ -391,6 +424,8 @@ function List () {
             setcheckedAccept(new Array(record.length).fill(false))
         }
     }, [record])
+
+    console.log(viewValue)
 
     useEffect(() => {
         const storedValue = localStorage.getItem('viewValue');
@@ -410,7 +445,7 @@ function List () {
                     (viewValue === 'donor' ?
                         <header className='list-header'>RECORD OF DONORS &#91; {record ? <span> &#160;{record.length} &#93;</span> : ""}</header> :
                         (viewValue === 'applicant' ?
-                            <header className='list-header'>RECORD OF APPLICANTS &#91; {record ? <span> &#160;{record.length} &#93;</span> : ""}</header>
+                            <header className='list-header'>RECORD OF APPLICANTS &#91; {record ? <span>&#160;{record.length} &#93;</span> : ""}</header>
                             : <header className='list-header'>RECORDS &#91; 0 &#93; </header>
                         )
                     )
@@ -421,8 +456,8 @@ function List () {
                 {checkedAccept.includes(true) ? <li><button className = 'record-acceptmany-button' onClick={() => openConfirmation(acceptMany, "accept")}>ACCEPT MANY</button></li> : ""}
                 {checkedDelete.includes(true) ? <li><button className = 'record-deletemany-button' onClick={() => openConfirmation(deleteMany, "delete")}>DELETE MANY</button></li> : ""}
                 {field ? <li><button className = 'record-enter-button' onClick={() => validateNewField()}>ENTER FIELD</button></li> : <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>}
-                {field ? <li><button className = 'record-cancel-button' onClick={() => setField()}>CANCEL ADDING</button></li> : ""}
-                <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li>
+                {field ? <li><button className = 'record-cancel-button' onClick={handleCancelAdding}>CANCEL ADDING</button></li> : ""}
+                {userRole === "admin" || userRole === "member" ? <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li> : ""}
                 <li><DropDown value = {orderValue} options = {orderFilter} onChange={orderChange}/></li>
             </ul>
 
@@ -436,15 +471,15 @@ function List () {
                         <tr className='table-header'>
                             <th className='list-head'>NAME</th>
                             <th className='list-head'>EMAIL</th>
-                            {viewValue !== "donor" ? <th className='list-head'>GRADUATION YEAR</th> : ""}
-                            {viewValue === "donor" || viewValue === "scholar?value=true" ? <th className='list-head'>SCHOLARSHIP DETAILS</th> : ""}
-                            {attributes.map((attribute) => (<th className='list-head'>{attribute.toUpperCase()}</th>))}
-                            {viewValue !== "donor" ? <th className='list-head'>LINKS</th> : ""}
-                            {viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
-                            {viewValue === "applicant" ? <th className='list-head'><AiFillCheckCircle className='green-check'></AiFillCheckCircle></th> : ""}
-                            {viewValue === "applicant" ? <th className='list-head'>ACCEPT?</th> : ""}
-                            {viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
-                            <th className='list-head'><AiFillDelete className='red-trash'></AiFillDelete> </th>
+                            {!field && viewValue !== "donor" ? <th className='list-head'>GRADUATION YEAR</th> : ""}
+                            {(!field && viewValue === "donor") || (!field && viewValue === "scholar?value=true") ? <th className='list-head'>SCHOLARSHIP DETAILS</th> : ""}
+                            {!field && attributes.map((attribute) => (<th className='list-head'>{attribute.toUpperCase()}</th>))}
+                            {!field && viewValue !== "donor" ? <th className='list-head'>LINKS</th> : ""}
+                            {!field && viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
+                            {!field && viewValue === "applicant" ? <th className='list-head'><AiFillCheckCircle className='green-check'></AiFillCheckCircle></th> : ""}
+                            {!field && viewValue === "applicant" ? <th className='list-head'>ACCEPT?</th> : ""}
+                            {!field && viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
+                            {!field ? <th className='list-head'><AiFillDelete className='red-trash'></AiFillDelete> </th> : ""}
                             {field ? <th className='barrier'>&nbsp;</th> : ""}
                             {field ? <th className='list-head'>ADD {field.toUpperCase()}</th> : <th className='list-head'></th>}
                         </tr>
@@ -456,8 +491,8 @@ function List () {
                                         <td className='first-list-cell'><Link to={`/scholar/${person._id}/Profile`}>{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>
                                     : <td className='first-list-cell'><Link to={`/${viewValue}/${person._id}/Profile`}>{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>}
                                     <td className='list-cell'><a href={`mailto: ${person.email}`} className='email-color'>{person.email}</a></td>
-                                    {viewValue !== "donor" ? <td className='list-cell'>{person.graduation_year}</td> : ""}
-                                    {viewValue === "scholar?value=true" || viewValue === "donor" ?
+                                    {!field && viewValue !== "donor" ? <td className='list-cell'>{person.graduation_year}</td> : ""}
+                                    {(!field && viewValue === "scholar?value=true") || (!field && viewValue === "donor") ?
                                         scholarships.map((scholarship) => {
                                             return (
                                                 viewValue === 'donor' ? 
@@ -472,13 +507,13 @@ function List () {
                                             )
                                         })
                                     : ""}
-                                    {person.newFields ? attributes.map((attribute) => (<td className='list-cell'>{person.newFields[attribute]}</td>)) : ""}
-                                    {(viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='app-link'>link</a> </td> :
-                                        viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {`app_link${i}`} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
+                                    {!field && person.newFields ? attributes.map((attribute) => (<td className='list-cell'>{person.newFields[attribute]}</td>)) : ""}
+                                    {(!field && viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='app-link'>link</a> </td> :
+                                        !field && viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {`app_link${i}`} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
                                     : ""}
-                                    {viewValue === "scholar?value=false" ? <td className='list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
-                                    {viewValue === "applicant" ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedAccept[i]} value = {checkedAccept[i]} onChange={() => handleCheckAcceptChange(i)}></input></td> : ""}
-                                    {viewValue === "applicant" ?
+                                    {!field && viewValue === "scholar?value=false" ? <td className='list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
+                                    {!field && viewValue === "applicant" ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedAccept[i]} value = {checkedAccept[i]} onChange={() => handleCheckAcceptChange(i)}></input></td> : ""}
+                                    {!field && viewValue === "applicant" ?
                                         <td className='list-cell'>
                                             <div className='list-buttons'>
                                                 <button className='app-green-button' onClick={() => openConfirmation(person, "accept")}>Yes</button>&nbsp;
@@ -486,8 +521,8 @@ function List () {
                                             </div>
                                         </td>
                                     : ""}
-                                    {viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => openConfirmation(person, "delete")}><AiFillDelete/></td> : ""}
-                                    <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedDelete[i]} value = {checkedDelete[i]} onChange={() => handleCheckDeleteChange(i)}></input></td>
+                                    {!field && viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => openConfirmation(person, "delete")}><AiFillDelete/></td> : ""}
+                                    {!field ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedDelete[i]} value = {checkedDelete[i]} onChange={() => handleCheckDeleteChange(i)}></input></td> : ""}
                                     {field ? <td className='table-barrier'>||||</td> : ""}
                                     {field ? <td className='list-cell'><input type='text' className='link-input' id = {`new_field${i}`} placeholder={`Enter ${field.toLowerCase()}.`}></input></td> : <td className='last-list-cell'>...</td>}
                                     {field ? <td className='last-table-barrier'>||||</td> : ""}

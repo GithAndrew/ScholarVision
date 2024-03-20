@@ -33,15 +33,18 @@ const Header = () => {
             ]);
         })
         .then(([dataSchools]) => {
-            setSchool(dataSchools);
-            let uploadID = dataSchools.upload_id.split(".")[0]
-            fetch(apiUrl(`/upload/${uploadID}`), {
-                method: "GET",
-                credentials: 'include'
-            }).then((response) => response.json())
-            .catch(error => {
-                console.error("Error fetching data:", error);
-            });    
+            if (dataSchools.message === "school not found") {setSchool("")}
+            else {
+                setSchool(dataSchools);
+                let uploadID = dataSchools.upload_id.split(".")[0]
+                fetch(apiUrl(`/upload/${uploadID}`), {
+                    method: "GET",
+                    credentials: 'include'
+                }).then((response) => response.json())
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+            }
         })
         .catch(error => {
             console.error("Error fetching data:", error);
@@ -66,7 +69,7 @@ const Header = () => {
             </div>
             {user ?
                 <div className='header-div-right'>
-                    <p className='rightmost-text'>{user.first_name} {user.last_name}</p>
+                    <p className='header-text'>{user.first_name} {user.last_name}</p>
                 </div>
             : ""}
             {user ? <img className="main-pic-right" src={user.picture} alt="Profile Pic"/> : ""}

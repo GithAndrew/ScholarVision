@@ -22,7 +22,8 @@ exports.setSchool = async (req, res) => {
         email: body.email,
         contact_no: body.contact_no,
         location: body.location,
-        upload_id: body.upload_id
+        upload_id: body.upload_id,
+        member_emails: body.member_emails
     };
 
     console.log(body)

@@ -90,7 +90,7 @@ function Users () {
 
             <header className='list-header'>ACCOUNTS</header>
             <ul className='record-dropdowns'>
-                <li><button className = 'record-add-button' onClick={toggleEdit}>EDIT</button></li>
+                {forEdit ? <li><button className = 'record-add-button' onClick={toggleEdit}>BACK</button></li> : <li><button className = 'record-add-button' onClick={toggleEdit}>EDIT</button></li>}
             </ul>
 
             {users.length !== 0 ?

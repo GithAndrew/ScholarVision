@@ -4,6 +4,7 @@
 }
 
 .main-header {
+    user-select: none;
     position: fixed;
     display: flex;
     padding: 20px;
@@ -64,13 +65,6 @@
     justify-content: right;
 }
 
-.rightmost-text {
-    font-family: "Inter", sans-serif;
-    top: 15px;
-    font-size: 40px;
-    font-weight: bold;
-}
-
 .main-pic-right {
     width: 60px;
     height: 60px;
@@ -81,6 +75,7 @@
 }
 
 .back-button {
+    user-select: none;
     left: 4%;
     top: 120px;
     width: 5%;

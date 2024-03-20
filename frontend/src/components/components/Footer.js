@@ -18,7 +18,8 @@ const Footer = () => {
             ]);
         })
         .then(([dataSchools]) => {
-            setSchool(dataSchools);
+            if (dataSchools.message === "school not found") {setSchool("")}
+            else {setSchool(dataSchools);}
         })
         .catch(error => {
             console.error("Error fetching data:", error);

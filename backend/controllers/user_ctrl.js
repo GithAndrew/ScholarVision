@@ -1,12 +1,12 @@
 const User = require('../handlers/user_hndlr');
 const Log = require('../handlers/log_hndlr');
+const School = require('../handlers/school_hndlr');
 const utils = require('./utils');
 const jwt_decode = require('jwt-decode');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 exports.login = async (req, res) => {
-    console.log("user.login")
     const userobject = jwt_decode(req.body.token);
 
     const newUser = {
@@ -14,15 +14,17 @@ exports.login = async (req, res) => {
         first_name: userobject.given_name,
         last_name: userobject.family_name,
         picture: userobject.picture,
-        role: 'guest',
+        role: 'guest'
     };
 
     try {
         var existing = null;
         existing = await User.getOne({ email: newUser.email });
         if (!existing) {
-            if (userobject.hd && userobject.hd == 'up.edu.ph') {
-                newUser.role = 'e.guest';
+            var school = null;
+            school = await School.getOne({ _id: req.body.school});
+            if (school.member_emails.includes(userobject.email)) {
+                newUser.role = 'member';
             }
         } else {
             const tokenPayload = {_id: existing._id};
@@ -81,8 +83,6 @@ exports.search = async (req, res) => {
     //     return;
     // }
 
-    console.log("user.search")
-
     const token = await utils.verifyToken(req);
 
     // if (!token.status) {
@@ -123,7 +123,6 @@ exports.changeRole = async (req, res) => {
     //     return;
     // }
 
-    console.log("user.changeRole")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -168,7 +167,6 @@ exports.findAll = async (req, res) => {
     //     return;
     // }
 
-    console.log("user.findAll")
     const token = await utils.verifyToken(req);
 
     // if (!token.status) {

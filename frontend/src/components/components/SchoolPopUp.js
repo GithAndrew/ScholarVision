@@ -1,5 +1,3 @@
-import Header from './Header'
-import Footer from './Footer'
 import Alert from '../components/Alert';
 import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
@@ -10,6 +8,7 @@ function SchoolPopUp (props) {
     const [imageSrc, setImageSrc] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
+    const [counter, setCounter] = useState(1);
     let missingFields = [];
 
     const showMessage = (message) => {
@@ -33,6 +32,7 @@ function SchoolPopUp (props) {
         const email = getValue("schoolEmail", true);
         const contact_no = getValue("schoolNumber", true);
         const location = getValue("schoolLocation", true);
+        const member_emails = getEmails();
 
         if (missingFields.length !== 0) {
             return
@@ -48,7 +48,8 @@ function SchoolPopUp (props) {
                     email: email,
                     contact_no: contact_no,
                     location: location,
-                    upload_id: picID
+                    upload_id: picID,
+                    member_emails: member_emails
                 })
             })
             .then(response => response.json())
@@ -98,8 +99,8 @@ function SchoolPopUp (props) {
     };
 
     const addRow = () => {
-        let systemUserCounter = 1;
-        const table = document.getElementById('system-user-table');
+        let systemMemberCounter = counter + 1;
+        const table = document.getElementById('system-member-table');
 
         const newRow = table.insertRow(-1);
         const existingRow = table.rows[1];
@@ -109,14 +110,21 @@ function SchoolPopUp (props) {
             const newCell = newRow.insertCell(i);
             newCell.colSpan = '2';
             const input = document.createElement('input');
-            input.type = 'text';
+            input.type = 'email';
             input.className='school-input';
-            input.id = existingCell.querySelector('input').id.replace(/\d+/g, systemUserCounter);
+            input.id = existingCell.querySelector('input').id.replace(/\d+/g, systemMemberCounter);
             newCell.appendChild(input);
         }
 
-        systemUserCounter++;
-        // setCounter(systemUserCounter);
+        setCounter(systemMemberCounter);
+    }
+
+    const getEmails = () => {
+        const systemUsers = [];
+        for (let i = 1; i <= counter; i++) {
+            systemUsers.push(getValue(`system-member-${i}`));
+        }
+        return systemUsers;
     }
 
     const openImageFile = (e) => {
@@ -149,10 +157,8 @@ function SchoolPopUp (props) {
 
     return (
         <div>
-            <Header/>
             <div className='popup-wrapper'>
                 <div className="school-popup-box">
-                    <span className="add-close-icon" onClick={props.handleClose}>x</span>
                     <p className='add-label'>School Details</p>
                     <table>
                         <tr className='table-form-tr'>
@@ -172,24 +178,24 @@ function SchoolPopUp (props) {
                         <tr className='table-form-tr'><td className='table-form-td'><input className='school-input' type = "text" id = "schoolName" required></input></td></tr>
                         <tr className='table-form-tr'><th className='table-form-th'>Email</th></tr>
                         <tr className='table-form-tr'><td className='table-form-td'><input className='school-input' type = "text" id = "schoolEmail" required></input></td></tr>
-                        <tr className='table-form-tr'><th className='table-form-th'>School Number</th></tr>
+                        <tr className='table-form-tr'><th className='table-form-th'>School Contact Number</th></tr>
                         <tr className='table-form-tr'><td className='table-form-td'><input className='school-input' type = "text" id = "schoolNumber" required></input></td></tr>
                         <tr className='table-form-tr'><th className='table-form-th'>School Location</th></tr>
                         <tr className='table-form-tr'><td className='table-form-td'><input className='school-input' type = "text" id = "schoolLocation" required></input></td></tr>
                     </table>
                                         
                     <div className="school-column">
-                        <table id="system-user-table" className='table-form'>
+                        <table id="system-member-table" className='table-form'>
                             <thead>
                                 <tr className='table-form-tr'>
                                     <th className='table-form-th-1'>Email of Scholar Committee Members</th>
-                                    <th><button id="add-systemUser-btn" className='school-green-button' onClick={addRow}>Add User</button></th>
+                                    <th><button id="add-systemmember-btn" className='school-green-button' onClick={addRow}>Add</button></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr className='table-form-tr'>
                                     <td className='table-form-td-1' colSpan='2'>
-                                        <input type="text" className='school-input' id="system-user1-name" />
+                                        <input type="email" className='school-input' id="system-member-1" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -202,7 +208,6 @@ function SchoolPopUp (props) {
                 message={alertMessage} 
                 handleClose={toggleAlertPopUp} 
            />: ""}
-            <Footer/>
         </div>
     )
 }

@@ -24,6 +24,7 @@ body, html {
 }
 
 .login-logo {
+  user-select: none;
   height: 5%;
   width: 5%;
   margin-right: 20px;
@@ -31,6 +32,7 @@ body, html {
 }
 
 .login-header-text {
+  user-select: none;
   font-family: "Inter", sans-serif;
   color: #FFFEF2;
   text-align: left;
@@ -40,6 +42,7 @@ body, html {
 }
 
 .login-subheader-text {
+  user-select: none;
   font-family: "Inter", sans-serif;
   color: #FFFEF2;
   text-align: left;
@@ -85,6 +88,7 @@ body, html {
 }
 
 .apply-button {
+  user-select: none;
   font-family: Inter;
   padding: 0px;
   font-size: 16px;
@@ -138,6 +142,7 @@ body, html {
 }
 
 .login-form {
+  user-select: none;
   margin-top: 5%;
   width: 560px;
   min-height: 88vh;
@@ -175,6 +180,7 @@ body, html {
 }
 
 button {
+  user-select: none;
   outline: none !important;
   border: none;
   background: transparent;

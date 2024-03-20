@@ -196,6 +196,7 @@
 }
 
 label.upload-label {
+    user-select: none;
     padding: 1.5px;
     cursor: pointer;
     background-color: #EFEFEF;

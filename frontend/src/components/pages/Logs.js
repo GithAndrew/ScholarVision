@@ -84,7 +84,7 @@ function Logs () {
                             <th className='list-head'>EMAIL</th>
                             <th className='list-head'>ROLE</th>
                             <th className='list-head'>TIMESTAMP</th>
-                            <th className='list-head'>ACTIVITY TYPE</th>
+                            <th className='list-head'>ACTIVITY</th>
                             <th className='list-head'>DETAILS</th>
                         </tr>
                         <tr className='smol'></tr>
