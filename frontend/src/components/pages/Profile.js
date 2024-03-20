@@ -194,14 +194,14 @@ function Profile () {
                             <tr className='smol'>&nbsp;</tr>
                             {attributes.map((attribute) => (
                                 <tr>
-                                    <td className='cell-bold'>{attribute.charAt(0).toUpperCase() + attribute.slice(1)}</td>
+                                    <td className='cell-bold'>{attribute.charAt(0).toUpperCase() + attribute.slice(1).split("~")[0]}</td>
                                     <td className='info-here'>{record.newFields[attribute]}</td>
                                     <td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td>
                                 </tr>
                             ))}
                             <tr className='smol'></tr>
                         </table>
-: ""}
+                    : ""}
                 </div>
                 <Footer/>
         </div>

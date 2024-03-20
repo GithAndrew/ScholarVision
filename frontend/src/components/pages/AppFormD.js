@@ -17,6 +17,13 @@ const AppFormDonor = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const [picID, setPicID] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
+    const [donor, setDonor] = useState([]);
+
+    let attributes = [];
+    if (donor[0] && donor[0]["newFields"]) {
+        const keys = Object.keys(donor[0]["newFields"]);
+        keys.forEach(key => {attributes.push(key);});
+    }
 
     const showMessage = (message) => {
         setAlertMessage(message);
@@ -92,6 +99,14 @@ const AppFormDonor = () => {
             const statement = getValue("appreason", true);
             getValue("agree", true);
 
+            const newFields = {};
+            let value;
+            for (let i = 0; i < attributes.length; i++) {
+                const booleanValue = attributes[i].split("~")[1] === "true";
+                value = getValue(attributes[i], booleanValue);
+                newFields[attributes[i]] = `${value}`;
+            }
+
             if (missingFields.length !== 0) {
                 return
             } else {
@@ -113,14 +128,12 @@ const AppFormDonor = () => {
                         sex: sex,
                         citizenship: citizenship,
                         statement: statement,
+                        newFields: newFields,
                         upload_id: picID
                     })
                 })
                 .then(response => response.json())
-                .then(data => {
-                    console.log(data.donor)
-                    sendScholarship(data.donor._id);
-                })
+                .then(data => {sendScholarship(data.donor._id);})
                 .then(allEmails.push(tempEmail))
                 .then(showMessage(`Application for ${first_name} ${last_name} accepted!`))
                 .catch(error => {
@@ -173,6 +186,7 @@ const AppFormDonor = () => {
     
         if (required && value === '') {
             missingFields.push(id);
+            showID = id.charAt(0).toUpperCase() + id.slice(1).split("~")[0]
             if (id === "surname") {showID = "Surname"}
             if (id === "firstname") {showID = "First Name"}
             if (id === "streetname") {showID = "Address Street Name"}
@@ -230,6 +244,7 @@ const AppFormDonor = () => {
         .then(([dataDonors]) => {
             const emails = dataDonors.map(don => don.email);
             setAllEmails(emails);
+            setDonor(dataDonors);
         })
         .catch(error => {
             console.error("Error fetching data:", error);
@@ -324,12 +339,31 @@ const AppFormDonor = () => {
                                     <td className='table-form-td'><input type = "text" id = "totalgrant" required></input></td>
                                     <td className='table-form-td'><input type = "text" id = "grantdetails" required></input></td>
                                 </tr>
-
                             </table>
                         </div>
                     </div>
                 </div>
 
+                {donor ? 
+                    <div className='backgrounds'>
+                        <table className='table-form'>
+                            <td className='form-subtitle'>Other Details</td>
+                            <tr className='table-form-tr'>
+                            {attributes.map((attribute) => (
+                                <th className='table-form-th'>
+                                    {attribute.charAt(0).toUpperCase() + attribute.slice(1).split("~")[0]}
+                                    {attribute.split("~")[1] === "true" ? <span className='for-required'>*</span> : ""}
+                                </th>
+                            ))}
+                            </tr>
+                            <tr className='table-form-tr'>
+                                {attributes.map((attribute) => (
+                                    <td className='table-form-td'><input type="text" id={attribute}/></td>
+                                ))}
+                                </tr>
+                        </table>
+                    </div>
+                : ""}
 
                 <div className='backgrounds'>
                     <h4 className='form-sections'>PERSONAL STATEMENT</h4>

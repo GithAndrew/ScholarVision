@@ -300,7 +300,7 @@ function List () {
             const value = element ? element.value : '';
             if (requiredField && value === '') {
                 showMessage(`Missing input for ${record[i].first_name} ${record[i].last_name}!`)
-                break
+                return
             }
             newFieldsArr.push(value)
         }
@@ -317,7 +317,7 @@ function List () {
             }
 
             const requestBody = {
-                newFields: {[field.toLowerCase()]: newFieldsArr[j]}
+                newFields: {[field.toLowerCase() + "~" + requiredField]: `${newFieldsArr[j]}`}
             };
 
             fetch(fetchLink,{
@@ -473,7 +473,7 @@ function List () {
                             <th className='list-head'>EMAIL</th>
                             {!field && viewValue !== "donor" ? <th className='list-head'>GRADUATION YEAR</th> : ""}
                             {(!field && viewValue === "donor") || (!field && viewValue === "scholar?value=true") ? <th className='list-head'>SCHOLARSHIP DETAILS</th> : ""}
-                            {!field && attributes.map((attribute) => (<th className='list-head'>{attribute.toUpperCase()}</th>))}
+                            {!field && attributes.map((attribute) => (<th className='list-head'>{attribute.toUpperCase().split("~")[0]}</th>))}
                             {!field && viewValue !== "donor" ? <th className='list-head'>LINKS</th> : ""}
                             {!field && viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
                             {!field && viewValue === "applicant" ? <th className='list-head'><AiFillCheckCircle className='green-check'></AiFillCheckCircle></th> : ""}
