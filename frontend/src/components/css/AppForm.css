@@ -199,14 +199,14 @@ label.upload-label {
     user-select: none;
     padding: 1.5px;
     cursor: pointer;
-    background-color: #EFEFEF;
-    color: #6D6D6D
+    background-color: #4B7F52;
+    color: #FFFEF2
 }
 
 label.upload-label:hover {
     cursor: pointer;
-    background-color: #E0E0E0;
-    color: #6D6D6D
+    background-color: #3C6742;
+    color: #FFFEF2
 }
 
 .upload-photo-box {
@@ -217,6 +217,13 @@ label.upload-label:hover {
     text-align: center;
     padding: 10px 10px;
     border-radius: 5px 5px;
+    margin-right: 1%;
+}
+
+.upload-photo-box:hover {
+    cursor: pointer;
+    background-color: #3C6742;
+    color: #FFFEF2
 }
 
 #upload-photo {

@@ -248,6 +248,7 @@
     cursor: pointer;
     margin-right: 1%;
     background-color: #255F85;
+    align-items: center;
     color: #FFFEF2;
     text-align: center;
     line-height: normal;
@@ -284,6 +285,35 @@
 .upload-green-button:hover {
     background-color: #3C6742;
     cursor: pointer;
+}
+
+.upload-green-button:link {
+    text-decoration: none;
+}
+
+.popup-uploaded-image {
+    margin-bottom: 10px;
+}
+
+.popup-uploaded-image img {
+    width: 150px;
+    height: 150px;
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 0 4px #1A1423;
+}
+
+#upload-photo-popup {
+    position: absolute;
+    z-index: -1;
+}
+
+.popup-form-subtitle {
+    font-style: italic;
+    margin-top: 10px;
+    font-weight: bold;
+    font-size: 15px;
+    text-align: center;
 }
 
 .edit-popup-box {
