@@ -3,17 +3,6 @@ const School = require('../handlers/school_hndlr');
 const utils = require('./utils');
 
 exports.setSchool = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
-
-    const token = await utils.verifyToken(req);
-
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
 
     const body = req.body;
 
@@ -49,17 +38,6 @@ exports.setSchool = async (req, res) => {
 }
 
 exports.findSchool = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
-
-    const token = await utils.verifyToken(req);
-
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
 
     const id = req.params.id;
     let school;

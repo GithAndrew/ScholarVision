@@ -6,18 +6,17 @@ const Log = require('../handlers/log_hndlr');
 const utils = require('./utils');
 
 exports.findDonor = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
-  
-    console.log("donor.findDonor")
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
+
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
   
     const id = req.params.id;
   
@@ -43,18 +42,17 @@ exports.findDonor = async (req, res) => {
 }
 
 exports.findAll = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    console.log("donor.findAll")
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     try {
         donor = await Donor.getAll();
@@ -71,18 +69,17 @@ exports.findAll = async (req, res) => {
 }
 
 exports.search = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    console.log("donor.search")
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let search = req.query.name;
     let result = new Array;
@@ -113,18 +110,17 @@ exports.search = async (req, res) => {
 }
 
 exports.sortBy = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    console.log("donor.sortBy")
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let orderby = req.query;
     const key = Object.keys(orderby);
@@ -140,7 +136,6 @@ exports.sortBy = async (req, res) => {
         if (newFields.includes(key[0])) {
             toSort = `newFields.${key[0]}`;
         }
-        console.log(toSort)
         const donor = await Donor.getAllSorted({ [toSort]: parseInt(value) });
         if (!donor) {
             console.log("Donor database is empty");
@@ -169,21 +164,19 @@ exports.sortBy = async (req, res) => {
 }
 
 exports.addDonor = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    console.log("donor.addDonor")
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     const body = req.body;
-
     console.log(body)
 
     const newDonor = {
@@ -224,20 +217,19 @@ exports.addDonor = async (req, res) => {
 }
   
 exports.editDonor = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    console.log("donor.editDonor")
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
-    // if (token.user.role == 'admin' || token.user.role == 'member') {
+    if (token.user.role == 'admin' || token.user.role == 'member') {
         const body = req.body;
         const donor = {
             id: req.params.id,
@@ -284,27 +276,26 @@ exports.editDonor = async (req, res) => {
             console.log(`Unable to edit donor. Error: ${err}`);
             return res.status(500).send({ message: 'Error editing donor' });
         }
-    // } else {
-    //     console.log("Unauthorized access");
-    //     return res.status(401).send({ message: "Unauthorized access" });
-    // }
+    } else {
+        console.log("Unauthorized access");
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
 }
   
 exports.deleteDonor = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    console.log("donor.deleteDonor")
     const token = await utils.verifyToken(req);
     
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
-    // if (token.user.role == 'admin' || token.user.role == 'member') {
+    if (token.user.role == 'admin' || token.user.role == 'member') {
         const idList = req.body.ids;
         let deleted = 0, failed = 0;
         let invalidId = new Array;
@@ -363,27 +354,26 @@ exports.deleteDonor = async (req, res) => {
             console.log(`Error deleting donors ${err}`);
             return res.status(500).send({ message: 'Error deleting donors' });
         }
-    // } else {
-    //     console.log("cannot delete: ", token.user.role);
-    //     return res.status(401).send({ message: 'Unauthorized Access' });
-    // }
+    } else {
+        console.log("cannot delete: ", token.user.role);
+        return res.status(401).send({ message: 'Unauthorized Access' });
+    }
 }
 
 exports.addField = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
-    console.log("donor.addField")
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
-    // if (token.user.role === 'admin' || token.user.role === 'member') {
+    if (token.user.role === 'admin' || token.user.role === 'member') {
         const body = req.body;
 
         const donor = {
@@ -411,7 +401,6 @@ exports.addField = async (req, res) => {
         }
 
         const mergedNewFields = { ...existing.newFields, ...donor.newFields };
-        console.log(existing.newFields)
 
         const existingDonor = {
             id: req.params.id,
@@ -427,8 +416,8 @@ exports.addField = async (req, res) => {
             console.log(`Unable to edit donor. Error: ${err}`);
             return res.status(500).send({ message: 'Error editing donor' });
         }
-    // } else {
-    //     console.log("Unauthorized access");
-    //     return res.status(401).send({ message: "Unauthorized access" });
-    // }
+    } else {
+        console.log("Unauthorized access");
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
 }

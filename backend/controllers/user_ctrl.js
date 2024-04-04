@@ -59,12 +59,11 @@ exports.login = async (req, res) => {
 };
 
 exports.isLogin = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     console.log('Unauthorized access');
-    //     return res.status(200).send({ message: 'Unauthorized access', status: false });
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        console.log('Unauthorized access');
+        return res.status(200).send({ message: 'Unauthorized access', status: false });
+    }
 
-    // console.log("user.isLogin")
     let tokenDetails = await utils.verifyToken(req);
 
     if (!tokenDetails.status) {
@@ -78,17 +77,17 @@ exports.isLogin = async (req, res) => {
 };
 
 exports.search = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let search = req.query.name;
     let result = new Array();
@@ -118,10 +117,10 @@ exports.search = async (req, res) => {
 }
 
 exports.changeRole = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
@@ -130,16 +129,16 @@ exports.changeRole = async (req, res) => {
         return;
     }
 
-    // if (token.user.role == 'admin' || token.user.role == 'member') {
+    if (token.user.role == 'admin' || token.user.role == 'member') {
         const email = req.body.email;
         const newRole = req.body.role;
         try {
             const existing = await User.getOne({ email: email });
             if (existing) {
-                // if (existing.role == 'admin') {
-                //     console.log("Unauthorized Access");
-                //     return res.status(401).send({ message: "Unauthorized access" });
-                // }
+                if (existing.role == 'admin') {
+                    console.log("Unauthorized Access");
+                    return res.status(401).send({ message: "Unauthorized access" });
+                }
                 const user = {
                     email: existing.email,
                     first_name: existing.first_name,
@@ -155,24 +154,24 @@ exports.changeRole = async (req, res) => {
             console.log(err);
             return res.status(500).send({ message: `Error changing user's role` });
         }
-    // } else {
-    //     console.log("Unauthorized Access");
-    //     return res.status(401).send({ message: "Unauthorized access" });
-    // }
+    } else {
+        console.log("Unauthorized Access");
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
 };
 
 exports.findAll = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let user;
     try {

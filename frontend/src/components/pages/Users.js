@@ -104,7 +104,6 @@ function Users () {
                             {users.map((person, i) => (
                                 <div key={i}>
                                     <div className={i % 2 === 0 ? "user-tile" : "user-odd-tile"}>
-                                        <img src={user.picture} className='user-dp' alt='profile'/>
                                         <div className='user-name'>
                                             {person.first_name} {person.last_name} <br/>
                                             <span>{person.email}</span> <br/>

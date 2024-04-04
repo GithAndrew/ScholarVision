@@ -64,17 +64,17 @@ exports.getDeleted = async(req,res) => {
 }
 
 exports.search = async (req, res) => {
-  // if (!req.cookies || !req.cookies.authToken) {
-  //     res.status(401).send({ message: "Unauthorized access" });
-  //     return;
-  // }
+  if (!req.cookies || !req.cookies.authToken) {
+      res.status(401).send({ message: "Unauthorized access" });
+      return;
+  }
 
-  // const token = await utils.verifyToken(req);
+  const token = await utils.verifyToken(req);
 
-  // if (!token.status) {
-  //     res.status(token.code).send({ message: token.message });
-  //     return;
-  // }
+  if (!token.status) {
+      res.status(token.code).send({ message: token.message });
+      return;
+  }
 
   let search = req.query.name;
   let result = new Array();

@@ -106,45 +106,47 @@ function Login() {
       });
   }, [storedValue]);
 
-    return (
-      <div className="login-limiter">
-        <header className='login-header'>
-          <img className="login-logo" src={SVLogo} alt="logo" />
-          {school.upload_id ? <img className="login-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="login-logo" src={SchoolLogo} alt="logo"/>}
-          <div>
-            {school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
-              <p className='login-header-text'style={{fontSize: '1.5em'}}>Name of School</p>
-            }
-            <p className='login-subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
-          </div>
-        </header>
+  console.log(school)
 
-        <div className = 'login-info'>
-            <h2 className='sv-title'>SCHOLARVISION</h2>
-            <p className='sv-desc'> A <span style={{fontWeight: 'bold'}}>Content Management System</span> template that can be dynamically used by schools for their own scholarship databases.</p>
-            <a href={scholartemplate} className='apply-button' download> APPLY NOW </a>
+  return (
+    <div className="login-limiter">
+      <header className='login-header'>
+        <img className="login-logo" src={SVLogo} alt="logo" />
+        {school.upload_id ? <img className="login-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="login-logo" src={SchoolLogo} alt="logo"/>}
+        <div>
+          {school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
+            <p className='login-header-text'style={{fontSize: '1.5em'}}>Name of School</p>
+          }
+          <p className='login-subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
         </div>
-  
-        <div className="login-container">
-          <div className="login-wrap">
-            <form className="login-form">
-              <span className="login-form-title">
-                <h2 className='user-login'>User Login</h2>
-              </span>
-  
-                <div id="signInDiv">
-                    <span class="icon"></span>
-                    <span class="buttonText">Google</span>
-                </div>
-            </form>
+      </header>
 
-            <div className="login-more" ></div>
-          </div>
-        </div>
-        {school ? "" : <SchoolPopUp></SchoolPopUp>}
-        <Footer/>
+      <div className = 'login-info'>
+          <h2 className='sv-title'>SCHOLARVISION</h2>
+          <p className='sv-desc'> A <span style={{fontWeight: 'bold'}}>Content Management System</span> template that can be dynamically used by schools for their own scholarship databases.</p>
+          <a href={scholartemplate} className='apply-button' download> APPLY NOW </a>
       </div>
-    );
-  }
+
+      <div className="login-container">
+        <div className="login-wrap">
+          <form className="login-form">
+            <span className="login-form-title">
+              <h2 className='user-login'>User Login</h2>
+            </span>
+
+              <div id="signInDiv">
+                  <span class="icon"></span>
+                  <span class="buttonText">Google</span>
+              </div>
+          </form>
+
+          <div className="login-more" ></div>
+        </div>
+      </div>
+      {school ? "" : <SchoolPopUp></SchoolPopUp>}
+      <Footer/>
+    </div>
+  );
+}
 
 export default Login;

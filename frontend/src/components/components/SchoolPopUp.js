@@ -2,7 +2,7 @@ import Alert from '../components/Alert';
 import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
 
-function SchoolPopUp (props) {
+function SchoolPopUp () {
 
     const [picID, setPicID] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);

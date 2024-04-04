@@ -213,75 +213,20 @@ function ProfileFamily () {
                         <td className='cell-bold'>Occupation</td>
                     </tr>
                     <tr className='smol'></tr>
-                    {record.sibling_details ?
-                        <tr className='table-tr'>
-                            <td className='info-here'> {record.sibling_details.sibling1.name ? record.sibling_details.sibling1.name : <span className='info-white'>N/A</span>} </td>
+
+                    {record.sibling_details && Object.keys(record.sibling_details).map((key, index) => (
+                        <tr className='table-tr' key={index}>
+                            <td className='info-here'>{record.sibling_details[key].name || <span className='info-white'>N/A</span>}</td>
                             <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling1.age ? record.sibling_details.sibling1.age : <span className='info-white'>N/A</span>} </td>
+                            <td className='info-here'>{record.sibling_details[key].age || <span className='info-white'>N/A</span>}</td>
                             <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling1.civil_status ? record.sibling_details.sibling1.civil_status : <span className='info-white'>N/A</span>} </td>
+                            <td className='info-here'>{record.sibling_details[key].civil_status || <span className='info-white'>N/A</span>}</td>
                             <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling1.educ_attainment ? record.sibling_details.sibling1.educ_attainment : <span className='info-white'>N/A</span>} </td>
+                            <td className='info-here'>{record.sibling_details[key].educ_attainment || <span className='info-white'>N/A</span>}</td>
                             <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling1.occupation ? record.sibling_details.sibling1.occupation : <span className='info-white'>N/A</span>} </td>
+                            <td className='info-here'>{record.sibling_details[key].occupation || <span className='info-white'>N/A</span>}</td>
                         </tr>
-                    : ""}
-                    <tr className='smol'></tr>
-                    {record.sibling_details ?
-                        <tr className='table-tr'>
-                            <td className='info-here'> {record.sibling_details.sibling2.name ? record.sibling_details.sibling2.name : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling2.age ? record.sibling_details.sibling2.age : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling2.civil_status ? record.sibling_details.sibling2.civil_status : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling2.educ_attainment ? record.sibling_details.sibling2.educ_attainment : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling2.occupation ? record.sibling_details.sibling2.occupation : <span className='info-white'>N/A</span>} </td>
-                        </tr>
-                    : ""}
-                    <tr className='smol'></tr>
-                    {record.sibling_details ?
-                        <tr className='table-tr'>
-                            <td className='info-here'> {record.sibling_details.sibling3.name ? record.sibling_details.sibling3.name : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling3.age ? record.sibling_details.sibling3.age : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling3.civil_status ? record.sibling_details.sibling3.civil_status : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling3.educ_attainment ? record.sibling_details.sibling3.educ_attainment : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling3.occupation ? record.sibling_details.sibling3.occupation : <span className='info-white'>N/A</span>} </td>
-                        </tr>
-                    : ""}
-                    <tr className='smol'></tr>
-                    {record.sibling_details ?
-                        <tr className='table-tr'>
-                            <td className='info-here'> {record.sibling_details.sibling4.name ? record.sibling_details.sibling4.name : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling4.age ? record.sibling_details.sibling4.age : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling4.civil_status ? record.sibling_details.sibling4.civil_status : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling4.educ_attainment ? record.sibling_details.sibling4.educ_attainment : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling4.occupation ? record.sibling_details.sibling4.occupation : <span className='info-white'>N/A</span>} </td>
-                        </tr>
-                    : ""}
-                    <tr className='smol'></tr>
-                    {record.sibling_details ?
-                        <tr className='table-tr'>
-                            <td className='info-here'> {record.sibling_details.sibling5.name ? record.sibling_details.sibling5.name : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling5.age ? record.sibling_details.sibling5.age : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling5.civil_status ? record.sibling_details.sibling5.civil_status : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling5.educ_attainment ? record.sibling_details.sibling5.educ_attainment : <span className='info-white'>N/A</span>} </td>
-                            <td></td>
-                            <td className='info-here'> {record.sibling_details.sibling5.occupation ? record.sibling_details.sibling5.occupation : <span className='info-white'>N/A</span>} </td>
-                        </tr>
-                    : ""}
+                    ))}
                     <tr className='smol'></tr>
                     </table>
                 </div>

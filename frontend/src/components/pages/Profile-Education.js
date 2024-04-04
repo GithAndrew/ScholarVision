@@ -72,65 +72,18 @@ function ProfileEducation () {
                             <td className='cell-bold'>Scholarship or Academic Awards Received</td></tr>
                         <tr className='smol'></tr>
                         <tr className='smol'></tr>
-                        {record.educational_bg ?
-                            <tr className='table-tr'>
-                                <td className='info-here'> {record.educational_bg.educ_bg1.level ? record.educational_bg.educ_bg1.level : <span className='info-white'>N/A</span>} </td>
+
+                        {record.educational_bg && Object.keys(record.educational_bg).map((key, index) => (
+                            <tr className='table-tr' key={index}>
+                                <td className='info-here'>{record.educational_bg[key].level || <span className='info-white'>N/A</span>}</td>
                                 <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg1.school ? record.educational_bg.educ_bg1.school : <span className='info-white'>N/A</span>} </td>
+                                <td className='info-here'>{record.educational_bg[key].school || <span className='info-white'>N/A</span>}</td>
                                 <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg1.dates ? record.educational_bg.educ_bg1.dates : <span className='info-white'>N/A</span>} </td>
+                                <td className='info-here'>{record.educational_bg[key].dates || <span className='info-white'>N/A</span>}</td>
                                 <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg1.awards ? record.educational_bg.educ_bg1.awards : <span className='info-white'>N/A</span>} </td>
+                                <td className='info-here'>{record.educational_bg[key].awards || <span className='info-white'>N/A</span>}</td>
                             </tr>
-                        : ""}
-                        <tr className='smol'></tr>
-                        {record.educational_bg ?
-                            <tr className='table-tr'>
-                                <td className='info-here'> {record.educational_bg.educ_bg2.level ? record.educational_bg.educ_bg2.level : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg2.school ? record.educational_bg.educ_bg2.school : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg2.dates ? record.educational_bg.educ_bg2.dates : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg2.awards ? record.educational_bg.educ_bg2.awards : <span className='info-white'>N/A</span>} </td>
-                            </tr>
-                        : ""}
-                        <tr className='smol'></tr>
-                        {record.educational_bg ?
-                            <tr className='table-tr'>
-                                <td className='info-here'> {record.educational_bg.educ_bg3.level ? record.educational_bg.educ_bg3.level : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg3.school ? record.educational_bg.educ_bg3.school : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg3.dates ? record.educational_bg.educ_bg3.dates : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg3.awards ? record.educational_bg.educ_bg3.awards : <span className='info-white'>N/A</span>} </td>
-                            </tr>
-                        : ""}
-                        <tr className='smol'></tr>
-                        {record.educational_bg ?
-                            <tr className='table-tr'>
-                                <td className='info-here'> {record.educational_bg.educ_bg4.level ? record.educational_bg.educ_bg4.level : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg4.school ? record.educational_bg.educ_bg4.school : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg4.dates ? record.educational_bg.educ_bg4.dates : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg4.awards ? record.educational_bg.educ_bg4.awards : <span className='info-white'>N/A</span>} </td>
-                            </tr>
-                        : ""}
-                        <tr className='smol'></tr>
-                        {record.educational_bg ?
-                            <tr className='table-tr'>
-                                <td className='info-here'> {record.educational_bg.educ_bg5.level ? record.educational_bg.educ_bg5.level : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg5.school ? record.educational_bg.educ_bg5.school : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg5.dates ? record.educational_bg.educ_bg5.dates : <span className='info-white'>N/A</span>} </td>
-                                <td></td>
-                                <td className='info-here'> {record.educational_bg.educ_bg5.awards ? record.educational_bg.educ_bg5.awards : <span className='info-white'>N/A</span>} </td>
-                            </tr>
-                        : ""}
+                        ))}
                         <tr className='smol'></tr>
                     </table>
                 </div>

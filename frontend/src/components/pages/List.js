@@ -77,6 +77,7 @@ function List () {
         { label: 'LAST NAME', value: 'last_name' },
         { label: 'FIRST NAME', value: 'first_name' },
         { label: 'GRAD YEAR', value: 'graduation_year' },
+        { label: 'GRANT', value: 'grant' },
         { label: 'ADD VIEW', value: 'newfield' }
     ]);
 
@@ -350,27 +351,6 @@ function List () {
             </label>
         );
     }
-
-    // const addGrant = () => {
-    //    const grantFilterExists = orderFilter.some(item => item.value === 'grant');
-    //     if(!grantFilterExists) {
-    //         orderFilter.splice(orderFilter.length-1, 0, { label: "GRANT", value: "grant" });
-    //         setOrderFilter(orderFilter);
-    //     }
-    // }
-
-    // const removeGrant = () => {
-    //     const filteredOrderFilter = orderFilter.filter(item => item.value !== 'grant');
-    //     setOrderFilter(filteredOrderFilter);
-    // }
-
-    // useEffect(() => {
-    //     if (viewValue === "donor" || viewValue === "scholar?value=true") {
-    //         addGrant();
-    //     } else {
-    //         removeGrant();
-    //     }
-    // }, [viewValue]);
 
     // SOURCE: https://medium.com/@jdhawks/make-fetch-s-happen-5022fcc2ddae
     useEffect(() => {

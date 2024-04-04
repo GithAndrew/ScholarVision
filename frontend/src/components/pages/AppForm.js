@@ -74,7 +74,7 @@ const AppForm = () => {
     const sendData = (e) => {
         e.preventDefault();
 
-        if (picID === undefined) {
+        if (picID === null) {
             showMessage('No image set!');
             return
         }

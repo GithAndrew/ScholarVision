@@ -10,7 +10,6 @@ exports.findApplicant = async (req, res) => {
         return;
     }
 
-    console.log("app.findApplicant")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -18,7 +17,6 @@ exports.findApplicant = async (req, res) => {
         return;
     }
 
-    console.log(`applicant id: ${req.params.id}`);
     const id = req.params.id;
     let applicant;
 
@@ -49,7 +47,6 @@ exports.findAll = async (req, res) => {
         return;
     }
 
-    console.log("app.findAll")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -78,7 +75,6 @@ exports.search = async (req, res) => {
         return;
     }
 
-    console.log("app.search")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -120,7 +116,6 @@ exports.sortBy = async (req, res) => {
         return;
     }
 
-    console.log("app.sortBy")
     const token = await utils.verifyToken(req);
     
     if (!token.status) {
@@ -161,7 +156,6 @@ exports.addApplicant = async (req, res) => {
         return;
     }
 
-    console.log("app.addApplicant")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -222,7 +216,6 @@ exports.editApplicant = async (req, res) => {
         return;
     }
 
-    console.log("app.editApplicant")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -294,7 +287,6 @@ exports.deleteApplicant = async (req, res) => {
         return;
     }
 
-    console.log("app.deleteApplicant")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {
@@ -364,7 +356,6 @@ exports.addField = async (req, res) => {
         return;
     }
 
-    console.log("app.addField")
     const token = await utils.verifyToken(req);
 
     if (!token.status) {

@@ -6,17 +6,17 @@ const Delete = require('../handlers/deleted_hndlr');
 const utils = require('./utils');
 
 exports.findScholar = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     const id = req.params.id;
     let scholar;
@@ -43,17 +43,17 @@ exports.findScholar = async (req, res) => {
 }
   
 exports.findAll = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
     
     try {
         let scholar = null;
@@ -95,17 +95,17 @@ exports.findAll = async (req, res) => {
 }
   
 exports.search = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let search = req.query.name;
     let value = req.query.value;
@@ -149,17 +149,17 @@ exports.search = async (req, res) => {
 }
   
 exports.sortBy = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     let orderby = req.query;
     const key = Object.keys(orderby);
@@ -216,17 +216,17 @@ exports.sortBy = async (req, res) => {
 }
   
 exports.addScholar = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
     const body = req.body;
 
@@ -281,19 +281,19 @@ exports.addScholar = async (req, res) => {
 }
   
 exports.editScholar = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
-    // if (token.user.role === 'admin' || token.user.role === 'member') {
+    if (token.user.role === 'admin' || token.user.role === 'member') {
         const body = req.body;
 
         const scholar = {
@@ -352,26 +352,26 @@ exports.editScholar = async (req, res) => {
             console.log(`Unable to edit scholar. Error: ${err}`);
             return res.status(500).send({ message: 'Error editing scholar' });
         }
-    // } else {
-    //     console.log("Unauthorized access");
-    //     return res.status(401).send({ message: "Unauthorized access" });
-    // }
+    } else {
+        console.log("Unauthorized access");
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
 }
 
 exports.deleteScholar = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
-    // if (token.user.role === 'admin' || token.user.role === 'member') {
+    if (token.user.role === 'admin' || token.user.role === 'member') {
         const idList = req.body.ids;
         let deleted = 0, failed = 0;
         let invalidId = [];
@@ -427,26 +427,26 @@ exports.deleteScholar = async (req, res) => {
             console.log(`Error deleting scholars ${err}`);
             return res.status(500).send({ message: 'Error deleting scholars' });
         }
-    // } else {
-    //     console.log("Cannot delete: ", token.user.role);
-    //     return res.status(401).send({ message: "Unauthorized access" });
-    // }
+    } else {
+        console.log("Cannot delete: ", token.user.role);
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
 }
 
 exports.addField = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
 
     const token = await utils.verifyToken(req);
 
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
 
-    // if (token.user.role === 'admin' || token.user.role === 'member') {
+    if (token.user.role === 'admin' || token.user.role === 'member') {
         const body = req.body;
 
         const scholar = {
@@ -489,8 +489,8 @@ exports.addField = async (req, res) => {
             console.log(`Unable to edit scholar. Error: ${err}`);
             return res.status(500).send({ message: 'Error editing scholar' });
         }
-    // } else {
-    //     console.log("Unauthorized access");
-    //     return res.status(401).send({ message: "Unauthorized access" });
-    // }
+    } else {
+        console.log("Unauthorized access");
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
 }
