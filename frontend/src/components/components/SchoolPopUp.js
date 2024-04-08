@@ -33,6 +33,7 @@ function SchoolPopUp () {
         const contact_no = getValue("schoolNumber", true);
         const location = getValue("schoolLocation", true);
         const member_emails = getEmails();
+        const admin_email = getValue("adminEmail", true);
 
         if (missingFields.length !== 0) {
             return
@@ -49,7 +50,8 @@ function SchoolPopUp () {
                     contact_no: contact_no,
                     location: location,
                     upload_id: picID,
-                    member_emails: member_emails
+                    member_emails: member_emails,
+                    admin_email: admin_email
                 })
             })
             .then(response => response.json())
@@ -185,6 +187,20 @@ function SchoolPopUp () {
                     </table>
                                         
                     <div className="school-column">
+                        <table id="system-admin-table" className='table-form'>
+                            <thead>
+                                <tr className='table-form-tr'>
+                                    <th className='table-form-th-1'>Email of Scholar Committee Admin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr className='table-form-tr'>
+                                    <td className='table-form-td-1' colSpan='2'>
+                                        <input type="email" className='school-input' id="adminEmail" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <table id="system-member-table" className='table-form'>
                             <thead>
                                 <tr className='table-form-tr'>

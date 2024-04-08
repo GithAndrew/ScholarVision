@@ -23,9 +23,8 @@ exports.login = async (req, res) => {
         if (!existing) {
             var school = null;
             school = await School.getOne({ _id: req.body.school});
-            if (school.member_emails.includes(userobject.email)) {
-                newUser.role = 'member';
-            }
+            if (school.member_emails.includes(userobject.email)) {newUser.role = 'member';}
+            if (school.admin_email === userobject.email) {newUser.role = 'admin';}
         } else {
             const tokenPayload = {_id: existing._id};
             const token = jwt.sign(tokenPayload, `${process.env.JWT_SECRET_KEY}`);

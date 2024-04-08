@@ -181,10 +181,10 @@ function Profile () {
                         </tr>
                         <tr className='smol'></tr>
                         <tr>
-                        <td className='cell-bold'>Address</td>
+                        {type !== "donor" ? <td className='cell-bold'>Address</td> : ""}
                         {record.address && type !== "donor" ?
                             <td className='huge-info-here' colSpan='8'> {record.address.street}, {record.address.subd}, {record.address.brgy}, {record.address.city}, {record.address.province}, {record.address.postal_code} </td>
-                        : <td className='huge-info-here' colSpan='8'> <span className='info-white'>N/A</span> </td>} 
+                        : ""} 
                         </tr>
                         <tr className='smol'></tr>
                     </table>

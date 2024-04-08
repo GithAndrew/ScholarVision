@@ -48,7 +48,6 @@ function Users () {
     }
 
     const handleSubmit = () => {
-
         if (input !== "" && input !== undefined) {
             fetch(apiUrl(`/user/search?name=${input}`), {
                 method: "GET",
@@ -96,7 +95,7 @@ function Users () {
             {users.length !== 0 ?
                 <div className='scholar-container'>
                     <div className='list-search-container'>
-                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record" value={input} onChange={handleUserInput} onKeyDown={handleKeyDown} required></input>
+                        <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search for user" value={input} onChange={handleUserInput} onKeyDown={handleKeyDown} required></input>
                         <BsSearch className='list-search-icon' onClick={handleSubmit}/>
                     </div>
                     <div className="view-users-body">

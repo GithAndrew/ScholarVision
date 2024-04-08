@@ -88,7 +88,7 @@ function Login() {
           ]);
       })
       .then(([dataSchools]) => {
-          if (dataSchools.message === "school not found") {setSchool("")}
+          if (dataSchools.existing === false) {setSchool("")}
           else {
             setSchool(dataSchools);
             let uploadID = dataSchools.upload_id.split(".")[0]

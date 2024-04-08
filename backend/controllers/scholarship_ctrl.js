@@ -53,34 +53,32 @@ exports.findAll = async (req, res) => {
         return;
     }
 
-    if (token.user.role == 'admin' || token.user.role == 'member' || token.user.role == 'scholar' || token.user.role == 'donor') {
-        const sort = req.body.sort;
-        if (sort == 0) {
-            try {
-                const scholarship = await Scholarship.getAll();
-                if (!scholarship) {
-                    console.log("Scholarship database is empty");
-                    return res.status(404).send({ message: `No scholarship in database` });
-                } else {
-                    return res.status(200).send(scholarship);
-                }
-            } catch (err) {
-                console.log(`Error searching for scholarship in the DB ${err}`);
-                return res.status(500).send({ message: 'Error searching for scholarship' });
+    const sort = req.body.sort;
+    if (sort == 0) {
+        try {
+            const scholarship = await Scholarship.getAll();
+            if (!scholarship) {
+                console.log("Scholarship database is empty");
+                return res.status(404).send({ message: `No scholarship in database` });
+            } else {
+                return res.status(200).send(scholarship);
             }
-        } else {
-            try {
-                const scholarship = await Scholarship.getAllSorted(sort);
-                if (!scholarship) {
-                    console.log("Scholarship database is empty");
-                    return res.status(404).send({ message: `No scholarship in database` });
-                } else {
-                    return res.status(200).send(scholarship);
-                }
-            } catch (err) {
-                console.log(`Error searching for scholarship in the DB ${err}`);
-                return res.status(500).send({ message: 'Error searching for scholarship' });
+        } catch (err) {
+            console.log(`Error searching for scholarship in the DB ${err}`);
+            return res.status(500).send({ message: 'Error searching for scholarship' });
+        }
+    } else {
+        try {
+            const scholarship = await Scholarship.getAllSorted(sort);
+            if (!scholarship) {
+                console.log("Scholarship database is empty");
+                return res.status(404).send({ message: `No scholarship in database` });
+            } else {
+                return res.status(200).send(scholarship);
             }
+        } catch (err) {
+            console.log(`Error searching for scholarship in the DB ${err}`);
+            return res.status(500).send({ message: 'Error searching for scholarship' });
         }
     }
 };
@@ -98,30 +96,25 @@ exports.addScholarship = async (req, res) => {
         return;
     }
 
-    if (token.user.role == 'admin' || token.user.role == 'member' || token.user.role == 'donor') {
-        const body = req.body;
+    const body = req.body;
 
-        const newScholarship = {
-            donor: body.donor,
-            grant: body.grant,
-            scholarshipname: body.scholarshipname,
-            year: body.year,
-            details: body.details,
-            donor_id: body.donor_id
-        };
-    
-        try {
-            const scholarship = await Scholarship.create(newScholarship);
-            await Log.create(token.user, 'create', `added scholarship ${scholarship.scholarshipname}`);
-            console.log(`New Scholarship: \n ${scholarship}`);
-            return res.status(201).send({ message: 'New Scholarship successfully added' });
-        } catch(err) {
-            console.log(`Unable to create new Scholarship. Error: ${err}`);
-            return res.status(500).send({ message: "Error creating new Scholarship" })
-        }
-    } else {
-        console.log("Unauthorized access")
-        return res.status(401).send({message: "Unauthorized access"});
+    const newScholarship = {
+        donor: body.donor,
+        grant: body.grant,
+        scholarshipname: body.scholarshipname,
+        year: body.year,
+        details: body.details,
+        donor_id: body.donor_id
+    };
+
+    try {
+        const scholarship = await Scholarship.create(newScholarship);
+        await Log.create(token.user, 'create', `added scholarship ${scholarship.scholarshipname}`);
+        console.log(`New Scholarship: \n ${scholarship}`);
+        return res.status(201).send({ message: 'New Scholarship successfully added' });
+    } catch(err) {
+        console.log(`Unable to create new Scholarship. Error: ${err}`);
+        return res.status(500).send({ message: "Error creating new Scholarship" })
     }
 }
 

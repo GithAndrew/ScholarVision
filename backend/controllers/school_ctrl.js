@@ -12,7 +12,8 @@ exports.setSchool = async (req, res) => {
         contact_no: body.contact_no,
         location: body.location,
         upload_id: body.upload_id,
-        member_emails: body.member_emails
+        member_emails: body.member_emails,
+        admin_email: body.admin_email
     };
 
     console.log(body)
@@ -53,7 +54,7 @@ exports.findSchool = async (req, res) => {
         school = await School.getOne({ _id: id })
         if (!school) {
             console.log("School not found")
-            return res.status(404).send({ message: `school not found` })
+            return res.status(404).send({ existing: false, message: `school not found` })
         } else {
             return res.status(200).send(school)
         }

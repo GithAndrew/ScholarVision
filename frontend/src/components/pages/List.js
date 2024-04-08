@@ -18,7 +18,6 @@ function List () {
     const { user } = useStore();
     let userRole = "";
     if (user) {userRole = user.role;}
-    console.log(userRole)
 
     let input;
     const [assignScholar, setAssign] = useState([]);
@@ -293,7 +292,6 @@ function List () {
         }
     }
 
-
     const validateNewField = () => {
         let newFieldsArr = []
         for (let i = 0; i < record.length; i++) {
@@ -405,8 +403,6 @@ function List () {
         }
     }, [record])
 
-    console.log(viewValue)
-
     useEffect(() => {
         const storedValue = localStorage.getItem('viewValue');
         if (storedValue) {
@@ -435,7 +431,7 @@ function List () {
             <ul className='record-dropdowns'>
                 {checkedAccept.includes(true) ? <li><button className = 'record-acceptmany-button' onClick={() => openConfirmation(acceptMany, "accept")}>ACCEPT MANY</button></li> : ""}
                 {checkedDelete.includes(true) ? <li><button className = 'record-deletemany-button' onClick={() => openConfirmation(deleteMany, "delete")}>DELETE MANY</button></li> : ""}
-                {field ? <li><button className = 'record-enter-button' onClick={() => validateNewField()}>ENTER FIELD</button></li> : <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>}
+                {(userRole === "admin" || userRole === "member") && field ? <li><button className = 'record-enter-button' onClick={() => validateNewField()}>ENTER FIELD</button></li> : (userRole === "admin" || userRole === "member") && <li><button className = 'record-add-button' onClick={() => toggleAddPopup()}>ADD FIELD</button></li>}
                 {field ? <li><button className = 'record-cancel-button' onClick={handleCancelAdding}>CANCEL ADDING</button></li> : ""}
                 {userRole === "admin" || userRole === "member" ? <li><DropDown value = {viewValue} options = {viewFilter} onChange={viewChange} /></li> : ""}
                 <li><DropDown value = {orderValue} options = {orderFilter} onChange={orderChange}/></li>
@@ -458,8 +454,8 @@ function List () {
                             {!field && viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
                             {!field && viewValue === "applicant" ? <th className='list-head'><AiFillCheckCircle className='green-check'></AiFillCheckCircle></th> : ""}
                             {!field && viewValue === "applicant" ? <th className='list-head'>ACCEPT?</th> : ""}
-                            {!field && viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
-                            {!field ? <th className='list-head'><AiFillDelete className='red-trash'></AiFillDelete> </th> : ""}
+                            {(userRole === "admin" || userRole === "member") && !field && viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
+                            {(userRole === "admin" || userRole === "member") && !field ? <th className='list-head'><AiFillDelete className='red-trash'></AiFillDelete> </th> : ""}
                             {field ? <th className='barrier'>&nbsp;</th> : ""}
                             {field ? <th className='list-head'>ADD {field.toUpperCase()}</th> : <th className='list-head'></th>}
                         </tr>
@@ -501,11 +497,12 @@ function List () {
                                             </div>
                                         </td>
                                     : ""}
-                                    {!field && viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => openConfirmation(person, "delete")}><AiFillDelete/></td> : ""}
-                                    {!field ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedDelete[i]} value = {checkedDelete[i]} onChange={() => handleCheckDeleteChange(i)}></input></td> : ""}
+                                    {(userRole === "admin" || userRole === "member") && !field && viewValue !== "applicant" ? <td className='list-cell-trash' onClick={() => openConfirmation(person, "delete")}><AiFillDelete/></td> : ""}
+                                    {(userRole === "admin" || userRole === "member") && !field ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedDelete[i]} value = {checkedDelete[i]} onChange={() => handleCheckDeleteChange(i)}></input></td> : ""}
                                     {field ? <td className='table-barrier'>||||</td> : ""}
-                                    {field ? <td className='list-cell'><input type='text' className='link-input' id = {`new_field${i}`} placeholder={`Enter ${field.toLowerCase()}.`}></input></td> : <td className='last-list-cell'>...</td>}
+                                    {field ? <td className='list-cell'><input type='text' className='link-input' id = {`new_field${i}`} placeholder={`Enter ${field.toLowerCase()}.`}></input></td> : (userRole === "admin" || userRole === "member") && <td className='last-list-cell'>...</td>}
                                     {field ? <td className='last-table-barrier'>||||</td> : ""}
+                                    {(userRole === "admin" || userRole === "member") ? "" : <td className='last-table-barrier'>||||</td>}
                                 </tr>
                             );
                         })}

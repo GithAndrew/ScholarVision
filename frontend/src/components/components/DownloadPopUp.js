@@ -170,8 +170,6 @@ function DownloadPopUp (props) {
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    console.log(csvImage)
-
     const sendScholarData = (appData, siblings, education) => {
         if (picID === null) {
             showMessage('No image set!');
@@ -229,6 +227,7 @@ function DownloadPopUp (props) {
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
+            setTimeout(() => window.location.reload(), 750)
         } else {
             showMessage("Inputted email address already exists!");
         }
