@@ -28,7 +28,8 @@ function List () {
     const [record, setRecord] = useState([]);
     const [originalRecord, setOriginalRecord] = useState([]);
     const [combinedLength, setCombinedLength] = useState(0);
-
+    const [searchQuery, setSearchQuery] = useState("");
+    
     const [openDonor, setOpenDonor] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [openOrder, setOpenOrder] = useState(false);
@@ -80,6 +81,15 @@ function List () {
         { label: 'ADD VIEW', value: 'newfield' }
     ]);
 
+    const [searchOrderFilter, setSearchOrderFilter] = useState([
+        { label: 'NONE', value: '' },
+        { label: 'LAST NAME', value: 'last_name' },
+        { label: 'FIRST NAME', value: 'first_name' },
+        { label: 'GRAD YEAR', value: 'graduation_year' },
+        { label: 'GRANT', value: 'grant' },
+        { label: 'ADD SEARCH', value: 'searchfield' }
+    ]);
+
     const viewChange = (selectedValue) => {
         setViewValue(selectedValue);
         localStorage.setItem('viewValue', selectedValue);
@@ -87,6 +97,10 @@ function List () {
 
     const orderChange = (selectedValue) => {
         setOrderValue(selectedValue);
+    }
+
+    const searchChange = (selectedValue) => {
+        setSearchQuery(selectedValue);
     }
 
     const giveScholarship = (person) => {
@@ -124,6 +138,13 @@ function List () {
         setOrderValue(newAttribute.toLowerCase())
     }
 
+    const updateSearchOrderFilter = (newValue) => {
+        const newAttribute = newValue.replace(' ', '_').replace('Number', 'no');
+        searchOrderFilter.splice(searchOrderFilter.length-1, 0, { label: newValue.toUpperCase(), value: newAttribute.toLowerCase() });
+        setSearchOrderFilter(searchOrderFilter)
+        setSearchQuery(newAttribute.toLowerCase())
+    }
+
     const handleUserInput = (e) => {
         input = e.target.value;
     }
@@ -138,10 +159,10 @@ function List () {
     const handleSubmit = () => {
         let inputLink = ""
 
-        if (input !== '' && input !== undefined && viewValue === "donor") {inputLink = (apiUrl(`/donor/search?name=${input}`))}
-        if (input !== '' && input !== undefined && viewValue === "applicant") {inputLink = (apiUrl(`/applicant/search?name=${input}`))}
-        if (input !== '' && input !== undefined && viewValue === "scholar?value=false") {inputLink = (apiUrl(`/scholar/search?name=${input}&value=false`))}
-        if (input !== '' && input !== undefined && viewValue === "scholar?value=true") {inputLink = (apiUrl(`/scholar/search?name=${input}&value=true`))}
+        if (input !== '' && input !== undefined && viewValue === "donor") {inputLink = (apiUrl(`/donor/search?${searchQuery}=${input}`))}
+        if (input !== '' && input !== undefined && viewValue === "applicant") {inputLink = (apiUrl(`/applicant/search?${searchQuery}=${input}`))}
+        if (input !== '' && input !== undefined && viewValue === "scholar?value=false") {inputLink = (apiUrl(`/scholar/search?${searchQuery}=${input}&value=false`))}
+        if (input !== '' && input !== undefined && viewValue === "scholar?value=true") {inputLink = (apiUrl(`/scholar/search?${searchQuery}=${input}&value=true`))}
 
         if (inputLink !== "") {
             fetch(inputLink, {
@@ -442,6 +463,7 @@ function List () {
                     <div className='list-search-container'>
                         <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search a record" value={input} onChange={handleUserInput} onKeyDown={handleKeyDown} required></input>
                         <BsSearch className='list-search-icon' onClick={handleSubmit}/>
+                        <DropDown value = {searchQuery} options = {searchOrderFilter} onChange={searchChange}/>
                     </div>
                     <table className='list-table'>
                         <tr className='table-header'>
@@ -528,6 +550,12 @@ function List () {
                 record = {record}
                 orderFilter = {orderFilter}
                 addView = {updateOrderFilter}
+                handleClose = {toggleOrderPopup}
+            />}
+            {searchQuery === "searchfield" && <OrderPopUp
+                record = {record}
+                orderFilter = {searchOrderFilter}
+                addView = {updateSearchOrderFilter}
                 handleClose = {toggleOrderPopup}
             />}
             {openAdd ? <AddPopUp

@@ -82,8 +82,29 @@ exports.search = async (req, res) => {
         return;
     }
 
-    let search = req.query.name;
+    let queryParameter = Object.keys(req.query)[0];
+    let search = req.query[queryParameter];
     let result = new Array();
+
+    let insideNewField = false;
+    
+    applicantGetAll = await Applicant.getAll();
+    let newFields = [];
+    if (applicantGetAll && applicantGetAll.length > 0 && applicantGetAll[0].newFields) {
+        newFields = Object.keys(applicantGetAll[0].newFields).map(key => key.split("~")[0]);
+    }
+
+    if (newFields.includes(queryParameter)) {
+        insideNewField = true;
+        for (let i = 0; i <= Object.keys(applicantGetAll[0].newFields).length; i++) {
+            let [field, value] = Object.keys(applicantGetAll[0].newFields)[i].split("~");
+            if (field === queryParameter) {
+                queryParameter = `${field}~${value}`;
+                break;
+            }
+        }
+    }
+
     try {
         if (search === '') {
             return res.status(200).send({ result });
@@ -94,11 +115,14 @@ exports.search = async (req, res) => {
             return res.status(400).send({ message: `No applicant in database` });
         } else {
             search = search.toLowerCase();
+            let data = []
             for (let i = 0; i < applicant.length; i++) {
-                const fname = applicant[i].first_name.toLowerCase();
-                const mname = applicant[i].middle_name.toLowerCase();
-                const lname = applicant[i].last_name.toLowerCase();
-                if (fname.match(search) || lname.match(search) || mname.match(search)) {
+                if (insideNewField) {
+                    data = applicant[i].newFields[`${queryParameter}`].toLowerCase();
+                } else {
+                    data = applicant[i][queryParameter].toLowerCase();
+                }
+                if (data.match(search)) {
                     result.push(applicant[i]);
                 }
             }

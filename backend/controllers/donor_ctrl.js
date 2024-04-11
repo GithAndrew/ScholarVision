@@ -81,10 +81,31 @@ exports.search = async (req, res) => {
         return;
     }
 
-    let search = req.query.name;
-    let result = new Array;
+    let queryParameter = Object.keys(req.query)[0];
+    let search = req.query[queryParameter];
+    let result = new Array();
+
+    let insideNewField = false;
+    
+    donorGetAll = await Donor.getAll();
+    let newFields = [];
+    if (donorGetAll && donorGetAll.length > 0 && donorGetAll[0].newFields) {
+        newFields = Object.keys(donorGetAll[0].newFields).map(key => key.split("~")[0]);
+    }
+
+    if (newFields.includes(queryParameter)) {
+        insideNewField = true;
+        for (let i = 0; i <= Object.keys(donorGetAll[0].newFields).length; i++) {
+            let [field, value] = Object.keys(donorGetAll[0].newFields)[i].split("~");
+            if (field === queryParameter) {
+                queryParameter = `${field}~${value}`;
+                break;
+            }
+        }
+    }
+
     try {
-        if (search == '') {
+        if (search === '') {
             return res.status(200).send({ result });
         }
         let donor = await Donor.getAll();
@@ -93,11 +114,14 @@ exports.search = async (req, res) => {
             return res.status(400).send({ message: `No donor in database` });
         } else {
             search = search.toLowerCase();
+            let data = []
             for (let i = 0; i < donor.length; i++) {
-                const fname = donor[i].first_name.toLowerCase();
-                const mname = donor[i].middle_name.toLowerCase();
-                const lname = donor[i].last_name.toLowerCase();
-                if (fname.match(search) || lname.match(search) || mname.match(search)) {
+                if (insideNewField) {
+                    data = donor[i].newFields[`${queryParameter}`].toLowerCase();
+                } else {
+                    data = donor[i][queryParameter].toLowerCase();
+                }
+                if (data.match(search)) {
                     result.push(donor[i]);
                 }
             }

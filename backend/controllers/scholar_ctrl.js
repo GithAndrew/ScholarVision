@@ -107,9 +107,30 @@ exports.search = async (req, res) => {
         return;
     }
 
-    let search = req.query.name;
+    let queryParameter = Object.keys(req.query)[0];
+    let search = req.query[queryParameter];
     let value = req.query.value;
-    let result = [];
+    let result = new Array();
+    
+    let insideNewField = false;
+    
+    scholarGetAll = await Scholar.getAll();
+    let newFields = [];
+    if (scholarGetAll && scholarGetAll.length > 0 && scholarGetAll[0].newFields) {
+        newFields = Object.keys(scholarGetAll[0].newFields).map(key => key.split("~")[0]);
+    }
+    
+    if (newFields.includes(queryParameter)) {
+        insideNewField = true;
+        for (let i = 0; i <= Object.keys(scholarGetAll[0].newFields).length; i++) {
+            let [field, value] = Object.keys(scholarGetAll[0].newFields)[i].split("~");
+            if (field === queryParameter) {
+                queryParameter = `${field}~${value}`;
+                break;
+            }
+        }
+    }
+    
     try {
         if (!search) {
             return res.status(200).send({ result });
@@ -120,11 +141,14 @@ exports.search = async (req, res) => {
             return res.status(400).send({ message: `No scholar in database` });
         } else {
             search = search.toLowerCase();
+            let data = []
             for (let i = 0; i < scholar.length; i++) {
-                const fname = scholar[i].first_name.toLowerCase();
-                const mname = scholar[i].middle_name.toLowerCase();
-                const lname = scholar[i].last_name.toLowerCase();
-                if (fname.match(search) || lname.match(search) || mname.match(search)) {
+                if (insideNewField) {
+                    data = scholar[i].newFields[`${queryParameter}`].toLowerCase();
+                } else {
+                    data = scholar[i][queryParameter].toLowerCase();
+                }
+                if (data.match(search)) {
                     if (value) {
                         if (value == 'true') {
                             if (scholar[i].scholarship_id) {
@@ -142,8 +166,8 @@ exports.search = async (req, res) => {
             }
             return res.status(200).send({ result });
         }
-    } catch(err) {
-        console.log(`Error searching for scholar in the DB ${err}` );
+    } catch (err) {
+        console.log(`Error searching for scholar in the DB ${err}`);
         return res.status(500).send({ message: 'Error searching for scholar' });
     }
 }
@@ -256,8 +280,6 @@ exports.addScholar = async (req, res) => {
         upload_id: body.upload_id,
         newFields: body.newFields
     };
-
-    console.log(body)
 
     try {
         const existing = await Scholar.getOne({ student_no: newScholar.student_no });
