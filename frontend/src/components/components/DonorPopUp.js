@@ -52,8 +52,8 @@ function DonorPopUp (props) {
 
     useEffect(() => {
         Promise.all([
-            fetch(apiUrl(`/donor`)),
-            fetch(apiUrl(`/scholarship`))
+            fetch(apiUrl(`/donor`), {credentials:'include'}),
+            fetch(apiUrl(`/scholarship`), {credentials:'include'})
         ])
         .then(([resDonors, resScholarship]) => {
             return Promise.all([
@@ -68,6 +68,8 @@ function DonorPopUp (props) {
             console.error("Error fetching data:", error);
         });
     }, []);
+
+    console.log(donor)
 
     return (
         <div>

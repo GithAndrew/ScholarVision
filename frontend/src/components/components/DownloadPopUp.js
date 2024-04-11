@@ -314,10 +314,10 @@ function DownloadPopUp (props) {
                 <div className="upload-popup-box">
                     <span className="add-close-icon" onClick={props.handleClose}>x</span>
                     <p className='delete-label'>Instructions for Application</p>
-                    <p className='popup-form-subtitle'>1. Download the Excel file through the blue button found below.</p>
+                    <p className='popup-form-subtitle'>1. Download the Excel file through the green button found below.</p>
                     <p className='popup-form-subtitle'>2. Fill up your data. Cells with a * means information is required.</p>
                     <p className='popup-form-subtitle'>3. Save the file as .csv.</p>
-                    <p className='popup-form-subtitle'>4. Upload your CSV file using the green button.</p>
+                    <p className='popup-form-subtitle'>4. Upload your CSV file using the blue button.</p>
                     <p className='popup-form-subtitle'>5. If the proper data is sent, a button for uploading your image will appear.</p>
                     <p className='popup-form-subtitle'>6. Another button will appear for you to submit your file.</p>
 
