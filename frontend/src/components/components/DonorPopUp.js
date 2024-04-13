@@ -69,8 +69,6 @@ function DonorPopUp (props) {
         });
     }, []);
 
-    console.log(donor)
-
     return (
         <div>
             <Header/>

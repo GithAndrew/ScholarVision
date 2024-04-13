@@ -23,6 +23,8 @@ function DownloadPopUp (props) {
     const [picID, setPicID] = useState(null);
     const [csvImage, setcsvImage] = useState(null);
     const [forMult, setMult] = useState(false);
+    const [multData, setMultData] = useState([]);
+    const [multImg, setMultImg] = useState([]);
 
     const showMessage = (message) => {
         setAlertMessage(message);
@@ -61,9 +63,10 @@ function DownloadPopUp (props) {
             }
         });
 
+        let lotsofData = [];
+
         for (let useNo = 0; useNo < (useCount*2); useNo+=2) {
             let data = {};
-            let boolData = false;
             const siblings = {};
             const education = {};
             const newFields = {};
@@ -83,7 +86,6 @@ function DownloadPopUp (props) {
                     }
     
                     if (row[1 + useNo] === "Reason/s for Applying for Personal Statement") {
-                        boolData = true;
                         data["statement"] = rows[i+1].split(",")[1 + useNo];
                         break
                     }
@@ -113,6 +115,7 @@ function DownloadPopUp (props) {
                             numofSiblings += 1
                             j += 1
                         }
+                        data["siblings"] = siblings
                     }
     
                     if (row[1 + useNo] === "EDUCATIONAL BACKGROUND") {
@@ -128,6 +131,7 @@ function DownloadPopUp (props) {
                             educationLevel += 1
                             j += 1
                         }
+                        data["education"] = education
                     }
     
                     if (row !== "" && row.length > 1 && row[3 + useNo] !== ""){
@@ -154,6 +158,7 @@ function DownloadPopUp (props) {
                             newFields[attribute.toLowerCase()] = `${rows[j+1].split(",")[2  + useNo].trim()}`
                             j += 1
                         }
+                        data["newFields"] = newFields
                     }
     
                     if (row[1 + useNo].includes("*") && row[2 + useNo] === "") {
@@ -162,7 +167,6 @@ function DownloadPopUp (props) {
                     }
         
                     if (row[1] === "Reason/s for Applying for Personal Statement"){
-                        boolData = true;
                         data["statement"] = rows[i+1].split(",")[1 + useNo];
                         break
                     }
@@ -176,12 +180,9 @@ function DownloadPopUp (props) {
                     }
                 }
             }
-    
-            if (boolData === true){
-                if (props.user === "donor") {sendDonorData(data, newFields)}
-                if (props.user === "scholar") {sendScholarData(data, siblings, education, newFields)}
-            }
+            lotsofData.push(data)
         }
+        setMultData(lotsofData);
     }
 
     const validateData = (inputData) => {
@@ -221,6 +222,7 @@ function DownloadPopUp (props) {
                         newFields[attribute.toLowerCase()] = `${rows[j+1].split(",")[2]}`
                         j += 1
                     }
+                    data["newFields"] = newFields
                 }
 
                 if (row[1] === "Siblings' Information") {
@@ -237,6 +239,7 @@ function DownloadPopUp (props) {
                         numofSiblings += 1
                         j += 1
                     }
+                    data["siblings"] = siblings
                 }
 
                 if (row[1] === "EDUCATIONAL BACKGROUND") {
@@ -252,6 +255,7 @@ function DownloadPopUp (props) {
                         educationLevel += 1
                         j += 1
                     }
+                    data["education"] = education
                 }
 
                 if (row !== "" && row.length > 1 && row[3] !== ""){
@@ -302,9 +306,37 @@ function DownloadPopUp (props) {
         }
 
         if (boolData === true){
-            if (props.user === "donor") {sendDonorData(data, newFields)}
-            if (props.user === "scholar") {sendScholarData(data, siblings, education, newFields)}
+            if (props.user === "donor") {sendDonorData(data, 0, "mult")}
+            if (props.user === "scholar") {sendScholarData(data, 0, "single")}
         }
+    }
+
+    const openManyImageFilePopup = (e, lastName) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const img = new Image();
+            img.onload = () => {
+                if (img.width !== img.height) {
+                    showMessage('Please upload a square image.');
+                    setcsvImage(null);
+                } else {
+                    setcsvImage(reader.result);
+                    const data = new FormData();
+                    data.append("image", e.target.files[0]);
+
+                    fetch(apiUrl("/upload"), {
+                      method: "POST",
+                      body: data,
+                      credentials: 'include'
+                    }).then((response) => response.json())
+                    .then((result) => {
+                        setMultImg(prevMultImg => [...prevMultImg, { [lastName]: result.id }]);
+                    });
+                }
+            };
+            img.src = reader.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
     }
 
     const openImageFilePopup = (e) => {
@@ -335,8 +367,12 @@ function DownloadPopUp (props) {
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    const sendScholarData = (appData, siblings, education, newFields) => {
-        if (picID === null) {
+    const sendScholarData = (appData, useNo, type) => {
+        let photoID = ""
+        if (type === "single") {photoID = picID}
+        if (type === "mult") {photoID = multImg[useNo][appData["last_name"]]}
+
+        if (photoID === null) {
             showMessage('No image set!');
             return
         }
@@ -381,11 +417,11 @@ function DownloadPopUp (props) {
                     father_details: father_details,
                     mother_details: mother_details,
                     guardian_details: guardian_details,
-                    sibling_details: siblings,
-                    educational_bg: education,
+                    sibling_details: appData["siblings"],
+                    educational_bg: appData["education"],
                     statement: appData["statement"],
-                    upload_id: picID,
-                    newFields: newFields
+                    upload_id: photoID,
+                    newFields: appData["newFields"]
                 })
             })
             .then(response => response.json())
@@ -411,8 +447,20 @@ function DownloadPopUp (props) {
         [`${parent.replace("'s","")}_income`]: appData[`${parent}_annual income`]
     });
 
-    const sendDonorData = (appData, newFields) => {
-        if (picID === null) {
+    const sendMultipleData = (multipleData) => {
+        for (let useNo = 0; useNo < multipleData.length; useNo++) {
+            if (props.user === "donor") {sendDonorData(multipleData[useNo], useNo, "mult")}
+            if (props.user === "scholar") {sendScholarData(multipleData[useNo], useNo, "mult")}
+        }
+        setTimeout(() => window.location.reload(), 750)
+    }
+
+    const sendDonorData = (appData, useNo, type) => {
+        let photoID = ""
+        if (type === "single") {photoID = picID}
+        if (type === "mult") {photoID = multImg[useNo][appData["last_name"]]}
+
+        if (photoID === null) {
             showMessage('No image set!');
             return
         }
@@ -439,8 +487,8 @@ function DownloadPopUp (props) {
                     sex: appData["sex"],
                     citizenship: appData["citizenship"],
                     statement: appData["statement"],
-                    upload_id: picID,
-                    newFields: newFields
+                    upload_id: photoID,
+                    newFields: appData["newFields"]
                 })
             })
             .then(response => response.json())
@@ -449,7 +497,7 @@ function DownloadPopUp (props) {
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
-            setTimeout(() => window.location.reload(), 750)
+            if (type === "single") {setTimeout(() => window.location.reload(), 750)};
         } else {showMessage("Inputted email address already exists!")}
     }
 
@@ -500,17 +548,17 @@ function DownloadPopUp (props) {
                         </div>
                     :   <div>
                             <p className='delete-label'>Instructions for Uploading Multiple Files</p>
-                            <p className='popup-form-subtitle'>1. Download the Excel file through the green button found below.</p>
+                            <p className='popup-form-subtitle'>1. Download the Excel file through the blue button found below.</p>
                             <p className='popup-form-subtitle'>2. Copy the entire template and paste it to the next blank column. Copy-paste continuously depending on how many people you will submit.</p>
                             <p className='popup-form-subtitle'>3. Fill up the required data for each person. Cells with a * means information is required.</p>
                             <p className='popup-form-subtitle'>4. Save the file as .csv.</p>
                             <p className='popup-form-subtitle'>5. Upload your CSV file using the blue button.</p>
-                            <p className='popup-form-subtitle'>6. If the proper data is sent, a button for uploading your image will appear.</p>
-                            <p className='popup-form-subtitle'>7. Another button will appear for you to submit your file.</p>
+                            <p className='popup-form-subtitle'>6. If the proper data is sent, buttons for uploading images will appear.</p>
+                            <p className='popup-form-subtitle'>7. Once everyone has the required image, another button will appear for you to submit your file.</p>
                         </div>
                     }
 
-                    {csvImage && (
+                    {!forMult && csvImage && (
                         <div className='popup-uploaded-image'>
                             <img src={csvImage} alt="Upload" />
                         </div>
@@ -520,7 +568,7 @@ function DownloadPopUp (props) {
                         <div className="delete-buttons">
                             {props.user === "donor" ? <a href={donortemplate} className='upload-green-button' download> Download Excel</a>: ""}
                             {props.user === "scholar" ? <a href={scholartemplate} className='upload-green-button' download> Download Excel</a>: ""}
-                            <label htmlFor="file-input" className='upload-blue-button' ONC>Upload CSV</label>
+                            <label htmlFor="file-input" className='upload-blue-button'>Upload CSV</label>
                             <input type="file" id="file-input" accept='.csv' onChange={setCSVFile}></input>
                             {csvFile ? 
                                 <div className='upload-photo-box'>
@@ -531,19 +579,36 @@ function DownloadPopUp (props) {
                             {csvImage ? <button className='upload-blue-button' onClick={() => readFile(csvFile)}>Submit {csvFile.name}</button> : "" }
                         </div>
                     : 
-                        <div className="delete-buttons">
-                            {props.user === "donor" ? <a href={donormanytemplate} className='upload-green-button' download> Download Excel</a>: ""}
-                            {props.user === "scholar" ? <a href={scholarmanytemplate} className='upload-green-button' download> Download Excel</a>: ""}
-                            <label htmlFor="file-input" className='upload-blue-button' ONC>Upload CSV</label>
-                            <input type="file" id="file-input" accept='.csv' onChange={setCSVFile}></input>
-                            {csvFile ? 
-                                <div className='upload-photo-box'>
-                                    <label htmlFor="upload-photo-popup" className="upload-label">Upload Picture</label>
-                                    <input type="file" id="upload-photo-popup" accept=".png,.jpg" onChange={openImageFilePopup}/>
-                                </div>
-                            : ""}
-                            {csvImage ? <button className='upload-blue-button' onClick={() => readFile(csvFile)}>Submit {csvFile.name}</button> : "" }
+                        <div>
+                            <div className="delete-buttons">
+                                {props.user === "donor" ? <a href={donormanytemplate} className='upload-blue-button' download> Download Excel</a>: ""}
+                                {props.user === "scholar" ? <a href={scholarmanytemplate} className='upload-blue-button' download> Download Excel</a>: ""}
+                                <label htmlFor="file-input" className='upload-green-button'>Upload CSV</label>
+                                <input type="file" id="file-input" accept='.csv' onChange={setCSVFile}></input>
+                                {csvFile ? <button className='upload-blue-button' onClick={() => readFile(csvFile)}>Submit {csvFile.name}</button> : "" }
+                            </div>
+                            <div className='barrier'>&nbsp;</div>
+                            <div>
+                                {multData && multData.map((person, i) => (
+                                    <div>
+                                        <div className='upload-photo-box' key={i}>
+                                            <label htmlFor={`upload-photo-popup${i}`} className="upload-label">Upload Picture for {person.first_name} {person.last_name}</label>
+                                            <input type="file" id={`upload-photo-popup${i}`} accept=".png,.jpg" onChange={(e) => openManyImageFilePopup(e, person.last_name)} style={{ position: 'absolute', zIndex: -1 }} />
+                                            {multImg[i] && <div>DONE</div>}
+                                        </div>
+                                        <div className='smol'>&nbsp;</div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div>
+                                {multData.length !== 0 && (multImg.length === multData.length) ? 
+                                    <div className="delete-buttons">
+                                        <button className='upload-blue-button' onClick={() => sendMultipleData(multData)}>Submit Everyone's Data</button>
+                                    </div>
+                                : ""}
+                            </div>
                         </div>
+                    
                     }
                 </div>
             </div>

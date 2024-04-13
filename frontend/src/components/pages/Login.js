@@ -106,8 +106,6 @@ function Login() {
       });
   }, [storedValue]);
 
-  console.log(school)
-
   return (
     <div className="login-limiter">
       <header className='login-header'>
