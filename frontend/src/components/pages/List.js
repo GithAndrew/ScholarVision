@@ -51,9 +51,11 @@ function List () {
     const [alertMessage, setAlertMessage] = useState("");
 
     let attributes = [];
-    if (record[0] && record[0]["newFields"]) {
-        const keys = Object.keys(record[0]["newFields"]);
-        keys.forEach(key => {attributes.push(key);});
+    if (record[0]) {
+        if (record[0]["newFields"]) {
+            const keys = Object.keys(record[0]["newFields"]);
+            keys.forEach(key => {attributes.push(key);});
+        }    
     }
 
     const showMessage = (message) => {

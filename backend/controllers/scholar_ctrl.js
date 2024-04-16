@@ -130,6 +130,20 @@ exports.search = async (req, res) => {
             }
         }
     }
+
+    let scholArr = new Array();
+    if (queryParameter === 'grant' && value === 'true') {
+        const scholarship = await Scholarship.getAll();
+        for (i = 0; i < scholarship.length; i++) {
+            for (j = 0; j < scholarGetAll.length; j++) {
+                if (scholarship[i]._id == scholarGetAll[j].scholarship_id) {
+                    if (String(scholarship[i].grant).match(search)) {
+                        scholArr.push(scholarGetAll[j]);
+                    }
+                }
+            }
+        }
+    }
     
     try {
         if (!search) {
@@ -140,31 +154,37 @@ exports.search = async (req, res) => {
             console.log("Scholar database is empty");
             return res.status(400).send({ message: `No scholar in database` });
         } else {
-            search = search.toLowerCase();
-            let data = []
-            for (let i = 0; i < scholar.length; i++) {
-                if (insideNewField) {
-                    data = scholar[i].newFields[`${queryParameter}`].toLowerCase();
-                } else {
-                    data = scholar[i][queryParameter].toLowerCase();
+            if (queryParameter === 'grant' && value === 'true') {
+                if (scholArr.length > 0) {
+                    return res.status(200).send({result: scholArr});
                 }
-                if (data.match(search)) {
-                    if (value) {
-                        if (value == 'true') {
-                            if (scholar[i].scholarship_id) {
-                                result.push(scholar[i]);
-                            }
-                        } else if (value == 'false') {
-                            if (!scholar[i].scholarship_id) {
-                                result.push(scholar[i]);
-                            }
-                        }
+            } else {
+                search = search.toLowerCase();
+                let data = []
+                for (let i = 0; i < scholar.length; i++) {
+                    if (insideNewField) {
+                        data = scholar[i].newFields[`${queryParameter}`].toLowerCase();
                     } else {
-                        result.push(scholar[i]);
+                        data = scholar[i][queryParameter].toLowerCase();
+                    }
+                    if (data.match(search)) {
+                        if (value) {
+                            if (value == 'true') {
+                                if (scholar[i].scholarship_id) {
+                                    result.push(scholar[i]);
+                                }
+                            } else if (value == 'false') {
+                                if (!scholar[i].scholarship_id) {
+                                    result.push(scholar[i]);
+                                }
+                            }
+                        } else {
+                            result.push(scholar[i]);
+                        }
                     }
                 }
+                return res.status(200).send({ result });    
             }
-            return res.status(200).send({ result });
         }
     } catch (err) {
         console.log(`Error searching for scholar in the DB ${err}`);

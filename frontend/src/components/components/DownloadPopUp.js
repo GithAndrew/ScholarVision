@@ -58,14 +58,18 @@ function DownloadPopUp (props) {
 
         let useCount = 0;
         rows[0].split(",").forEach(element => {
-            if (element === "SCHOLARVISION DONOR INFORMATION") {
+            if (element === "SCHOLARVISION DONOR INFORMATION" || element === "SCHOLARVISION APPLICANT INFORMATION") {
                 useCount++;
             }
         });
 
         let lotsofData = [];
+        let counter = 0;
 
-        for (let useNo = 0; useNo < (useCount*2); useNo+=2) {
+        if (props.user === "donor") {counter = 2}
+        if (props.user === "scholar") {counter = 5}
+
+        for (let useNo = 0; useNo < (useCount*counter); useNo+=counter) {
             let data = {};
             const siblings = {};
             const education = {};
@@ -108,7 +112,7 @@ function DownloadPopUp (props) {
                             siblings[`sibling${numofSiblings}`] = {
                                 name: rows[j+2].split(",")[1 + useNo],
                                 age: rows[j+2].split(",")[2 + useNo],
-                                civil_status: rows[j+2].split(",")[3] + useNo,
+                                civil_status: rows[j+2].split(",")[3 + useNo],
                                 educ_attainment: rows[j+2].split(",")[4 + useNo],
                                 occupation: rows[j+2].split(",")[5 + useNo]
                             };
@@ -182,6 +186,7 @@ function DownloadPopUp (props) {
             }
             lotsofData.push(data)
         }
+        console.log(lotsofData)
         setMultData(lotsofData);
     }
 
@@ -541,7 +546,7 @@ function DownloadPopUp (props) {
                             <p className='delete-label'>Instructions for Application</p>
                             <p className='popup-form-subtitle'>1. Download the Excel file through the green button found below.</p>
                             <p className='popup-form-subtitle'>2. Fill up your data. Cells with a * means information is required.</p>
-                            <p className='popup-form-subtitle'>3. Save the file as .csv.</p>
+                            <p className='popup-form-subtitle'>3. Save the file as .csv (comma delimited).</p>
                             <p className='popup-form-subtitle'>4. Upload your CSV file using the blue button.</p>
                             <p className='popup-form-subtitle'>5. If the proper data is sent, a button for uploading your image will appear.</p>
                             <p className='popup-form-subtitle'>6. Another button will appear for you to submit your file.</p>
@@ -551,8 +556,8 @@ function DownloadPopUp (props) {
                             <p className='popup-form-subtitle'>1. Download the Excel file through the blue button found below.</p>
                             <p className='popup-form-subtitle'>2. Copy the entire template and paste it to the next blank column. Copy-paste continuously depending on how many people you will submit.</p>
                             <p className='popup-form-subtitle'>3. Fill up the required data for each person. Cells with a * means information is required.</p>
-                            <p className='popup-form-subtitle'>4. Save the file as .csv.</p>
-                            <p className='popup-form-subtitle'>5. Upload your CSV file using the blue button.</p>
+                            <p className='popup-form-subtitle'>4. Save the file as .csv (comma delimited).</p>
+                            <p className='popup-form-subtitle'>5. Upload your CSV file using the green button.</p>
                             <p className='popup-form-subtitle'>6. If the proper data is sent, buttons for uploading images will appear.</p>
                             <p className='popup-form-subtitle'>7. Once everyone has the required image, another button will appear for you to submit your file.</p>
                         </div>

@@ -4,6 +4,7 @@ const Scholarship = require('../handlers/scholarship_hndlr');
 const Delete = require('../handlers/deleted_hndlr');
 const Log = require('../handlers/log_hndlr');
 const utils = require('./utils');
+const scholar_mdl = require('../models/scholar_mdl');
 
 exports.findDonor = async (req, res) => {
     if (!req.cookies || !req.cookies.authToken) {
@@ -85,9 +86,12 @@ exports.search = async (req, res) => {
     let search = req.query[queryParameter];
     let result = new Array();
 
+    console.log(queryParameter)
+    console.log(search)
+
     let insideNewField = false;
     
-    donorGetAll = await Donor.getAll();
+    const donorGetAll = await Donor.getAll();
     let newFields = [];
     if (donorGetAll && donorGetAll.length > 0 && donorGetAll[0].newFields) {
         newFields = Object.keys(donorGetAll[0].newFields).map(key => key.split("~")[0]);
@@ -104,6 +108,20 @@ exports.search = async (req, res) => {
         }
     }
 
+    let scholArr = new Array();
+    if (queryParameter === 'grant') {
+        const scholarship = await Scholarship.getAll();
+        for (i = 0; i < scholarship.length; i++) {
+            for (j = 0; j < donorGetAll.length; j++) {
+                if (scholarship[i].donor_id == donorGetAll[j]._id) {
+                    if (String(scholarship[i].grant).match(search)) {
+                        scholArr.push(donorGetAll[j]);
+                    }
+                }
+            }
+        }
+    }
+
     try {
         if (search === '') {
             return res.status(200).send({ result });
@@ -113,19 +131,25 @@ exports.search = async (req, res) => {
             console.log("Donor database is empty");
             return res.status(400).send({ message: `No donor in database` });
         } else {
-            search = search.toLowerCase();
-            let data = []
-            for (let i = 0; i < donor.length; i++) {
-                if (insideNewField) {
-                    data = donor[i].newFields[`${queryParameter}`].toLowerCase();
-                } else {
-                    data = donor[i][queryParameter].toLowerCase();
+            if (queryParameter === 'grant') {
+                if (scholArr.length > 0) {
+                    return res.status(200).send({result: scholArr});
                 }
-                if (data.match(search)) {
-                    result.push(donor[i]);
+            } else {
+                search = search.toLowerCase();
+                let data = [];
+                for (let i = 0; i < donor.length; i++) {
+                    if (insideNewField) {
+                        data = donor[i].newFields[`${queryParameter}`].toLowerCase();
+                    } else {
+                        data = donor[i][queryParameter].toLowerCase();
+                    }
+                    if (data.match(search)) {
+                        result.push(donor[i]);
+                    }
                 }
+                return res.status(200).send({ result });
             }
-            return res.status(200).send({ result });
         }
     } catch (err) {
         console.log(`Error searching for donor in the DB ${err}`);
@@ -201,7 +225,6 @@ exports.addDonor = async (req, res) => {
     }
 
     const body = req.body;
-    console.log(body)
 
     const newDonor = {
         first_name: body.first_name,
