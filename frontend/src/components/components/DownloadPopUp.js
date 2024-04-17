@@ -57,136 +57,142 @@ function DownloadPopUp (props) {
         let rows = inputData.slice(inputData.indexOf('\n')+1).split('\n');
 
         let useCount = 0;
-        rows[0].split(",").forEach(element => {
-            if (element === "SCHOLARVISION DONOR INFORMATION" || element === "SCHOLARVISION APPLICANT INFORMATION") {
-                useCount++;
+
+        let fieldsArr = [];
+
+        for (let i = 0; i < rows[0].split(",").length; i++) {
+            fieldsArr.push(rows[0].split(",")[i])
+        }
+
+        for (let i = 1; i < rows.length; i++) {
+            if (rows[i].split(",")[1] !== "") {
+                useCount++
             }
-        });
+        }
 
         let lotsofData = [];
-        let counter = 0;
 
-        if (props.user === "donor") {counter = 2}
-        if (props.user === "scholar") {counter = 5}
-
-        for (let useNo = 0; useNo < (useCount*counter); useNo+=counter) {
+        for (let useNo = 1; useNo < useCount; useNo++) {
             let data = {};
             const siblings = {};
             const education = {};
             const newFields = {};
 
-            for (let i = 0; i < rows.length; i ++) {
-                let row = rows[i].split(",");
-    
-                if (props.user === "scholar") {
-                    if (row[1] === "SCHOLARVISION DONOR INFORMATION") {
-                        showMessage("Wrong Excel file!")
-                        return
-                    }
-                    
-                    if (row[1 + useNo].includes("*") && row[3 + useNo] === "") {
-                        showMessage(`Missing value for ${row[1 + useNo].replace(" *","")}!`)
-                        return
-                    }
-    
-                    if (row[1 + useNo] === "Reason/s for Applying for Personal Statement") {
-                        data["statement"] = rows[i+1].split(",")[1 + useNo];
-                        break
-                    }
-    
-                    if (row[1] === "ADDITIONAL INFORMATION") {
-                        let j = i
-                        while (rows[j+1].split(",")[1 + useNo] !== "FAMILY BACKGROUND") {
-                            let attribute = ""
-                            if (rows[j+1].split(",")[1 + useNo].includes("*")) {attribute = `${rows[j+1].split(",")[1] + useNo}`.replace(" *","~true")}
-                            else {attribute = rows[j+1].split(",")[1 + useNo] + "~false"}
-                            newFields[attribute.toLowerCase()] = `${rows[j+1].split(",")[2 + useNo]}`
-                            j += 1
-                        }
-                    }
-    
-                    if (row[1] === "Siblings' Information") {
-                        let j = i
-                        let numofSiblings = 1
-                        while (rows[j+2].split(",")[1 + useNo] !== "EDUCATIONAL BACKGROUND") {
-                            siblings[`sibling${numofSiblings}`] = {
-                                name: rows[j+2].split(",")[1 + useNo],
-                                age: rows[j+2].split(",")[2 + useNo],
-                                civil_status: rows[j+2].split(",")[3 + useNo],
-                                educ_attainment: rows[j+2].split(",")[4 + useNo],
-                                occupation: rows[j+2].split(",")[5 + useNo]
-                            };
-                            numofSiblings += 1
-                            j += 1
-                        }
-                        data["siblings"] = siblings
-                    }
-    
-                    if (row[1 + useNo] === "EDUCATIONAL BACKGROUND") {
-                        let j = i
-                        let educationLevel = 1
-                        while (rows[j+2].split(",")[1 + useNo] !== "PERSONAL STATEMENT") {
-                            education[`educ_bg${educationLevel}`] = {
-                                level: rows[j+2].split(",")[1 + useNo],
-                                school: rows[j+2].split(",")[2 + useNo],
-                                dates: rows[j+2].split(",")[3 + useNo],
-                                awards: rows[j+2].split(",")[4 + useNo]
-                            };
-                            educationLevel += 1
-                            j += 1
-                        }
-                        data["education"] = education
-                    }
-    
-                    if (row !== "" && row.length > 1 && row[3 + useNo] !== ""){
-                        let attribute = row[1 + useNo].replace(" *", "").replace(" ", "_").toLowerCase()
-                        data[attribute] = row[3 + useNo];
-                    } else if (row !== "" && row.length > 1 && row[1 + useNo].toUpperCase() !== row[1 + useNo]){
-                        let attribute = row[1 + useNo].replace(" ", "_").toLowerCase()
-                        data[attribute] = row[3 + useNo];
-                    }
+            let row = rows[useNo].split(",");
+
+            if (props.user === "donor") {
+                if (fieldsArr[0] === "Scholar") {
+                    showMessage("Wrong Excel file!");
+                    return;
                 }
-    
-                if (props.user === "donor") {
-                    if (row[1] === "SCHOLARVISION APPLICANT INFORMATION") {
-                        showMessage("Wrong Excel file!")
+
+                for (let j = 1; j < row.length; j++) {
+                    if (fieldsArr[j].includes("*") && row[j] === "") {
+                        showMessage(`Missing value for ${row[j].replace(" *","")} for ${row[2]} ${row[1]}!`)
                         return
                     }
     
-                    if (row[1 + useNo] === "ADDITIONAL INFORMATION") {
-                        let j = i
-                        while (rows[j+1].split(",")[1 + useNo] !== "SCHOLARSHIP TO OFFER DETAILS") {
+                    let field = fieldsArr[j].replace(' *','').replace(' ', '_').replace('Name','name').toLowerCase()
+                    data[field] = `${row[j]}`;
+
+                    if (row[j] === "add") {
+                        let i = j;
+                        while (fieldsArr[i+1] !== "Scholarship Name") {
                             let attribute = ""
-                            if (rows[j+1].split(",")[1 + useNo].includes("*")) {attribute = `${rows[j+1].split(",")[1 + useNo]}`.replace(" *","~true")}
-                            else {attribute = rows[j+1].split(",")[1 + useNo].replace("/\r/g","") + "~false"}
-                            newFields[attribute.toLowerCase()] = `${rows[j+1].split(",")[2  + useNo].trim()}`
-                            j += 1
+                            if (fieldsArr[i].includes("*")) {attribute = `${row[i]}`.replace(" *","~true")}
+                            else {attribute = row[i].replace("/\r/g","") + "~false"}
+                            newFields[attribute.toLowerCase()] = `${row[i].trim()}`
+                            i += 1
                         }
                         data["newFields"] = newFields
                     }
-    
-                    if (row[1 + useNo].includes("*") && row[2 + useNo] === "") {
-                        showMessage(`Missing value for ${row[1 + useNo].replace(" *","")}!`)
-                        return
-                    }
-        
-                    if (row[1] === "Reason/s for Applying for Personal Statement"){
-                        data["statement"] = rows[i+1].split(",")[1 + useNo];
+
+                    if (fieldsArr[j] === "Reason/s for Applying"){
+                        data["statement"] = `${row[j]}`;
                         break
                     }
-        
-                    if (row !== "" && row.length > 1 && row[2 + useNo] !== ""){
-                        let attribute = row[1 + useNo].replace(" *", "").replace(" ", "_").toLowerCase()
-                        data[attribute] = row[2 + useNo].trim();
-                    } else if (row !== "" && row.length > 1 && row[1 + useNo].toUpperCase() !== row[1 + useNo]){
-                        let attribute = row[1 + useNo].replace(" ", "_").toLowerCase()
-                        data[attribute] = row[2 + useNo].trim();
+                }
+                lotsofData.push(data)
+            }
+
+            if (props.user === "scholar") { 
+                if (fieldsArr[0] === "Donor") {
+                    showMessage("Wrong Excel file!");
+                    return;
+                }
+
+                for (let j = 1; j < row.length; j++) {
+                    if (fieldsArr[j].includes("*") && row[j] === "") {
+                        showMessage(`Missing value for ${row[j].replace(" *","")} for ${row[2]} ${row[1]}!`)
+                        return
+                    }
+    
+                    let field = fieldsArr[j].replace(' *','').replace(' ', '_').replace('Name','name').toLowerCase()
+                    data[field] = `${row[j]}`;
+
+
+                    // CHECK THIS ONE
+                    // 
+                    //
+                    //
+                    if (row[j] === "Sibling 1 Name") {
+                        let i=j
+                        let numofSiblings = 1
+                        while (fieldsArr[i+1] !== "Educ BG 1 Level") {
+                            siblings[`sibling${numofSiblings}`] = {
+                                name: row[i+=1],
+                                age: row[i+=1],
+                                civil_status: row[i+=1],
+                                educ_attainment: row[i+=1],
+                                occupation: row[i+=1]
+                            };
+                            numofSiblings += 1
+                            i += 1
+                        }
+                        data["siblings"] = siblings
+                    }
+
+                    if (row[j] === "Educ BG 1 Level") {
+                        let i=j
+                        let educationLevel = 1
+                        while (fieldsArr[i+1] !== "Reason/s for Applying") {
+                            education[`educ_bg${educationLevel}`] = {
+                                level: row[i+=1],
+                                school: row[i+=1],
+                                dates: row[i+=1],
+                                awards: row[i+=1]
+                            };
+                            educationLevel += 1
+                            i += 1
+                        }
+                        data["education"] = education
+                    }
+
+                    if (row[j] === "add") {
+                        let i = j;
+                        while (fieldsArr[i+1] !== "Father's Name") {
+                            let attribute = ""
+                            if (fieldsArr[i].includes("*")) {attribute = `${row[i]}`.replace(" *","~true")}
+                            else {attribute = row[i].replace("/\r/g","") + "~false"}
+                            newFields[attribute.toLowerCase()] = `${row[i].trim()}`
+                            i += 1
+                        }
+                        data["newFields"] = newFields
+                    }
+
+                    //
+                    //
+                    // CONTINUE CHECK
+
+                    if (fieldsArr[j] === "Reason/s for Applying"){
+                        data["statement"] = `${row[j]}`;
+                        break
                     }
                 }
+                lotsofData.push(data)
             }
-            lotsofData.push(data)
         }
-        console.log(lotsofData)
+
         setMultData(lotsofData);
     }
 
