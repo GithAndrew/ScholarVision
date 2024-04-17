@@ -1,6 +1,8 @@
+const mongoose = require('mongoose');
 const User = require('../handlers/user_hndlr');
 const Log = require('../handlers/log_hndlr');
 const School = require('../handlers/school_hndlr');
+const Delete = require('../handlers/deleted_hndlr');
 const utils = require('./utils');
 const jwt_decode = require('jwt-decode');
 const jwt = require('jsonwebtoken');
@@ -191,3 +193,72 @@ exports.logout = (req, res) => {
     console.log("User logged out.");
     res.clearCookie('authToken').send();
 };
+
+exports.deleteUser = async (req, res) => {
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
+
+    const token = await utils.verifyToken(req);
+
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
+
+    const idList = req.body.ids;
+    let deleted = 0, failed = 0;
+    let invalidId = [];
+    
+    try {
+        var reqLength = idList.length;
+    } catch {
+        console.log('Invalid property');
+        res.status(501).send({ message: 'Invalid property' });
+        return;
+    }
+
+    try {
+        for (let i = 0; i < reqLength; i++) {
+            try {
+                mongoose.Types.ObjectId(idList[i]);
+            } catch(err) {
+                console.log('Wrong format:', idList[i]);
+                invalidId.push(idList[i]);
+                failed++;
+                continue;
+            }
+
+            let user = null;
+            try {
+                user = await User.getOne({ _id: idList[i] });
+                if (user) {
+                    await Delete.create("user", user);
+                    await Log.create(token.user, 'delete', `deleted user ${user.first_name} ${user.last_name}`);
+                    await User.delete({ _id: idList[i] });
+                    console.log('Successfully deleted user with id:', idList[i]);
+                    deleted++;
+                } else {
+                    console.log('Invalid user id:', idList[i]);
+                    invalidId.push(idList[i]);
+                    failed++;
+                }
+            } catch(err) {
+                console.log(`Error searching for user in the DB ${err}`);
+                return res.status(500).send({ message: 'Error searching for user' });
+            }
+        }
+
+        if (reqLength == failed) {
+            res.status(404).send({ body: invalidId, message: "ids not found" });
+        } else if (failed == 0) {
+            res.status(200).send({ message: `Successfully deleted ${deleted} user` });
+        } else {
+            res.status(201).send({ body: invalidId, message: `Successfully deleted ${deleted} user/s but failed to delete ${failed} user/s` });
+        }
+    } catch(err) {
+        console.log(`Error deleting applicants ${err}`);
+        res.status(500).send({ message: 'Error deleting applicants' });
+    }
+}

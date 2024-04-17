@@ -118,7 +118,6 @@ function ConfirmPopUp (props) {
     }
 
     const deletePerson = (id) => {
-        console.log(id)
         if (isArray) {
             for (let i = 0; i < id.length; i++){
                 fetch(apiUrl("/" + [type]), {

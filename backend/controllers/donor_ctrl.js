@@ -86,9 +86,6 @@ exports.search = async (req, res) => {
     let search = req.query[queryParameter];
     let result = new Array();
 
-    console.log(queryParameter)
-    console.log(search)
-
     let insideNewField = false;
     
     const donorGetAll = await Donor.getAll();

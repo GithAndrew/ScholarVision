@@ -30,7 +30,6 @@ function Login() {
                     token: token,
                     school: storedValue
                 }),
-    
             })
             .then((response) => response.json())
             .then((data) => {

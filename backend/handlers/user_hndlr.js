@@ -22,6 +22,15 @@ exports.edit = (object) =>{
     });
 }
 
+exports.delete = (query) => {
+    return new Promise((resolve, reject) => {
+        User.deleteMany(query, (err, result) => {
+            if(err) { reject(err); }
+            else { resolve(result); }
+        })
+    })
+}
+
 exports.getAll = () => {
     return new Promise((resolve, reject) => {
         User.find((err,user) => {

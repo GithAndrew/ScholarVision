@@ -14,7 +14,7 @@ const Header = () => {
     const storedValue = localStorage.getItem('mainSchool');
 
     const logout = () => {
-        fetch(apiUrl("/user"), {
+        fetch(apiUrl("/user/logout"), {
             method: "DELETE",
             credentials:'include',
             headers:{

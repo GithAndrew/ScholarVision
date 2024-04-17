@@ -4,6 +4,7 @@ import {React, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
 import useStore from '../../authHook';
+import ConfirmPopUp from '../components/ConfirmPopUp';
 import EditPopUp from '../components/EditPopUp';
 import {BsSearch}  from 'react-icons/bs';
 import '../css/Users.css'
@@ -23,6 +24,11 @@ function Users () {
     const [forEdit, setEdit] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
 
+    const [assignConfirm, setAssignConfirm] = useState([]);
+    const [forConfirm, setConfirm] = useState([]);
+    const [forDelete, setDelete] = useState(false);
+    const [openDelete, setOpenDelete] = useState(false);
+
     const handleUserInput = (e) => {
         input = e.target.value;
     }
@@ -37,6 +43,10 @@ function Users () {
         setEdit(!forEdit);
     }
 
+    const toggleDelete = () => {
+        setDelete(!forDelete);
+    }
+
     const editUser = (person, role) => {
         setEditPerson(person);
         setCurrentRole(role);
@@ -45,6 +55,16 @@ function Users () {
 
     const toggleEditPopup = () => {
         setOpenEdit(!openEdit);
+    }
+
+    const openConfirmation = (person, toDo) => {
+        setAssignConfirm(person)
+        setConfirm(toDo)
+        toggleConfirmPopup()
+    }
+
+    const toggleConfirmPopup = () => {
+        setOpenDelete(!openDelete);
     }
 
     const handleSubmit = () => {
@@ -90,6 +110,7 @@ function Users () {
             <header className='list-header'>ACCOUNTS</header>
             <ul className='record-dropdowns'>
                 {forEdit ? <li><button className = 'record-add-button' onClick={toggleEdit}>BACK</button></li> : <li><button className = 'record-add-button' onClick={toggleEdit}>EDIT</button></li>}
+                {forDelete ? <li><button className = 'header-delete-button' onClick={toggleDelete}>BACK</button></li> : <li><button className = 'header-delete-button' onClick={toggleDelete}>DELETE</button></li>}
             </ul>
 
             {users.length !== 0 ?
@@ -108,6 +129,7 @@ function Users () {
                                             <span>{person.email}</span> <br/>
                                             <span>{person.role.charAt(0).toUpperCase() + person.role.slice(1)}</span>
                                         </div>
+                                        {forDelete ? <button className="user-delete-button" onClick={() => openConfirmation(person, "delete")}>Delete User</button> : ""}
                                         {forEdit ? <button className="edit-button" onClick={() => editUser(person, person.role)}>Edit Role</button> : ""}
                                     </div>
                                 </div>
@@ -129,6 +151,12 @@ function Users () {
                 handleClose = {toggleEditPopup}
                 person = {editPerson}
                 role = {currentRole}
+            /> : ""}
+            {openDelete ? <ConfirmPopUp
+                person = {assignConfirm}
+                type = {"user"}
+                toDo = {forConfirm}
+                handleClose = {toggleConfirmPopup}
             /> : ""}
             <Footer/>
         </div>

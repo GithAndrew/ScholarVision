@@ -98,6 +98,45 @@
     color: #FFFEF2;
 }
 
+.user-delete-button {
+    border:none;
+    outline:none;
+    width: auto;
+    margin: 12px 0px 12px 0px;
+    font-size: 15px;
+    font-family: "Inter", sans-serif;
+    background-color: #E5E5E5;
+    border-radius: 10px;
+    font-weight: bold;
+    padding:7px 10px;
+    margin-left: auto;
+    display: block;
+    cursor:pointer;
+}
+
+.user-delete-button:hover {
+    background-color: #C05746;
+    color: #FFFEF2;
+}
+
+.header-delete-button {
+    font-family: "Inter", sans-serif;
+    background-color: #C05746;
+    color: #FFFEF2;
+    outline: none;
+    border: none;
+    margin: 5px;
+    padding: 5px 10px;
+    width: auto;
+    height: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.header-delete-button:hover {
+    background-color: #A74839;
+}
+
 .tile-page {
     width: 67%;
     margin-top: 15px;

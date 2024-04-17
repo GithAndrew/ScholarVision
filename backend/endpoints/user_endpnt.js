@@ -8,6 +8,7 @@ User.put('/', UserController.changeRole);
 User.get('/isLogin', UserController.isLogin);
 User.get('/', UserController.findAll);
 User.get('/search', UserController.search);
-User.delete('/', UserController.logout);
+User.delete('/logout', UserController.logout);
+User.delete('/', UserController.deleteUser);
 
 module.exports = User;
