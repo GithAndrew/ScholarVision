@@ -95,12 +95,12 @@ function DownloadPopUp (props) {
                     let field = fieldsArr[j].replace(' *','').replace(' ', '_').replace('Name','name').toLowerCase()
                     data[field] = `${row[j]}`;
 
-                    if (row[j] === "add") {
-                        let i = j;
-                        while (fieldsArr[i+1] !== "Scholarship Name") {
+                    if (fieldsArr[j] === "add") {
+                        let i = j + 1;
+                        while (fieldsArr[i] !== "Scholarship Name *") {
                             let attribute = ""
-                            if (fieldsArr[i].includes("*")) {attribute = `${row[i]}`.replace(" *","~true")}
-                            else {attribute = row[i].replace("/\r/g","") + "~false"}
+                            if (fieldsArr[i].includes("*")) {attribute = `${fieldsArr[i]}`.replace(" *","~true")}
+                            else {attribute = fieldsArr[i].replace("/\r/g","") + "~false"}
                             newFields[attribute.toLowerCase()] = `${row[i].trim()}`
                             i += 1
                         }
@@ -123,20 +123,15 @@ function DownloadPopUp (props) {
 
                 for (let j = 1; j < row.length; j++) {
                     if (fieldsArr[j].includes("*") && row[j] === "") {
-                        showMessage(`Missing value for ${row[j].replace(" *","")} for ${row[2]} ${row[1]}!`)
+                        showMessage(`Missing value for ${fieldsArr[j].replace(" *","")} for ${row[2]} ${row[1]}!`)
                         return
                     }
     
                     let field = fieldsArr[j].replace(' *','').replace(' ', '_').replace('Name','name').toLowerCase()
                     data[field] = `${row[j]}`;
 
-
-                    // CHECK THIS ONE
-                    // 
-                    //
-                    //
-                    if (row[j] === "Sibling 1 Name") {
-                        let i=j
+                    if (fieldsArr[j] === "Sibling 1 Name") {
+                        let i = j - 1
                         let numofSiblings = 1
                         while (fieldsArr[i+1] !== "Educ BG 1 Level") {
                             siblings[`sibling${numofSiblings}`] = {
@@ -147,13 +142,12 @@ function DownloadPopUp (props) {
                                 occupation: row[i+=1]
                             };
                             numofSiblings += 1
-                            i += 1
                         }
                         data["siblings"] = siblings
                     }
 
-                    if (row[j] === "Educ BG 1 Level") {
-                        let i=j
+                    if (fieldsArr[j] === "Educ BG 1 Level") {
+                        let i = j - 1
                         let educationLevel = 1
                         while (fieldsArr[i+1] !== "Reason/s for Applying") {
                             education[`educ_bg${educationLevel}`] = {
@@ -163,26 +157,21 @@ function DownloadPopUp (props) {
                                 awards: row[i+=1]
                             };
                             educationLevel += 1
-                            i += 1
                         }
                         data["education"] = education
                     }
 
-                    if (row[j] === "add") {
-                        let i = j;
-                        while (fieldsArr[i+1] !== "Father's Name") {
+                    if (fieldsArr[j] === "add") {
+                        let i = j + 1;
+                        while (fieldsArr[i] !== "Father's Name") {
                             let attribute = ""
-                            if (fieldsArr[i].includes("*")) {attribute = `${row[i]}`.replace(" *","~true")}
-                            else {attribute = row[i].replace("/\r/g","") + "~false"}
+                            if (fieldsArr[i].includes("*")) {attribute = `${fieldsArr[i]}`.replace(" *","~true")}
+                            else {attribute = fieldsArr[i].replace("/\r/g","") + "~false"}
                             newFields[attribute.toLowerCase()] = `${row[i].trim()}`
                             i += 1
                         }
                         data["newFields"] = newFields
                     }
-
-                    //
-                    //
-                    // CONTINUE CHECK
 
                     if (fieldsArr[j] === "Reason/s for Applying"){
                         data["statement"] = `${row[j]}`;
@@ -192,7 +181,6 @@ function DownloadPopUp (props) {
                 lotsofData.push(data)
             }
         }
-
         setMultData(lotsofData);
     }
 
@@ -317,7 +305,7 @@ function DownloadPopUp (props) {
         }
 
         if (boolData === true){
-            if (props.user === "donor") {sendDonorData(data, 0, "mult")}
+            if (props.user === "donor") {sendDonorData(data, 0, "single")}
             if (props.user === "scholar") {sendScholarData(data, 0, "single")}
         }
     }

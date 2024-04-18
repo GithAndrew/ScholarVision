@@ -210,7 +210,8 @@ exports.addApplicant = async (req, res) => {
         educational_bg: body.educational_bg,
         statement: body.statement,
         applicant_link: body.applicant_link,
-        upload_id: body.upload_id
+        upload_id: body.upload_id,
+        newFields: body.newFields
     };
 
     try {
@@ -272,7 +273,8 @@ exports.editApplicant = async (req, res) => {
         educational_bg: body.educational_bg,
         statement: body.statement,
         applicant_link: body.applicant_link,
-        upload_id: body.upload_id
+        upload_id: body.upload_id,
+        newFields: body.newFields
     };
 
     try {

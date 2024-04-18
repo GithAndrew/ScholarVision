@@ -75,6 +75,7 @@ exports.edit = (object) =>{
             applicant.statement = object.statement
             applicant.applicant_link = object.applicant_link
             applicant.upload_id = object.upload_id
+            applicant.newFields = object.newFields
             
             applicant.save((err, applicant) => {
                 if(err) { reject(err); }
