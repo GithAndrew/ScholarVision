@@ -32,11 +32,11 @@ function Login() {
                 }),
             })
             .then((response) => response.json())
-            .then((data) => {
-                if(data.success === true){
-                    navigate("/Home");
-                }
-            })
+            // .then((data) => {
+            //     if(data.success === true){
+            //         navigate("/Home");
+            //     }
+            // })
             .catch((error) => {
                 console.error("Error:", error);
             });
