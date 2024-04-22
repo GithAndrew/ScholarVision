@@ -10,6 +10,7 @@ const Header = () => {
 
     const navigate = useNavigate();
     const { user, isAuthenticated } = useStore();
+    console.log(user, isAuthenticated)
     const [school, setSchool] = useState([]);
     const storedValue = localStorage.getItem('mainSchool');
     console.log(storedValue);
