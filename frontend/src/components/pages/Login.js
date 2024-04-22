@@ -33,7 +33,6 @@ function Login() {
             })
             .then((response) => response.json())
             .then((data) => {
-                console.log(data.success)
                 if(data.success === true){
                     navigate("/Home");
                 }
