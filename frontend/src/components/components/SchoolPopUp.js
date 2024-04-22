@@ -57,6 +57,7 @@ function SchoolPopUp () {
             .then(response => response.json())
             .then(data => {
                 const schoolID = data.school._id;
+                console.log(schoolID)
                 localStorage.setItem('mainSchool', schoolID)
             })
             .then(showMessage(`School ${school_name} registered!`))
@@ -64,7 +65,7 @@ function SchoolPopUp () {
                 console.error('Error submitting application:', error);
             });
         }
-        setTimeout(() => window.location.reload(), 750)
+        // setTimeout(() => window.location.reload(), 750)
     }
 
     const getValue = (id, required = false) => {
