@@ -60,16 +60,16 @@ exports.login = async (req, res) => {
 };
 
 exports.isLogin = async (req, res) => {
-    if (!req.cookies || !req.cookies.authToken) {
-        console.log('Unauthorized access');
-        return res.status(200).send({ message: 'Unauthorized access', status: false });
-    }
+    // if (!req.cookies || !req.cookies.authToken) {
+    //     console.log('Unauthorized access');
+    //     return res.status(200).send({ message: 'Unauthorized access', status: false });
+    // }
 
-    let tokenDetails = await utils.verifyToken(req);
+    // let tokenDetails = await utils.verifyToken(req);
 
-    if (!tokenDetails.status) {
-        return res.status(tokenDetails.code).send({ message: tokenDetails.message, status: false });
-    }
+    // if (!tokenDetails.status) {
+    //     return res.status(tokenDetails.code).send({ message: tokenDetails.message, status: false });
+    // }
 
     const user = tokenDetails.user;
     let { _id, email, first_name, last_name, picture, role } = user;
