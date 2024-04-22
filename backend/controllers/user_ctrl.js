@@ -67,6 +67,8 @@ exports.isLogin = async (req, res) => {
 
     let tokenDetails = await utils.verifyToken(req);
 
+    console.log(tokenDetails)
+
     if (!tokenDetails.status) {
         return res.status(tokenDetails.code).send({ message: tokenDetails.message, status: false });
     }
