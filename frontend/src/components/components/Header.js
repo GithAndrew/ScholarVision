@@ -12,6 +12,7 @@ const Header = () => {
     const { user, isAuthenticated } = useStore();
     const [school, setSchool] = useState([]);
     const storedValue = localStorage.getItem('mainSchool');
+    console.log(storedValue);
 
     const logout = () => {
         fetch(apiUrl("/user/logout"), {
