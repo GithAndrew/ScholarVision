@@ -47,7 +47,7 @@ exports.findSchool = async (req, res) => {
         mongoose.Types.ObjectId(id)
     } catch(err) {
         console.log('Invalid id')
-        return res.status(400).send({ message: 'Invalid id' })
+        return res.status(400).send({ existing: false, message: 'Invalid id' })
     }
 
     try {
