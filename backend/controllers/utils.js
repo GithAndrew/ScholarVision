@@ -7,6 +7,7 @@ require('dotenv').config()
 exports.verifyToken = (req) => {
   return jwt.verify(
     req.cookies.authToken, 
+    `${process.env.SECRET_ACCESS_TOKEN}`, 
     async (err, tokenPayload) => {
       if(err){
         console.log('Invalid token')

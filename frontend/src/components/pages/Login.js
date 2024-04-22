@@ -69,7 +69,6 @@ function Login() {
             },
         }).then(response => {return response.json()})
         .then((data)=> {
-          console.log(data.User, data.status)
             setAuth(data.User, data.status);
             if(data.status === true){
               const previousLocation = localStorage.getItem('currentLocation') || '/Home';
