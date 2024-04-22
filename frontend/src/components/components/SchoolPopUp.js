@@ -23,6 +23,8 @@ function SchoolPopUp () {
     const sendData = (e) => {
         e.preventDefault();
 
+        console.log(picID)
+
         if (picID === null) {
             showMessage('No image set!');
             return
