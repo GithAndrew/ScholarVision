@@ -23,8 +23,6 @@ function SchoolPopUp () {
     const sendData = (e) => {
         e.preventDefault();
 
-        console.log(picID)
-
         if (picID === null) {
             showMessage('No image set!');
             return
@@ -67,7 +65,7 @@ function SchoolPopUp () {
                 console.error('Error submitting application:', error);
             });
         }
-        // setTimeout(() => window.location.reload(), 750)
+        setTimeout(() => window.location.reload(), 750)
     }
 
     const getValue = (id, required = false) => {
