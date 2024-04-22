@@ -151,6 +151,7 @@ function SchoolPopUp () {
                       credentials:'include'
                     }).then((response) => response.json())
                     .then((result) => {
+                        console.log(result.id);
                         setPicID(result.id);
                     });
                 }
