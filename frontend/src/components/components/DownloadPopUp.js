@@ -451,7 +451,7 @@ function DownloadPopUp (props) {
             if (props.user === "donor") {sendDonorData(multipleData[useNo], useNo, "mult")}
             if (props.user === "scholar") {sendScholarData(multipleData[useNo], useNo, "mult")}
         }
-        setTimeout(() => window.location.reload(), 750)
+        setTimeout(() => window.location.reload(), 1500)
     }
 
     const sendDonorData = (appData, useNo, type) => {
@@ -496,14 +496,11 @@ function DownloadPopUp (props) {
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
-            // if (type === "single") {setTimeout(() => window.location.reload(), 1500)};
+            if (type === "single") {setTimeout(() => window.location.reload(), 1500)};
         } else {showMessage("Inputted email address already exists!")}
     }
 
     const sendScholarship = (appData, donorID) => {
-        console.log("HI")
-        console.log(appData)
-        console.log(donorID)
         fetch(apiUrl("/scholarship"), {
             method: "POST",
             credentials: 'include',
