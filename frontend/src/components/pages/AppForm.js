@@ -160,7 +160,7 @@ const AppForm = () => {
                     console.error('Error submitting application:', error);
                 });
             }
-            props.handleClose()
+            setTimeout(() => window.location.reload(), 1500)
         } else {
             showMessage("Inputted email address already exists!");
         }
