@@ -49,7 +49,7 @@ const Header = () => {
         .catch(error => {
             console.error("Error fetching data:", error);
         });
-    }, [schoolID]);
+    }, []);
 
     // useEffect(()=> {
     //     if(isAuthenticated === false){

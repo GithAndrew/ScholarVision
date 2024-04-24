@@ -91,7 +91,7 @@ function Login() {
         ]);
       })
       .then(([dataSchools]) => {
-          if (dataSchools[0].existing === false) {setSchool("")}
+          if (dataSchools.existing === false) {setSchool("")}
           else {
             setSchool(dataSchools[0]);
             // let uploadID = dataSchools.upload_id.split(".")[0]
@@ -107,7 +107,7 @@ function Login() {
       .catch(error => {
         console.error("Error fetching data:", error);
       });
-  }, [schoolID]);
+  }, []);
 
   return (
     <div className="login-limiter">
