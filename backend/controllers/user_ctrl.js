@@ -65,8 +65,6 @@ exports.isLogin = async (req, res) => {
     //     return res.status(200).send({ message: 'Unauthorized access', status: false });
     // }
 
-    console.log(req)
-
     let tokenDetails = await utils.verifyToken(req);
 
     if (!tokenDetails.status) {
