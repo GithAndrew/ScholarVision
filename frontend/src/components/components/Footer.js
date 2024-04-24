@@ -10,7 +10,7 @@ const Footer = () => {
 
     useEffect(() => {
         Promise.all([
-            fetch(apiUrl(`/school/${storedValue}`), {credentials:'include'})
+            fetch(apiUrl(`/school`), {credentials:'include'})
         ])
         .then(([resSchools]) => {
             return Promise.all([
@@ -18,8 +18,8 @@ const Footer = () => {
             ]);
         })
         .then(([dataSchools]) => {
-            if (dataSchools.message === "school not found") {setSchool("")}
-            else {setSchool(dataSchools);}
+            if (dataSchools.existing === false) {setSchool("")}
+            else {setSchool(dataSchools[0]);}
         })
         .catch(error => {
             console.error("Error fetching data:", error);
