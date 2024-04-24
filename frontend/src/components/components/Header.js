@@ -36,14 +36,14 @@ const Header = () => {
             if (dataSchools.existing === false) {setSchool("")}
             else {
                 setSchool(dataSchools);
-                let uploadID = dataSchools.upload_id.split(".")[0]
-                fetch(apiUrl(`/upload/${uploadID}`), {
-                    method: "GET",
-                    credentials: 'include'
-                }).then((response) => response.json())
-                .catch(error => {
-                    console.error("Error fetching data:", error);
-                });
+                // let uploadID = dataSchools.upload_id.split(".")[0]
+                // fetch(apiUrl(`/upload/${uploadID}`), {
+                //     method: "GET",
+                //     credentials: 'include'
+                // }).then((response) => response.json())
+                // .catch(error => {
+                //     console.error("Error fetching data:", error);
+                // });
             }
         })
         .catch(error => {
