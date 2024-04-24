@@ -4,6 +4,6 @@ const Router = require('express').Router;
 const School = Router();
 
 School.post('/', SchoolController.setSchool);
-School.get('/:id', SchoolController.findSchool);
+School.get('/', SchoolController.findAll);
 
 module.exports = School;

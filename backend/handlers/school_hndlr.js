@@ -9,6 +9,15 @@ exports.getOne = (query, next) => {
     });
 }
 
+exports.getAll = () => {
+    return new Promise((resolve, reject) => {
+        School.find((err,school) => {
+            if(err) {reject(err); }
+            resolve(school)
+        })
+    });
+}
+
 exports.create = (object) => {
     return new Promise((resolve,reject) => {
         const mainSchool = new School(object);

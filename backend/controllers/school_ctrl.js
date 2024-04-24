@@ -63,3 +63,30 @@ exports.findSchool = async (req, res) => {
         return res.status(500).send({ message: 'Error searching for school' })
     }
 }
+
+exports.findAll = async (req, res) => {
+    if (!req.cookies || !req.cookies.authToken) {
+        res.status(401).send({ message: "Unauthorized access" });
+        return;
+    }
+
+    const token = await utils.verifyToken(req);
+    
+    if (!token.status) {
+        res.status(token.code).send({ message: token.message });
+        return;
+    }
+
+    try {
+        school = await School.getAll();
+        if (!school) {
+            console.log("School database is empty");
+            return res.status(404).send({ message: `No school in database` });
+        } else {
+            return res.status(200).send(school);
+        }
+    } catch (err) {
+        console.log(`Error searching for school in the DB ${err}`);
+        return res.status(500).send({ message: 'Error searching for school' });
+    }
+}

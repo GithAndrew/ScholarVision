@@ -83,7 +83,7 @@ function Login() {
 
     useEffect(() => {
       Promise.all([
-        fetch(apiUrl(`/school/${schoolID}`), {credentials:'include'})
+        fetch(apiUrl(`/school`), {credentials:'include'})
       ])
       .then(([resSchools]) => {
         return Promise.all([
@@ -91,9 +91,9 @@ function Login() {
         ]);
       })
       .then(([dataSchools]) => {
-          if (dataSchools.existing === false) {setSchool("")}
+          if (dataSchools[0].existing === false) {setSchool("")}
           else {
-            setSchool(dataSchools);
+            setSchool(dataSchools[0]);
             // let uploadID = dataSchools.upload_id.split(".")[0]
             // fetch(apiUrl(`/upload/${uploadID}`), {
             //   method: "GET",
