@@ -451,7 +451,7 @@ function DownloadPopUp (props) {
             if (props.user === "donor") {sendDonorData(multipleData[useNo], useNo, "mult")}
             if (props.user === "scholar") {sendScholarData(multipleData[useNo], useNo, "mult")}
         }
-        setTimeout(() => window.location.reload(), 2500)
+        setTimeout(() => window.location.reload(), 4000)
     }
 
     const sendDonorData = (appData, useNo, type) => {
@@ -496,7 +496,7 @@ function DownloadPopUp (props) {
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
-            if (type === "single") {setTimeout(() => window.location.reload(), 1500)};
+            if (type === "single") {setTimeout(() => window.location.reload(), 3000)};
         } else {showMessage("Inputted email address already exists!")}
     }
 
