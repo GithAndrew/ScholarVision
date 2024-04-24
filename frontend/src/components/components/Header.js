@@ -10,7 +10,6 @@ const Header = () => {
 
     const navigate = useNavigate();
     const { user, isAuthenticated } = useStore();
-    const { schoolID } = createSchool();
     const [school, setSchool] = useState([]);
 
     const logout = () => {
@@ -51,11 +50,11 @@ const Header = () => {
         });
     }, []);
 
-    useEffect(()=> {
-        if(isAuthenticated === false){
-            navigate("/")
-        }
-    },[navigate, isAuthenticated]);
+    // useEffect(()=> {
+    //     if(isAuthenticated === false){
+    //         navigate("/")
+    //     }
+    // },[navigate, isAuthenticated]);
 
     return(
         <header className='main-header'>
