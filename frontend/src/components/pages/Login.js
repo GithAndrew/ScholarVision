@@ -116,7 +116,7 @@ function Login() {
         {/* {school.upload_id ? <img className="login-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="login-logo" src={SchoolLogo} alt="logo"/>} */}
         <img className="login-logo" src={SchoolLogo} alt="logo"/>
         <div>
-          {school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
+          {school && school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
             <p className='login-header-text'style={{fontSize: '1.5em'}}>Name of School</p>
           }
           <p className='login-subheader-text' style={{fontStyle: 'italic'}}> Scholar Database</p>
