@@ -11,103 +11,102 @@ import '../css/Login.css'
 
 function Login() {
 
-    const navigate = useNavigate();
-    const { user, isAuthenticated, setAuth } = useStore();
-    console.log(user, isAuthenticated)
+  const navigate = useNavigate();
+  const { user, isAuthenticated, setAuth } = useStore();
+  console.log(user, isAuthenticated)
 
-    const { schoolID } = createSchool();
-    const [school, setSchool] = useState([]);
+  const { schoolID } = createSchool();
+  const [school, setSchool] = useState([]);
 
-    useEffect(() => {
-      function sendToken(token){
-        fetch((apiUrl("/user/")), {
-          method: "POST",
-          credentials: 'include', 
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: token,
-            school: school._id
-          }),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-          if(data.success === true){
-            navigate("/Home");
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-        });
-      }
-  
-      function handleCallbackResponse(response){
-        sendToken(response.credential)
-      }    
-  
-      const initializeGoogleSignIn = () => {
-        /* global google */
-        google.accounts.id.initialize({
-          client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
-          callback: handleCallbackResponse,
-          cookiePolicy: 'single-host-origin'
-        });
-  
-        google.accounts.id.renderButton(
-          document.getElementById("signInDiv"),
-          { theme: "standard", size: "large", width: "393px", text: "Log In"}
-        )
-        const googleSignInButton = document.getElementById("signInDiv");
-        googleSignInButton.classList.add("signInDiv");
-      };
-  
-      initializeGoogleSignIn();
-  }, []);
-
-    useEffect(()=>{
-      fetch((apiUrl("/user/isLogin")), {
-          method: "GET",
-          credentials:'include',
-          headers:{
-            'Content-Type':'application/json'
-          },
-      }).then(response => {return response.json()})
-      .then((data)=> {
-          setAuth(data.User, data.status);
-          if(data.status === true){
-            const previousLocation = localStorage.getItem('currentLocation') || '/Home';
-            navigate(previousLocation);
-          }
+  useEffect(() => {
+    function sendToken(token){
+      fetch((apiUrl("/user/")), {
+        method: "POST",
+        credentials: 'include', 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: token,
+          school: school._id
+        }),
       })
-    },[navigate, setAuth]);
-
-    useEffect(() => {
-      Promise.all([
-        fetch(apiUrl(`/school`), {credentials:'include'})
-      ])
-      .then(([resSchools]) => {
-        return Promise.all([
-          resSchools.json()
-        ]);
+      .then((response) => response.json())
+      .then((data) => {
+        if(data.success === true){
+          navigate("/Home");
+        }
       })
-      .then(([dataSchools]) => {
-          if (dataSchools.existing === false) {setSchool("")}
-          else {
-            setSchool(dataSchools[0]);
-            // let uploadID = dataSchools.upload_id.split(".")[0]
-            // fetch(apiUrl(`/upload/${uploadID}`), {
-            //   method: "GET",
-            //   credentials: 'include'
-            // }).then((response) => response.json())
-            // .catch(error => {
-            //   console.error("Error fetching data:", error);
-            // });
-          }
-      })
-      .catch(error => {
-        console.error("Error fetching data:", error);
+      .catch((error) => {
+        console.error("Error:", error);
       });
+    }
+
+    function handleCallbackResponse(response){
+      sendToken(response.credential)
+    }    
+
+    const initializeGoogleSignIn = () => {
+      /* global google */
+      google.accounts.id.initialize({
+        client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
+        callback: handleCallbackResponse
+      });
+
+      google.accounts.id.renderButton(
+        document.getElementById("signInDiv"),
+        { theme: "standard", size: "large", width: "393px", text: "Log In"}
+      )
+      const googleSignInButton = document.getElementById("signInDiv");
+      googleSignInButton.classList.add("signInDiv");
+    };
+
+    initializeGoogleSignIn();
+}, []);
+
+  useEffect(()=>{
+    fetch((apiUrl("/user/isLogin")), {
+        method: "GET",
+        credentials:'include',
+        headers:{
+          'Content-Type':'application/json'
+        },
+    }).then(response => {return response.json()})
+    .then((data)=> {
+        setAuth(data.User, data.status);
+        if(data.status === true){
+          const previousLocation = localStorage.getItem('currentLocation') || '/Home';
+          navigate(previousLocation);
+        }
+    })
+  },[navigate, setAuth]);
+
+  useEffect(() => {
+    Promise.all([
+      fetch(apiUrl(`/school`), {credentials:'include'})
+    ])
+    .then(([resSchools]) => {
+      return Promise.all([
+        resSchools.json()
+      ]);
+    })
+    .then(([dataSchools]) => {
+        if (dataSchools.existing === false) {setSchool("")}
+        else {
+          setSchool(dataSchools[0]);
+          // let uploadID = dataSchools.upload_id.split(".")[0]
+          // fetch(apiUrl(`/upload/${uploadID}`), {
+          //   method: "GET",
+          //   credentials: 'include'
+          // }).then((response) => response.json())
+          // .catch(error => {
+          //   console.error("Error fetching data:", error);
+          // });
+        }
+    })
+    .catch(error => {
+      console.error("Error fetching data:", error);
+    });
   }, []);
 
   return (

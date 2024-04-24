@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
                 token
             };
             await Log.create(existing, 'login', `user ${existing.first_name} ${existing.last_name} logged in`);
-            return res.status(200).cookie('authToken', token, { maxAge: 60 * 60 * 1000, httpOnly: true }).send(response);
+            return res.status(200).cookie('authToken', token, { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true }).send(response);
         }
     } catch (err) {
         console.log(`Unable to add user. Error: ${err}`);
@@ -52,7 +52,7 @@ exports.login = async (req, res) => {
             token
         };
         await Log.create(user, 'login', `user ${user.first_name} ${user.last_name} logged in`);
-        return res.status(200).cookie('authToken', token, { maxAge: 60 * 60 * 1000, httpOnly: true }).send(response);
+        return res.status(200).cookie('authToken', token, { maxAge: 60 * 60 * 1000, httpOnly: true, sameSite: 'None', secure: true }).send(response);
     } catch (err) {
         console.log(`Unable to add new user. Error: ${err}`);
         res.status(500).send({ message: "Error adding new user" });
