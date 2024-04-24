@@ -21,51 +21,55 @@ function Login() {
     useEffect(() => {
       function sendToken(token){
         fetch((apiUrl("/user/")), {
-            method: "POST",
-            credentials: 'include', 
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                token: token,
-                school: schoolID
-            }),
+          method: "POST",
+          credentials: 'include', 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+            school: schoolID
+          }),
         })
         .then((response) => response.json())
         .then((data) => {
-            if(data.success === true){
-                navigate("/Home");
-            }
+          if(data.success === true){
+            navigate("/Home");
+          }
         })
         .catch((error) => {
-            console.error("Error:", error);
+          console.error("Error:", error);
         });
       }
   
       function handleCallbackResponse(response){
         sendToken(response.credential)
       }    
-      
-      /* global google */
-      google.accounts.id.initialize({
-        client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
-        callback: handleCallbackResponse
-      });
   
-      google.accounts.id.renderButton(
-        document.getElementById("signInDiv"),
-        { theme: "standard", size: "large", width: "393px", text: "Log In"}
-      )
-      const googleSignInButton = document.getElementById("signInDiv");
-      googleSignInButton.classList.add("signInDiv");
-    });
+      const initializeGoogleSignIn = () => {
+        /* global google */
+        google.accounts.id.initialize({
+          client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
+          callback: handleCallbackResponse
+        });
+  
+        google.accounts.id.renderButton(
+          document.getElementById("signInDiv"),
+          { theme: "standard", size: "large", width: "393px", text: "Log In"}
+        )
+        const googleSignInButton = document.getElementById("signInDiv");
+        googleSignInButton.classList.add("signInDiv");
+      };
+  
+      initializeGoogleSignIn();
+  }, []);
 
     useEffect(()=>{
       fetch((apiUrl("/user/isLogin")), {
           method: "GET",
           credentials:'include',
           headers:{
-              'Content-Type':'application/json'
+            'Content-Type':'application/json'
           },
       }).then(response => {return response.json()})
       .then((data)=> {
@@ -83,7 +87,7 @@ function Login() {
       ])
       .then(([resSchools]) => {
         return Promise.all([
-            resSchools.json()
+          resSchools.json()
         ]);
       })
       .then(([dataSchools]) => {
@@ -92,16 +96,16 @@ function Login() {
             setSchool(dataSchools);
             let uploadID = dataSchools.upload_id.split(".")[0]
             fetch(apiUrl(`/upload/${uploadID}`), {
-                method: "GET",
-                credentials: 'include'
+              method: "GET",
+              credentials: 'include'
             }).then((response) => response.json())
             .catch(error => {
-                console.error("Error fetching data:", error);
+              console.error("Error fetching data:", error);
             });
           }
       })
       .catch(error => {
-          console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error);
       });
   }, [schoolID]);
 
