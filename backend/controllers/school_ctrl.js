@@ -65,18 +65,6 @@ exports.findSchool = async (req, res) => {
 }
 
 exports.findAll = async (req, res) => {
-    // if (!req.cookies || !req.cookies.authToken) {
-    //     res.status(401).send({ message: "Unauthorized access" });
-    //     return;
-    // }
-
-    // const token = await utils.verifyToken(req);
-    
-    // if (!token.status) {
-    //     res.status(token.code).send({ message: token.message });
-    //     return;
-    // }
-
     try {
         school = await School.getAll();
         if (!school) {

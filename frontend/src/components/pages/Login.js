@@ -28,7 +28,7 @@ function Login() {
           },
           body: JSON.stringify({
             token: token,
-            school: schoolID
+            school: school._id
           }),
         })
         .then((response) => response.json())
@@ -50,7 +50,8 @@ function Login() {
         /* global google */
         google.accounts.id.initialize({
           client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
-          callback: handleCallbackResponse
+          callback: handleCallbackResponse,
+          cookiePolicy: 'single-host-origin'
         });
   
         google.accounts.id.renderButton(
