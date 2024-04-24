@@ -4,7 +4,7 @@ import Alert from '../components/Alert';
 import {React, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
-import useStore from '../../authHook';
+import {useStore} from '../../authHook';
 import {AiFillDelete, AiFillCheckCircle} from 'react-icons/ai';
 import {BsSearch}  from 'react-icons/bs';
 import AddPopUp from '../components/AddPopUp';

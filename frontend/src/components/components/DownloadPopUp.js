@@ -3,7 +3,7 @@ import Footer from '../components/Footer'
 import Alert from '../components/Alert';
 import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
-import useStore from '../../authHook';
+import {useStore} from '../../authHook';
 import scholartemplate from '../components/Scholar Application.xlsx';
 import donortemplate from '../components/Donor Application.xlsx';
 import scholarmanytemplate from '../components/Scholar Application Multiple.xlsx';

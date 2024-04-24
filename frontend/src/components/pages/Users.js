@@ -3,7 +3,7 @@ import Footer from '../components/Footer'
 import {React, useState, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
-import useStore from '../../authHook';
+import {useStore} from '../../authHook';
 import ConfirmPopUp from '../components/ConfirmPopUp';
 import EditPopUp from '../components/EditPopUp';
 import {BsSearch}  from 'react-icons/bs';

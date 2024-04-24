@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
-import useStore from '../../authHook';
+import {useStore, createSchool} from '../../authHook';
 import SVLogo from '../images/SVLogo.png'
 import SchoolLogo from '../images/SchoolLogo.png'
 import '../css/Header.css';
@@ -10,8 +10,8 @@ const Header = () => {
 
     const navigate = useNavigate();
     const { user, isAuthenticated } = useStore();
+    const { schoolID } = createSchool();
     const [school, setSchool] = useState([]);
-    const storedValue = localStorage.getItem('mainSchool');
 
     const logout = () => {
         fetch(apiUrl("/user/logout"), {
@@ -25,7 +25,7 @@ const Header = () => {
 
     useEffect(() => {
         Promise.all([
-            fetch(apiUrl(`/school/${storedValue}`), {credentials:'include'})
+            fetch(apiUrl(`/school/${schoolID}`), {credentials:'include'})
         ])
         .then(([resSchools]) => {
             return Promise.all([
@@ -36,32 +36,31 @@ const Header = () => {
             if (dataSchools.existing === false) {setSchool("")}
             else {
                 setSchool(dataSchools);
-                // let uploadID = dataSchools.upload_id.split(".")[0]
-                // fetch(apiUrl(`/upload/${uploadID}`), {
-                //     method: "GET",
-                //     credentials: 'include'
-                // }).then((response) => response.json())
-                // .catch(error => {
-                //     console.error("Error fetching data:", error);
-                // });
+                let uploadID = dataSchools.upload_id.split(".")[0]
+                fetch(apiUrl(`/upload/${uploadID}`), {
+                    method: "GET",
+                    credentials: 'include'
+                }).then((response) => response.json())
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
             }
         })
         .catch(error => {
             console.error("Error fetching data:", error);
         });
-    }, [storedValue]);
+    }, [schoolID]);
 
-    // useEffect(()=> {
-    //     if(isAuthenticated === false){
-    //         navigate("/")
-    //     }
-    // },[navigate, isAuthenticated]);
+    useEffect(()=> {
+        if(isAuthenticated === false){
+            navigate("/")
+        }
+    },[navigate, isAuthenticated]);
 
     return(
         <header className='main-header'>
             <img className="main-logo" src={SVLogo} alt="logo"/>
-            {/* {school.upload_id ? <img className="main-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>} */}
-            <img className="main-logo" src={SchoolLogo} alt="logo"/>
+            {school.upload_id ? <img className="main-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>}
             <div>
                 {school.school_name ? <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">{school.school_name}</Link></p> : 
                     <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">School Name</Link></p>

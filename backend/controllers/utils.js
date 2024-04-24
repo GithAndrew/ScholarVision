@@ -5,11 +5,9 @@ const Deleted = require('../handlers/deleted_hndlr');
 require('dotenv').config()
 
 exports.verifyToken = (req) => {
-  console.log(process.env.SECRET_ACCESS_TOKEN)
-  console.log(req.cookies.authToken)
   return jwt.verify(
     req.cookies.authToken, 
-    process.env.SECRET_ACCESS_TOKEN, 
+    `${process.env.SECRET_ACCESS_TOKEN}`, 
     async (err, tokenPayload) => {
       if(err){
         console.log('Invalid token')

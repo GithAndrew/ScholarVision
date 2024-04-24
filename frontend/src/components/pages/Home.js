@@ -1,7 +1,7 @@
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import {Link} from 'react-router-dom';
-import useStore from '../../authHook';
+import {useStore} from '../../authHook';
 import '../css/Home.css'
 
 function Home () {

@@ -3,7 +3,7 @@ import Footer from '../components/Footer'
 import {React, useState, useEffect} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
-import useStore from '../../authHook';
+import {useStore} from '../../authHook';
 import Avatar from '../images/Avatar.jpg'
 import '../css/Profile.css'
 

@@ -1,9 +1,11 @@
 import Alert from '../components/Alert';
 import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
+import {createSchool} from '../../authHook';
 
 function SchoolPopUp () {
 
+    const { setMainSchool } = createSchool();
     const [picID, setPicID] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
@@ -56,9 +58,7 @@ function SchoolPopUp () {
             })
             .then(response => response.json())
             .then(data => {
-                const schoolID = data.school._id;
-                console.log(schoolID)
-                localStorage.setItem('mainSchool', schoolID)
+                setMainSchool(data.school._id)
             })
             .then(showMessage(`School ${school_name} registered!`))
             .catch(error => {
@@ -149,7 +149,6 @@ function SchoolPopUp () {
                       credentials:'include'
                     }).then((response) => response.json())
                     .then((result) => {
-                        console.log(result.id);
                         setPicID(result.id);
                     });
                 }
