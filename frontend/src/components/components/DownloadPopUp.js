@@ -451,7 +451,7 @@ function DownloadPopUp (props) {
             if (props.user === "donor") {sendDonorData(multipleData[useNo], useNo, "mult")}
             if (props.user === "scholar") {sendScholarData(multipleData[useNo], useNo, "mult")}
         }
-        setTimeout(() => window.location.reload(), 1500)
+        setTimeout(() => window.location.reload(), 2500)
     }
 
     const sendDonorData = (appData, useNo, type) => {
