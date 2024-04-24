@@ -9,7 +9,7 @@ import '../css/Header.css';
 const Header = () => {
 
     const navigate = useNavigate();
-    const { user, isAuthenticated } = useStore();
+    const { user, isAuthenticated, setAuth } = useStore();
     const [school, setSchool] = useState([]);
 
     const logout = () => {
