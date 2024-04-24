@@ -50,11 +50,11 @@ const Header = () => {
         });
     }, []);
 
-    // useEffect(()=> {
-    //     if(isAuthenticated === false){
-    //         navigate("/")
-    //     }
-    // },[navigate, isAuthenticated]);
+    useEffect(()=> {
+        if(isAuthenticated === false){
+            navigate("/")
+        }
+    },[navigate, isAuthenticated]);
 
     return(
         <header className='main-header'>
