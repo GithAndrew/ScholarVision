@@ -140,7 +140,7 @@ const AppFormDonor = () => {
                     console.error('Error submitting application:', error);
                 });
             }
-            setTimeout(() => window.location.reload(), 750)
+            props.handleClose()
         } else {
             showMessage("Inputted email address already exists!");
         }
@@ -164,6 +164,15 @@ const AppFormDonor = () => {
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailRegex.test(value)) {
                 showMessage("Not a valid email!");
+                missingFields.push(id);
+                return;
+            }
+        }
+
+        if (id === "totalgrant") {
+            const grantRegex = /^[0-9]*$/;
+            if (!grantRegex.test(value)) {
+                showMessage("Total grant is not a number!");
                 missingFields.push(id);
                 return;
             }
