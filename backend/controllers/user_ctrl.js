@@ -19,8 +19,6 @@ exports.login = async (req, res) => {
         role: 'guest'
     };
 
-    console.log(req.body)
-
     try {
         var existing = null;
         existing = await User.getOne({ email: newUser.email });
@@ -32,7 +30,6 @@ exports.login = async (req, res) => {
         } else {
             const tokenPayload = {_id: existing._id};
             const token = jwt.sign(tokenPayload, `${process.env.JWT_SECRET_KEY}`);
-            console.log(token)
             const response = {
                 success: true,
                 token
