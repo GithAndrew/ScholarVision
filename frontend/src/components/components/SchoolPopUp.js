@@ -65,7 +65,6 @@ function SchoolPopUp () {
                 console.error('Error submitting application:', error);
             });
         }
-        setTimeout(() => window.location.reload(), 750)
     }
 
     const getValue = (id, required = false) => {

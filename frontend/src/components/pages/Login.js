@@ -14,9 +14,8 @@ function Login() {
     const navigate = useNavigate();
     const { user, isAuthenticated, setAuth } = useStore();
     console.log(user, isAuthenticated)
-    const { schoolID } = createSchool();
-    console.log(schoolID)
 
+    const { schoolID } = createSchool();
     const [school, setSchool] = useState([]);
 
     useEffect(() => {
