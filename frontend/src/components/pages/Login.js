@@ -19,46 +19,50 @@ function Login() {
     const storedValue = localStorage.getItem('mainSchool');
 
     useEffect(() => {
-        function sendToken(token){
-            fetch((apiUrl("/user/")), {
-                method: "POST",
-                credentials: 'include', 
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    token: token,
-                    school: storedValue
-                }),
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                if(data.success === true){
-                    navigate("/Home");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-        }
-    
-        function handleCallbackResponse(response){
-            sendToken(response.credential)
-        }    
-        
-        /* global google */
-        google.accounts.id.initialize({
-          client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
-          callback: handleCallbackResponse
+      function sendToken(token){
+        fetch((apiUrl("/user/")), {
+            method: "POST",
+            credentials: 'include', 
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                token: token,
+                school: storedValue
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if(data.success === true){
+                navigate("/Home");
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
         });
-    
-        google.accounts.id.renderButton(
-          document.getElementById("signInDiv"),
-          { theme: "standard", size: "large", width: "393px", text: "Log In"}
-        )
-        const googleSignInButton = document.getElementById("signInDiv");
-        googleSignInButton.classList.add("signInDiv");
-    });
+      }
+
+      function handleCallbackResponse(response){
+          sendToken(response.credential)
+      }    
+
+      const initializeGoogleSignIn = () => {
+          /* global google */
+          google.accounts.id.initialize({
+            client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
+            callback: handleCallbackResponse
+          });
+
+          google.accounts.id.renderButton(
+            document.getElementById("signInDiv"),
+            { theme: "standard", size: "large", width: "393px", text: "Log In"}
+          )
+          const googleSignInButton = document.getElementById("signInDiv");
+          googleSignInButton.classList.add("signInDiv");
+      };
+
+      initializeGoogleSignIn();
+  }, []);
 
     useEffect(()=>{
         fetch((apiUrl("/user/isLogin")), {
