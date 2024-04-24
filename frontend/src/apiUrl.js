@@ -1,6 +1,6 @@
 // const url = "https://uprhs-scholars-database.herokuapp.com";
-// const url = "https://scholar-vision-backend.vercel.app"
-const url = "http://localhost:3001"
+const url = "https://scholar-vision-backend.vercel.app"
+// const url = "http://localhost:3001"
 
 export const apiUrl = (endpoint) => {
     return url + endpoint;
