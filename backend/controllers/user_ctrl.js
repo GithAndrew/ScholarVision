@@ -19,6 +19,8 @@ exports.login = async (req, res) => {
         role: 'guest'
     };
 
+    console.log(userobject.email)
+
     try {
         var existing = null;
         existing = await User.getOne({ email: newUser.email });
@@ -60,6 +62,7 @@ exports.login = async (req, res) => {
 };
 
 exports.isLogin = async (req, res) => {
+    console.log(req.cookies)
     if (!req.cookies || !req.cookies.authToken) {
         console.log('Unauthorized access');
         return res.status(200).send({ message: 'Unauthorized access', status: false });

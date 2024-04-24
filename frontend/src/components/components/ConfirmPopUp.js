@@ -63,7 +63,7 @@ function ConfirmPopUp (props) {
                 .then(showMessage(`The applicant ${person[i].first_name} ${person[i].last_name} is accepted!`))
                 .then(deleteApplicant(person[i]._id))
             }
-            setTimeout(() => window.location.reload(), 750)
+            setTimeout(() => window.location.reload(), 1500)
         } else {
             fetch(apiUrl("/scholar"), {
                 method: "POST",
@@ -131,7 +131,7 @@ function ConfirmPopUp (props) {
                     }) 
                 }).then(response => {return response.json()})
             }
-            setTimeout(() => window.location.reload(), 450)
+            setTimeout(() => window.location.reload(), 1500)
         } else {
             fetch(apiUrl(`/${type}/`), {
                 method: "DELETE",
