@@ -496,7 +496,7 @@ function DownloadPopUp (props) {
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
-            if (type === "single") {setTimeout(() => window.location.reload(), 3000)};
+            if (type === "single") {props.handleClose()};
         } else {showMessage("Inputted email address already exists!")}
     }
 
