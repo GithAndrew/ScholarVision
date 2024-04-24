@@ -61,7 +61,7 @@ const Header = () => {
         <header className='main-header'>
             <img className="main-logo" src={SVLogo} alt="logo"/>
             {/* {school.upload_id ? <img className="main-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>} */}
-            <img className="login-logo" src={SchoolLogo} alt="logo"/>
+            <img className="main-logo" src={SchoolLogo} alt="logo"/>
             <div>
                 {school.school_name ? <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">{school.school_name}</Link></p> : 
                     <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">School Name</Link></p>
