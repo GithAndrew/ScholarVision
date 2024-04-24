@@ -21,7 +21,7 @@ exports.start = () => {
 
     app.use('/', Router);
     
-    app.listen("https://scholar-vision-backend.vercel.app", '0.0.0.0', (err) => {
+    app.listen(process.env.PORT || 3001, '0.0.0.0', (err) => {
         if (err) { console.log(err) }
         else {console.log(`Server started`)}
     })
