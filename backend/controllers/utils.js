@@ -9,7 +9,7 @@ exports.verifyToken = (req) => {
   console.log(process.env.SECRET_ACCESS_TOKEN)
   return jwt.verify(
     req.cookies.authToken, 
-    `${process.env.SECRET_ACCESS_TOKEN}`, 
+    process.env.SECRET_ACCESS_TOKEN, 
     async (err, tokenPayload) => {
       if(err){
         console.log('Invalid token')
