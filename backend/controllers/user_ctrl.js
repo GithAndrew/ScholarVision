@@ -19,7 +19,7 @@ exports.login = async (req, res) => {
         role: 'guest'
     };
 
-    console.log(req.body.school)
+    console.log(req.body)
 
     try {
         var existing = null;
@@ -32,6 +32,7 @@ exports.login = async (req, res) => {
         } else {
             const tokenPayload = {_id: existing._id};
             const token = jwt.sign(tokenPayload, `${process.env.JWT_SECRET_KEY}`);
+            console.log(token)
             const response = {
                 success: true,
                 token
@@ -49,7 +50,6 @@ exports.login = async (req, res) => {
         const user = await User.create(newUser);
         const tokenPayload = {_id: user._id};
         const token = jwt.sign(tokenPayload, `${process.env.JWT_SECRET_KEY}`);
-        console.log(token)
         const response = {
             success: true,
             token

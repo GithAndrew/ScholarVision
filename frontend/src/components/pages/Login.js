@@ -19,6 +19,7 @@ function Login() {
 
   useEffect(() => {
     function sendToken(token){
+      console.log(school)
       fetch((apiUrl("/user/")), {
         method: "POST",
         credentials: 'include', 
@@ -61,7 +62,7 @@ function Login() {
     };
 
     initializeGoogleSignIn();
-}, []);
+  });
 
   useEffect(()=>{
     fetch((apiUrl("/user/isLogin")), {
