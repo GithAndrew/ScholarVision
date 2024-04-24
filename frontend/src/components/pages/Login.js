@@ -15,7 +15,6 @@ function Login() {
   const { user, isAuthenticated, setAuth } = useStore();
   console.log(user, isAuthenticated)
 
-  const { schoolID } = createSchool();
   const [school, setSchool] = useState([]);
 
   useEffect(() => {
