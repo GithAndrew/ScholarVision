@@ -14,6 +14,7 @@ function ProfileScholarship () {
     let userRole = "";
     if (user) {userRole = user.role;}
     console.log(userRole)
+    const [imageURL, setImageURL] = useState();
 
     function formatDate(acceptDay) {
         const dateParts = acceptDay.split('-');
@@ -45,8 +46,30 @@ function ProfileScholarship () {
             ]);
         })
         .then(([dataDonors, dataScholars, dataScholarship]) => {
-            if (type === "donor") {setRecord(dataDonors);}
-            if (type === "scholar") {setRecord(dataScholars);}
+            if (type === "donor") {
+                setRecord(dataDonors);
+                let uploadID = dataDonors.upload_id.split(".")[0];
+                fetch(apiUrl(`/upload/${uploadID}`), {
+                    method: "GET",
+                    credentials: 'include'
+                }).then((response) => response.json())
+                .then(dataUrl => {setImageURL(dataUrl)})
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+            }
+            if (type === "scholar") {
+                setRecord(dataScholars);
+                let uploadID = dataScholars.upload_id.split(".")[0];
+                fetch(apiUrl(`/upload/${uploadID}`), {
+                    method: "GET",
+                    credentials: 'include'
+                }).then((response) => response.json())
+                .then(dataUrl => {setImageURL(dataUrl)})
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
+            }
             setScholarship(dataScholarship)
         })
         .catch(error => {
@@ -59,7 +82,7 @@ function ProfileScholarship () {
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
-                    {record.upload_id ? <img className="profile-pic" src={require(`../images/${record.upload_id}`)} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
+                    {record.upload_id ? <img className="profile-pic" src={imageURL} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
                     {record.first_name ? 
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}

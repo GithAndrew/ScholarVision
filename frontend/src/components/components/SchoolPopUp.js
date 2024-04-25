@@ -1,11 +1,9 @@
 import Alert from '../components/Alert';
 import {React, useState} from 'react';
 import {apiUrl} from '../../apiUrl';
-import {createSchool} from '../../authHook';
 
 function SchoolPopUp () {
 
-    const { setMainSchool } = createSchool();
     const [picID, setPicID] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
@@ -57,9 +55,6 @@ function SchoolPopUp () {
                 })
             })
             .then(response => response.json())
-            .then(data => {
-                setMainSchool(data.school._id)
-            })
             .then(showMessage(`School ${school_name} registered!`))
             .catch(error => {
                 console.error('Error submitting application:', error);
@@ -131,8 +126,11 @@ function SchoolPopUp () {
     }
 
     const openImageFile = (e) => {
+        const file = e.target.files[0];
         const reader = new FileReader();
-        reader.onload = () => {
+        let base64;
+        reader.onload = function(event) {
+            base64 = event.target.result;
             const img = new Image();
             img.onload = () => {
                 if (img.width !== img.height) {
@@ -141,7 +139,8 @@ function SchoolPopUp () {
                 } else {
                     setImageSrc(reader.result);
                     const data = new FormData();
-                    data.append("image", e.target.files[0]);
+                    data.append("image", file);
+                    data.append("fileData", base64);
             
                     fetch(apiUrl("/upload"), {
                       method: "POST",

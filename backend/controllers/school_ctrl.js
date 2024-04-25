@@ -66,15 +66,15 @@ exports.findSchool = async (req, res) => {
 
 exports.findAll = async (req, res) => {
     try {
-        school = await School.getAll();
-        if (!school) {
+        schools = await School.getAll();
+        if (!schools || schools.length === 0) {
             console.log("School database is empty");
-            return res.status(404).send({ existing: false, message: `No school in database` });
+            return res.status(404).send({ existing: false, message: `No schools in database` });
         } else {
-            return res.status(200).send(school);
+            return res.status(200).send(schools);
         }
     } catch (err) {
-        console.log(`Error searching for school in the DB ${err}`);
-        return res.status(500).send({ message: 'Error searching for school' });
+        console.log(`Error searching for schools in the DB ${err}`);
+        return res.status(500).send({ message: 'Error searching for schools' });
     }
 }

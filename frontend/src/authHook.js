@@ -10,12 +10,3 @@ export const useStore = create((set) => ({
       isAuthenticated: isAuthenticated,
     })),
 }));
-
-export const createSchool = create((set) => ({
-  schoolID: null,
-  setMainSchool: (schoolID) =>
-    set((state) => ({
-      ...state,
-      schoolID: schoolID,
-    })),
-}));

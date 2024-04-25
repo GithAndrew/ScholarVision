@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
-import {useStore, createSchool} from '../../authHook';
+import {useStore} from '../../authHook';
 import SVLogo from '../images/SVLogo.png'
 import SchoolLogo from '../images/SchoolLogo.png'
 import '../css/Header.css';
@@ -11,6 +11,7 @@ const Header = () => {
     const navigate = useNavigate();
     const { user, isAuthenticated, setAuth } = useStore();
     const [school, setSchool] = useState([]);
+    const [imageURL, setImageURL] = useState();
 
     const logout = () => {
         fetch(apiUrl("/user/logout"), {
@@ -37,14 +38,15 @@ const Header = () => {
             if (dataSchools.existing === false) {setSchool("")}
             else {
                 setSchool(dataSchools[0]);
-                // let uploadID = dataSchools.upload_id.split(".")[0]
-                // fetch(apiUrl(`/upload/${uploadID}`), {
-                //     method: "GET",
-                //     credentials: 'include'
-                // }).then((response) => response.json())
-                // .catch(error => {
-                //     console.error("Error fetching data:", error);
-                // });
+                let uploadID = dataSchools.upload_id.split(".")[0]
+                fetch(apiUrl(`/upload/${uploadID}`), {
+                    method: "GET",
+                    credentials: 'include'
+                }).then((response) => response.json())
+                .then(dataUrl => {setImageURL(dataUrl)})
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                });
             }
         })
         .catch(error => {
@@ -61,8 +63,7 @@ const Header = () => {
     return(
         <header className='main-header'>
             <img className="main-logo" src={SVLogo} alt="logo"/>
-            {/* {school.upload_id ? <img className="main-logo" src={require(`../images/${school.upload_id}`)} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>} */}
-            <img className="main-logo" src={SchoolLogo} alt="logo"/>
+            {school.upload_id ? <img className="main-logo" src={imageURL} alt="logo"/> : <img className="main-logo" src={SchoolLogo} alt="logo"/>}
             <div>
                 {school.school_name ? <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">{school.school_name}</Link></p> : 
                     <p className='header-text'style={{fontSize: '1.5em'}}><Link to="/Home">School Name</Link></p>

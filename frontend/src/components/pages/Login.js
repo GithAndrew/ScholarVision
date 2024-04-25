@@ -2,7 +2,7 @@ import Footer from '../components/Footer'
 import {React, useState, useEffect} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {apiUrl} from '../../apiUrl';
-import {useStore, createSchool} from '../../authHook';
+import {useStore} from '../../authHook';
 import SVLogo from '../images/SVLogo.png'
 import SchoolLogo from '../images/SchoolLogo.png'
 import scholartemplate from '../components/Scholar Application.xlsx';
@@ -14,107 +14,106 @@ function Login() {
   const navigate = useNavigate();
   const { user, isAuthenticated, setAuth } = useStore();
   console.log(user, isAuthenticated)
-
+  const [imageURL, setImageURL] = useState();
   const [school, setSchool] = useState([]);
 
-  useEffect(() => {
-    function sendToken(token){
-      console.log(school)
-      fetch((apiUrl("/user/")), {
-        method: "POST",
-        credentials: 'include', 
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: token,
-          school: school._id
-        }),
+    useEffect(() => {
+      function sendToken(token){
+        fetch((apiUrl("/user/")), {
+          method: "POST",
+          credentials: 'include', 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: token,
+            school: school._id
+          }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+          if(data.success === true){
+            navigate("/Home");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      }
+  
+      function handleCallbackResponse(response){
+        sendToken(response.credential)
+      }    
+  
+      const initializeGoogleSignIn = () => {
+        /* global google */
+        google.accounts.id.initialize({
+          client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
+          callback: handleCallbackResponse
+        });
+  
+        google.accounts.id.renderButton(
+          document.getElementById("signInDiv"),
+          { theme: "standard", size: "large", width: "393px", text: "Log In"}
+        )
+        const googleSignInButton = document.getElementById("signInDiv");
+        googleSignInButton.classList.add("signInDiv");
+      };
+  
+      initializeGoogleSignIn();
+  }, []);
+
+    useEffect(()=>{
+      fetch((apiUrl("/user/isLogin")), {
+          method: "GET",
+          credentials:'include',
+          headers:{
+            'Content-Type':'application/json'
+          },
+      }).then(response => {return response.json()})
+      .then((data)=> {
+          setAuth(data.User, data.status);
+          if(data.status === true){
+            const previousLocation = localStorage.getItem('currentLocation') || '/Home';
+            navigate(previousLocation);
+          }
       })
-      .then((response) => response.json())
-      .then((data) => {
-        if(data.success === true){
-          navigate("/Home");
-        }
+    },[navigate, setAuth]);
+
+    useEffect(() => {
+      Promise.all([
+        fetch(apiUrl(`/school`), {credentials:'include'})
+      ])
+      .then(([resSchools]) => {
+        return Promise.all([
+          resSchools.json()
+        ]);
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-    }
-
-    function handleCallbackResponse(response){
-      sendToken(response.credential)
-    }    
-
-    const initializeGoogleSignIn = () => {
-      /* global google */
-      google.accounts.id.initialize({
-        client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
-        callback: handleCallbackResponse
-      });
-
-      google.accounts.id.renderButton(
-        document.getElementById("signInDiv"),
-        { theme: "standard", size: "large", width: "393px", text: "Log In"}
-      )
-      const googleSignInButton = document.getElementById("signInDiv");
-      googleSignInButton.classList.add("signInDiv");
-    };
-
-    initializeGoogleSignIn();
-  });
-
-  useEffect(()=>{
-    fetch((apiUrl("/user/isLogin")), {
-        method: "GET",
-        credentials:'include',
-        headers:{
-          'Content-Type':'application/json'
-        },
-    }).then(response => {return response.json()})
-    .then((data)=> {
-        setAuth(data.User, data.status);
-        if(data.status === true){
-          const previousLocation = localStorage.getItem('currentLocation') || '/Home';
-          navigate(previousLocation);
-        }
-    })
-  },[navigate, setAuth]);
-
-  useEffect(() => {
-    Promise.all([
-      fetch(apiUrl(`/school`), {credentials:'include'})
-    ])
-    .then(([resSchools]) => {
-      return Promise.all([
-        resSchools.json()
-      ]);
-    })
-    .then(([dataSchools]) => {
+      .then(([dataSchools]) => {
         if (dataSchools.existing === false) {setSchool("")}
         else {
           setSchool(dataSchools[0]);
-          // let uploadID = dataSchools.upload_id.split(".")[0]
-          // fetch(apiUrl(`/upload/${uploadID}`), {
-          //   method: "GET",
-          //   credentials: 'include'
-          // }).then((response) => response.json())
-          // .catch(error => {
-          //   console.error("Error fetching data:", error);
-          // });
+          let uploadID = dataSchools[0].upload_id
+          fetch(apiUrl(`/upload/${uploadID}`), {
+            method: "GET",
+            credentials: 'include'
+          }).then(response => response.text())
+          .then(dataUrl => {setImageURL(dataUrl)})
+          .catch(error => {
+            console.error("Error fetching data:", error);
+          });
         }
-    })
-    .catch(error => {
-      console.error("Error fetching data:", error);
-    });
+      })
+      .catch(error => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
 
   return (
     <div className="login-limiter">
       <header className='login-header'>
         <img className="login-logo" src={SVLogo} alt="logo" />
-        {school.upload_id ? <img className="login-logo" src={apiUrl(`/upload/${school.upload_id}`)} alt="logo"/> : <img className="login-logo" src={SchoolLogo} alt="logo"/>}
-        {/* <img className="login-logo" src={SchoolLogo} alt="logo"/> */}
+        {school.upload_id ? <img className="login-logo" src={imageURL} alt="school"/> : <img className="login-logo" src={SchoolLogo} alt="school"/>}
         <div>
           {school && school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
             <p className='login-header-text'style={{fontSize: '1.5em'}}>Name of School</p>
