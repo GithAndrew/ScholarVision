@@ -173,19 +173,19 @@ const AppFormDonor = () => {
             }
         }
 
-        if (id === "totalgrant") {
-            const grantRegex = /^[0-9]*$/;
-            if (!grantRegex.test(value)) {
-                showMessage("Total grant is not a number!");
+        if (id === "contactnum") {
+            const contactnumRegex = /^09\d{9}$/;
+            if (!contactnumRegex.test(value)) {
+                showMessage("Phone number must have the format 09XXXXXXXXX");
                 missingFields.push(id);
                 return;
             }
         }
 
-        if (id === "contactnum") {
-            const contactnumRegex = /^09\d{9}$/;
-            if (!contactnumRegex.test(value)) {
-                showMessage("Phone number must have the format 09XXXXXXXXX");
+        if (id === "totalgrant") {
+            const grantRegex = /^[0-9]*$/;
+            if (!grantRegex.test(value)) {
+                showMessage("Total grant is not a number!");
                 missingFields.push(id);
                 return;
             }

@@ -1,4 +1,3 @@
-// const url = "https://uprhs-scholars-database.herokuapp.com";
 const url = "https://scholar-vision-backend.vercel.app"
 // const url = "http://localhost:3001"
 
