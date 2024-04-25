@@ -44,6 +44,7 @@ function Profile () {
     const [record, setRecord] = useState([]);
     const {type, id} = useParams();
     let attributes = [];
+    const [imageSrc, setImageSrc] = useState(null);
 
     if (record["newFields"]) {
         const keys = Object.keys(record["newFields"]);
@@ -71,6 +72,9 @@ function Profile () {
                     method: "GET",
                     credentials: 'include'
                 }).then((response) => response.json())
+                .then((data) => {
+                    setImageSrc(data.imageSrc);
+                })
                 .catch(error => {
                     console.error("Error fetching data:", error);
                 });    
@@ -82,6 +86,9 @@ function Profile () {
                     method: "GET",
                     credentials: 'include'
                 }).then((response) => response.json())
+                .then((data) => {
+                    setImageSrc(data.imageSrc);
+                })
                 .catch(error => {
                     console.error("Error fetching data:", error);
                 });
@@ -93,6 +100,9 @@ function Profile () {
                     method: "GET",
                     credentials: 'include'
                 }).then((response) => response.json())
+                .then((data) => {
+                    setImageSrc(data.imageSrc);
+                })
                 .catch(error => {
                     console.error("Error fetching data:", error);
                 });
@@ -108,7 +118,7 @@ function Profile () {
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
-                    {record.upload_id ? <img className="profile-pic" src={require(`../images/${record.upload_id}`)} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
+                    {record.upload_id && imageSrc ? <img className="profile-pic" src={imageSrc} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
                     {record.first_name ? 
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}

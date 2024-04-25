@@ -43,7 +43,7 @@ function ProfileEducation () {
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
-                    {record.upload_id ? <img className="profile-pic" src={require(`../images/${record.upload_id}`)} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
+                    {record.upload_id ? <img className="profile-pic" src={apiUrl(`/upload/${record.upload_id}`)} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
                     {record.first_name ? 
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}
