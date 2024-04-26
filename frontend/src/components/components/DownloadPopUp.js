@@ -492,7 +492,6 @@ function DownloadPopUp (props) {
             })
             .then(response => response.json())
             .then(data => {sendScholarship(appData, data.donor._id);})
-            .then(showMessage(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
@@ -516,6 +515,7 @@ function DownloadPopUp (props) {
             })
         })
         .then(response => { return response.json() })
+        .then(showMessage(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
     }
 
     const toggleMult = () => {
