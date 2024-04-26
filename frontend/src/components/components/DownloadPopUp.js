@@ -491,11 +491,8 @@ function DownloadPopUp (props) {
                 })
             })
             .then(response => response.json())
-            .then(data => {
-                sendScholarship(appData, data.donor._id);
-                showMessage(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`);
-                if (type === "single") {props.handleClose();}
-            })
+            .then(data => {sendScholarship(appData, data.donor._id);})
+            .then(showMessage(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
