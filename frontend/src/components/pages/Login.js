@@ -113,7 +113,7 @@ function Login() {
     <div className="login-limiter">
       <header className='login-header'>
         <img className="login-logo" src={SVLogo} alt="logo" />
-        {school.upload_id ? <img className="login-logo" src={imageURL} alt="school"/> : <img className="login-logo" src={SchoolLogo} alt="school"/>}
+        {imageURL ? <img className="login-logo" src={imageURL} alt="school"/> : <img className="login-logo" src={SchoolLogo} alt="school"/>}
         <div>
           {school && school.school_name ? <p className='login-header-text'>{school.school_name}</p> : 
             <p className='login-header-text'style={{fontSize: '1.5em'}}>Name of School</p>
