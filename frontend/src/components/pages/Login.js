@@ -62,7 +62,7 @@ function Login() {
       };
   
       initializeGoogleSignIn();
-  }, []);
+  });
 
     useEffect(()=>{
       fetch((apiUrl("/user/isLogin")), {
