@@ -310,7 +310,7 @@ function DownloadPopUp (props) {
         }
     }
 
-    const openManyImageFilePopup = (e) => {
+    const openManyImageFilePopup = (e, lastName) => {
         const file = e.target.files[0];
         const reader = new FileReader();
         let base64;
