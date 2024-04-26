@@ -93,6 +93,7 @@ function Login() {
       .then(([dataSchools]) => {
         if (dataSchools.existing === false) {setSchool("")}
         else {
+          console.log("PUMASOK AKO")
           setSchool(dataSchools[0]);
           let uploadID = dataSchools[0].upload_id
           fetch(apiUrl(`/upload/${uploadID}`), {
@@ -109,6 +110,8 @@ function Login() {
         console.error("Error fetching data:", error);
       });
   }, []);
+
+  console.log("OUTSIDE: " + school)
 
   return (
     <div className="login-limiter">
