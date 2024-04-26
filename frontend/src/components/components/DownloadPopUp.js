@@ -310,9 +310,12 @@ function DownloadPopUp (props) {
         }
     }
 
-    const openManyImageFilePopup = (e, lastName) => {
+    const openManyImageFilePopup = (e) => {
+        const file = e.target.files[0];
         const reader = new FileReader();
-        reader.onload = () => {
+        let base64;
+        reader.onload = function(event) {
+            base64 = event.target.result;
             const img = new Image();
             img.onload = () => {
                 if (img.width !== img.height) {
@@ -321,12 +324,13 @@ function DownloadPopUp (props) {
                 } else {
                     setcsvImage(reader.result);
                     const data = new FormData();
-                    data.append("image", e.target.files[0]);
-
+                    data.append("image", file);
+                    data.append("fileData", base64);
+            
                     fetch(apiUrl("/upload"), {
                       method: "POST",
                       body: data,
-                      credentials: 'include'
+                      credentials:'include'
                     }).then((response) => response.json())
                     .then((result) => {
                         setMultImg(prevMultImg => [...prevMultImg, { [lastName]: result.id }]);
@@ -339,8 +343,11 @@ function DownloadPopUp (props) {
     }
 
     const openImageFilePopup = (e) => {
+        const file = e.target.files[0];
         const reader = new FileReader();
-        reader.onload = () => {
+        let base64;
+        reader.onload = function(event) {
+            base64 = event.target.result;
             const img = new Image();
             img.onload = () => {
                 if (img.width !== img.height) {
@@ -349,12 +356,13 @@ function DownloadPopUp (props) {
                 } else {
                     setcsvImage(reader.result);
                     const data = new FormData();
-                    data.append("image", e.target.files[0]);
-
+                    data.append("image", file);
+                    data.append("fileData", base64);
+            
                     fetch(apiUrl("/upload"), {
                       method: "POST",
                       body: data,
-                      credentials: 'include'
+                      credentials:'include'
                     }).then((response) => response.json())
                     .then((result) => {
                         setPicID(result.id);
