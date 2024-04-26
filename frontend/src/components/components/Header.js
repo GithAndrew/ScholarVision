@@ -21,8 +21,6 @@ const Header = () => {
                 'Content-Type':'application/json'
             },
         }).then(response => {return response.json()})
-
-        setAuth(user, false);
     }
 
     useEffect(() => {

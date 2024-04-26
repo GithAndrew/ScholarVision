@@ -6,16 +6,16 @@ body {
 
 .home-main-text {
     font-family: "Inter", sans-serif;
-    padding-top: 120px;
+    padding-top: 95px;
     font-weight: bold;
-    font-size: 50px;
+    font-size: 200%;
     padding-left: 2.5%;
 }
 
 .home-main-desc {
     font-family: "Inter", sans-serif;
     margin: 0;
-    font-size: 150%;
+    font-size: 100%;
     padding-left: 3%;
     padding-right: 10%;
     padding-bottom: 1%;
@@ -32,16 +32,18 @@ body {
 .home-desc {
     font-family: "Inter", sans-serif;
     margin: 0;
-    font-size: 150%;
+    font-size: 100%;
     padding-left: 20px;
     padding-right: 10%;
     padding-bottom: 3%;
     font-style: italic;
     white-space: nowrap;
+    overflow-wrap: break-word;
 }
 
 .horizontal-line {
     border-top: 2000% solid;
+    width: 100%;
 }
 
 .home-text {
@@ -53,19 +55,30 @@ body {
     padding-left: 20px;
 }
 
+@media only screen and (max-width: 1000px) {
+    .home-desc {
+        white-space: normal;
+    }
+
+    .home-main-desc {
+        white-space: normal;
+    }
+}
+
 .green-button {
     font-family: "Inter", sans-serif;
     background-color: #4B7F52;
     border: none;
-    border-radius: 40px;
-    height: 150px;
-    width: 400px;
+    border-radius: 20px;
+    height: 125px;
+    width: 275px;
     text-align: center;
     display: inline-block;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-right: 20px;
     cursor: pointer;
+    min-width: 200px; 
 }
 
 .green-button :link {
@@ -88,15 +101,16 @@ body {
     font-family: "Inter", sans-serif;
     background-color: #255F85;
     border: none;
-    border-radius: 40px;
-    height: 150px;
-    width: 400px;
+    border-radius: 20px;
+    height: 125px;
+    width: 275px;
     text-align: center;
     display: inline-block;
     margin-top: 5px;
     margin-bottom: 5px;
     margin-right: 20px;
     cursor: pointer;
+    min-width: 200px; 
 }
 
 .blue-button :link {

@@ -36,7 +36,7 @@ body, html {
   font-family: "Inter", sans-serif;
   color: #FFFEF2;
   text-align: left;
-  font-size: 50px;
+  font-size: 200%;
   font-weight: bold;
   margin: 0;
 }
@@ -54,14 +54,15 @@ body, html {
   z-index: 2;
   position: absolute;
   left: 3%;
-  top: 38%;
-  width: 60%;
+  top: 30%;
+  width: 50%;
+  max-width: 850px;
   height: auto;
-  box-shadow: 0 4px 8px 0 #1A1423;
-  padding: 5px 18px 25px 18px;
+  padding: 2vw 3vw;
+  box-shadow: 0 0.5em 1em 0 #1A1423;
   text-align: left;
   background-color: #ffffff;
-  border-radius: 15px;
+  border-radius: 1.5em;
   opacity: 0.8;
 }
 

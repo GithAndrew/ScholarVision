@@ -551,6 +551,7 @@ function DownloadPopUp (props) {
                             <p className='popup-form-subtitle'>4. Upload your CSV file using the blue button.</p>
                             <p className='popup-form-subtitle'>5. If the proper data is sent, a button for uploading your image will appear.</p>
                             <p className='popup-form-subtitle'>6. Another button will appear for you to submit your file.</p>
+                            <p className='barrier'>|||</p>
                         </div>
                     :   <div>
                             <p className='delete-label'>Instructions for Uploading Multiple Files</p>
@@ -561,6 +562,7 @@ function DownloadPopUp (props) {
                             <p className='popup-form-subtitle'>5. Upload your CSV file using the green button.</p>
                             <p className='popup-form-subtitle'>6. If the proper data is sent, buttons for uploading images will appear.</p>
                             <p className='popup-form-subtitle'>7. Once everyone has the required image, another button will appear for you to submit your file.</p>
+                            <p className='barrier'>|||</p>
                         </div>
                     }
 
