@@ -38,7 +38,7 @@ const Header = () => {
             if (dataSchools.existing === false) {setSchool("")}
             else {
                 setSchool(dataSchools[0]);
-                let uploadID = dataSchools.upload_id.split(".")[0]
+                let uploadID = dataSchools[0].upload_id
                 fetch(apiUrl(`/upload/${uploadID}`), {
                     method: "GET",
                     credentials: 'include'
