@@ -33,7 +33,7 @@ function ProfileEducation () {
         .then(([dataApps, dataScholars]) => {
             if (type === "applicant") {
                 setRecord(dataApps);
-                let uploadID = dataApps.upload_id.split(".")[0];
+                let uploadID = dataApps.upload_id;
                 fetch(apiUrl(`/upload/${uploadID}`), {
                     method: "GET",
                     credentials: 'include'
@@ -45,7 +45,7 @@ function ProfileEducation () {
             }
             if (type === "scholar") {
                 setRecord(dataScholars);
-                let uploadID = dataScholars.upload_id.split(".")[0];
+                let uploadID = dataScholars.upload_id;
                 fetch(apiUrl(`/upload/${uploadID}`), {
                     method: "GET",
                     credentials: 'include'
@@ -66,7 +66,7 @@ function ProfileEducation () {
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
-                    {record.upload_id ? <img className="profile-pic" src={imageURL} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
+                    {record.upload_id ? <img className="profile-pic" src={imageURL} alt="profile"/>: <img className="profile-pic" src={Avatar} alt="profile"/>}
                     {record.first_name ? 
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}
