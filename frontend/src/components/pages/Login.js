@@ -19,6 +19,7 @@ function Login() {
 
     useEffect(() => {
       function sendToken(token){
+        console.log(school)
         fetch((apiUrl("/user/")), {
           method: "POST",
           credentials: 'include', 
