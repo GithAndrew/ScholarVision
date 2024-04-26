@@ -194,7 +194,7 @@ exports.findAll = async (req, res) => {
 
 exports.logout = (req, res) => {
     console.log("User logged out.");
-    res.clearCookie('authToken').send();
+    res.clearCookie('authToken', {httpOnly: true, sameSite: 'None', secure: true}).send();
 };
 
 exports.deleteUser = async (req, res) => {
