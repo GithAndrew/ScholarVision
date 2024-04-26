@@ -46,19 +46,26 @@ function Login() {
       }    
   
       const initializeGoogleSignIn = () => {
-        /* global google */
-        google.accounts.id.initialize({
-          client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
-          callback: handleCallbackResponse
-        });
+        const script = document.createElement("script");
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.onload = () => {
+          /* global google */
+          google.accounts.id.initialize({
+              client_id: "64363444097-efilpss9crpib95osovgqkfkve05u5br.apps.googleusercontent.com",
+              callback: handleCallbackResponse
+          });
   
-        google.accounts.id.renderButton(
-          document.getElementById("signInDiv"),
-          { theme: "standard", size: "large", width: "393px", text: "Log In"}
-        )
-        const googleSignInButton = document.getElementById("signInDiv");
-        googleSignInButton.classList.add("signInDiv");
-      };
+          google.accounts.id.renderButton(
+              document.getElementById("signInDiv"),
+              { theme: "standard", size: "large", width: "393px", text: "Log In"}
+          );
+  
+          const googleSignInButton = document.getElementById("signInDiv");
+          googleSignInButton.classList.add("signInDiv");
+        };
+        document.body.appendChild(script);
+    };
   
       initializeGoogleSignIn();
   });
