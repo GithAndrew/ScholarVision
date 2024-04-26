@@ -42,7 +42,7 @@ const Header = () => {
                 fetch(apiUrl(`/upload/${uploadID}`), {
                     method: "GET",
                     credentials: 'include'
-                }).then((response) => response.json())
+                }).then((response) => response.text())
                 .then(dataUrl => {setImageURL(dataUrl)})
                 .catch(error => {
                     console.error("Error fetching data:", error);
