@@ -491,15 +491,14 @@ function DownloadPopUp (props) {
                 })
             })
             .then(response => response.json())
-            .then(data => {sendScholarship(appData, data.donor._id);})
-            .then(showMessage(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`))
+            .then(data => {
+                sendScholarship(appData, data.donor._id);
+                showMessage(`Application for ${appData["first_name"]} ${appData["last_name"]} accepted!`);
+                if (type === "single") {props.handleClose();}
+            })
             .catch(error => {
                 console.error('Error submitting application:', error);
             });
-            if (type === "single") {
-                props.handleClose();
-                setTimeout(() => window.location.reload(), 750);
-            };
         } else {showMessage("Inputted email address already exists!")}
     }
 
