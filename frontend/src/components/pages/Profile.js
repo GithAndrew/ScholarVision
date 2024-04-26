@@ -112,7 +112,7 @@ function Profile () {
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
-                    {record.upload_id ? <img className="profile-pic" src={imageURL} alt="profile"/>: <img className="profile-pic" src={Avatar} alt="profile"/>}
+                    {imageURL ? <img className="profile-pic" src={imageURL} alt="profile"/>: <img className="profile-pic" src={Avatar} alt="profile"/>}
                     {record.first_name ? 
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}
