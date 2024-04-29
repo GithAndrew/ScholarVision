@@ -12,6 +12,7 @@ exports.start = () => {
     app.use(cookieParser());
 
     app.use((req, res, next) => {
+        // Replace line below with your frontend_deployment: res.setHeader("Access-Control-Allow-Origin", "frontend_deployment")
         res.setHeader("Access-Control-Allow-Origin", "https://scholar-vision.vercel.app")
         res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE")
         res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers,Access-Control-Allow-Methods,Origin,Accept,Content-Type")
