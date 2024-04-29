@@ -54,6 +54,9 @@ const AppForm = () => {
                 if (img.width !== img.height) {
                     showMessage('Please upload a square image.');
                     setImageSrc(null);
+                } else if (file.size > 1024 * 1024) {
+                    showMessage('Please upload an image smaller than 1MB.');
+                    setImageSrc(null);
                 } else {
                     setImageSrc(reader.result);
                     const data = new FormData();
