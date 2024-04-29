@@ -355,7 +355,7 @@ function DownloadPopUp (props) {
                     setcsvImage(null);
                 } else if (file.size > 1024 * 1024) {
                     showMessage('Please upload an image smaller than 1MB.');
-                    setImageSrc(null);
+                    setcsvImage(null);
                 } else {
                     setcsvImage(reader.result);
                     const data = new FormData();
