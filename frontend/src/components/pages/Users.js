@@ -114,7 +114,7 @@ function Users () {
             </ul>
 
             {users.length !== 0 ?
-                <div className='user-container'>
+                <div className='scholar-container'>
                     <div className='list-search-container'>
                         <input type = "text" id = 'input' className = 'list-search-input' placeholder = "Search for user" value={input} onChange={handleUserInput} onKeyDown={handleKeyDown} required></input>
                         <BsSearch className='list-search-icon' onClick={handleSubmit}/>
