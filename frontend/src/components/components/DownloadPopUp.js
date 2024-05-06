@@ -559,12 +559,12 @@ function DownloadPopUp (props) {
                     :   <div>
                             <p className='delete-label'>Instructions for Uploading Multiple Files</p>
                             <p className='popup-form-subtitle'>1. Download the Excel file through the blue button found below.</p>
-                            <p className='popup-form-subtitle'>2. Copy the entire template and paste it to the next blank column. Copy-paste continuously depending on how many people you will submit.</p>
-                            <p className='popup-form-subtitle'>3. Fill up the required data for each person. Cells with a * means information is required.</p>
-                            <p className='popup-form-subtitle'>4. Save the file as .csv (comma delimited).</p>
-                            <p className='popup-form-subtitle'>5. Upload your CSV file using the green button.</p>
-                            <p className='popup-form-subtitle'>6. If the proper data is sent, buttons for uploading images will appear.</p>
-                            <p className='popup-form-subtitle'>7. Once everyone has the required image, another button will appear for you to submit your file.</p>
+                            <p className='popup-form-subtitle'>2. Fill up the required data for each person per row. One person is for one row. Cells with a * means information is required.</p>
+                            <p className='popup-form-subtitle'>3. Save the file as .csv (comma delimited).</p>
+                            <p className='popup-form-subtitle'>4. Upload your CSV file using the green button.</p>
+                            <p className='popup-form-subtitle'>5. If the proper data is sent, a blue button will appear for you to submit your file. </p>
+                            <p className='popup-form-subtitle'>6. If the data has been verified, buttons for uploading images will appear.</p>
+                            <p className='popup-form-subtitle'>7. Once everyone has the required image, another button will appear for you to submit the data.</p>
                             <p className='barrier'>|||</p>
                         </div>
                     }
