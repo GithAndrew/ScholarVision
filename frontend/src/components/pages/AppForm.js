@@ -213,6 +213,7 @@ const AppForm = () => {
 
         if (required && value === '') {
             missingFields.push(id);
+            showID = id.charAt(0).toUpperCase() + id.slice(1).split("~")[0]
             if (id === "surname") {showID = "Surname"}
             if (id === "firstname") {showID = "First Name"}
             if (id === "streetname") {showID = "Address Street Name"}
