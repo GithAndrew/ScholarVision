@@ -118,3 +118,17 @@
     background-color: #3C6742;
     cursor: pointer;
 }
+
+@media (max-width: 767px) {
+    .header-text {
+        display: none;
+    }
+
+    .subheader-text {
+        display: none;
+    }
+    
+    .back-button {
+        width: 20%;
+    }   
+}

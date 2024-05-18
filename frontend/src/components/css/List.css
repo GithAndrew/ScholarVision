@@ -95,6 +95,14 @@
     padding-bottom: 100px;
 }
 
+.first-list-head {
+    font-family: "Inter", sans-serif;
+    padding-top: 1%;
+    font-size: 150%;
+    font-weight: bolder;
+    text-align: center;
+}
+
 .list-head {
     font-family: "Inter", sans-serif;
     padding-top: 1%;
@@ -163,6 +171,14 @@
 }
 
 .list-cell {
+    font-size: 100%;
+    font-weight: bold;
+    display: 'flex';
+    color: #1A1423;
+    vertical-align: middle;
+}
+
+.second-list-cell {
     font-size: 100%;
     font-weight: bold;
     display: 'flex';
@@ -399,4 +415,27 @@
 
 ::-webkit-scrollbar-thumb:hover {
     background: #C2C2C2;
+}
+
+@media (max-width: 600px) {
+    .list-header {
+        font-size: 120%;
+    }
+    
+    .list-head {
+        display: none;
+    }
+
+    .list-cell {
+        display: none;
+    }
+
+    .last-list-cell {
+        display: none;
+    }
+
+    .list-cell-trash {
+        display: none;
+    }
+    
 }

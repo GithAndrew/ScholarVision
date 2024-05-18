@@ -10,7 +10,6 @@ require('dotenv').config()
 
 exports.login = async (req, res) => {
     const userobject = jwt_decode(req.body.token);
-    console.log(req.body)
 
     const newUser = {
         email: userobject.email,
@@ -26,7 +25,6 @@ exports.login = async (req, res) => {
         if (!existing) {
             var school = null;
             school = await School.getOne({ _id: req.body.school});
-            console.log("school: " + school)
             if (school.member_emails.includes(userobject.email)) {newUser.role = 'member';}
             if (school.admin_email === userobject.email) {newUser.role = 'admin';}
         } else {
@@ -62,7 +60,6 @@ exports.login = async (req, res) => {
 };
 
 exports.isLogin = async (req, res) => {
-    console.log(req.cookies)
     if (!req.cookies || !req.cookies.authToken) {
         console.log('Unauthorized access');
         return res.status(200).send({ message: 'Unauthorized access', status: false });

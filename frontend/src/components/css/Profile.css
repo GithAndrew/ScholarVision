@@ -137,3 +137,23 @@
     color: #EFEFEF;
     user-select: none;
 }
+
+@media (max-width: 767px) {
+    .profile-header {
+        font-size: 120%;
+    }
+
+    .name {
+        font-size: 120%;
+    }
+
+    .profile-button-current {
+        width: 70%;
+        font-size: 80%;
+    }
+
+    .profile-button {
+        width: 70%;
+        font-size: 80%;
+    }
+}

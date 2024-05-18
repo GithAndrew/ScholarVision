@@ -469,8 +469,8 @@ function List () {
                     </div>
                     <table className='list-table'>
                         <tr className='table-header'>
-                            <th className='list-head'>NAME</th>
-                            <th className='list-head'>EMAIL</th>
+                            <th className='first-list-head'>NAME</th>
+                            <th className='first-list-head'>EMAIL</th>
                             {!field && viewValue !== "donor" ? <th className='list-head'>GRADUATION YEAR</th> : ""}
                             {(!field && viewValue === "donor") || (!field && viewValue === "scholar?value=true") ? <th className='list-head'>SCHOLARSHIP DETAILS</th> : ""}
                             {!field && attributes.map((attribute) => (<th className='list-head'>{attribute.toUpperCase().split("~")[0]}</th>))}
@@ -490,7 +490,7 @@ function List () {
                                     {viewValue === 'scholar?value=true' || viewValue === 'scholar?value=false' ? 
                                         <td className='first-list-cell'><Link to={`/scholar/${person._id}/Profile`}>{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>
                                     : <td className='first-list-cell'><Link to={`/${viewValue}/${person._id}/Profile`}>{person.last_name}, {person.first_name}{person.middle_name ? ', ' + person.middle_name : ""}</Link></td>}
-                                    <td className='list-cell'><a href={`mailto: ${person.email}`} className='email-color'>{person.email}</a></td>
+                                    <td className='second-list-cell'><a href={`mailto: ${person.email}`} className='email-color'>{person.email}</a></td>
                                     {!field && viewValue !== "donor" ? <td className='list-cell'>{person.graduation_year}</td> : ""}
                                     {(!field && viewValue === "scholar?value=true") || (!field && viewValue === "donor") ?
                                         scholarships.map((scholarship) => {

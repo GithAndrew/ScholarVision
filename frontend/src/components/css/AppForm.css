@@ -84,6 +84,7 @@
 
 .table-form {
     padding-bottom: 20px;
+    grid-template-columns: 1fr 1fr 1fr auto;
 }
 
 .table-form-th {
@@ -246,4 +247,55 @@ label.upload-label:hover {
 
 .for-required {
     color : #C05746;
+}
+
+@media (max-width: 600px) {
+    .app-form-body {
+        flex-direction: column;
+    }
+
+    .app-form-buttons {
+        left: 30%;
+        top: 80px;
+        width: 35%;
+        padding: 10px;
+    }
+
+    .backgrounds {
+        width: 100%;
+    }
+
+    .buttons, .buttons-g, .submit-button {
+        margin: 10px 0;
+        width: 100%;
+        height: auto;
+        justify-content: center;
+    }
+
+    .app-form-main {
+        flex-basis: 100%;
+        padding: 10px;
+        margin-top: 120px;
+    }
+
+    .form-title {
+        margin-top: 20px;
+    }
+
+    .form-section-1 {
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .backgrounds {
+        width: 700px;
+    }
+
+    .text-area {
+        width: 100%;
+    }
+
+    .table-form {
+        grid-template-columns: 1fr;
+    }
 }
