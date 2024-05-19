@@ -30,6 +30,8 @@ exports.uploadImage = async (req, res) => {
         );
 
         readableStream.pipe(uploadStream);
+
+        console.log(req.body)
         
         uploadStream.on('finish', async (fileInfo) => {
             await Upload.create({

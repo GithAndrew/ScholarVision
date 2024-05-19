@@ -153,6 +153,22 @@ exports.sortBy = async (req, res) => {
 
     try {
         applicantGetAll = await Applicant.getAll();
+
+        if (key[0] === "income") {
+            applicantGetAll.sort((a, b) => {
+                const sumA = (a.father_details?.father_income || 0) + (a.mother_details?.mother_income || 0) + (a.guardian_details?.guardian_income || 0);
+                const sumB = (b.father_details?.father_income || 0) + (b.mother_details?.mother_income || 0) + (b.guardian_details?.guardian_income || 0);
+                return sumA - sumB;
+            });
+
+            if (!applicantGetAll) {
+                console.log("Applicant database is empty");
+                return res.status(404).send({ message: `No applicant in database` });
+            } else {
+                return res.status(200).send(applicantGetAll);
+            }    
+        }
+
         let newFields = [];
         if (applicantGetAll && applicantGetAll.length > 0 && applicantGetAll[0].newFields) {
             newFields = Object.keys(applicantGetAll[0].newFields);

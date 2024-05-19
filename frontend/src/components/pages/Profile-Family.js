@@ -93,7 +93,7 @@ function ProfileFamily () {
             <Header/>
                 <button className='back-button'><Link to="/List">BACK</Link></button>
                 <div className='profile'>
-                    {imageURL ? <img className="profile-pic" src={imageURL} alt="profile"/>: <img className="profile-pic" src={Avatar} alt="profile"/>}
+                    {imageURL ? <img className="profile-pic" src={imageURL} alt="logo"/>: <img className="profile-pic" src={Avatar} alt="logo"/>}
                     {record.first_name ? 
                         <div className='name'>{record.first_name.toUpperCase()} {record.last_name.toUpperCase()}</div>
                     : ""}

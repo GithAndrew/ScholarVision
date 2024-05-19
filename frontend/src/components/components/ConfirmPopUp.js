@@ -131,7 +131,7 @@ function ConfirmPopUp (props) {
                     }) 
                 }).then(response => {return response.json()})
             }
-            setTimeout(() => window.location.reload(), 1500)
+            setTimeout(() => window.location.reload(), 450)
         } else {
             fetch(apiUrl(`/${type}/`), {
                 method: "DELETE",

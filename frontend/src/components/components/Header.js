@@ -9,7 +9,7 @@ import '../css/Header.css';
 const Header = () => {
 
     const navigate = useNavigate();
-    const { user, isAuthenticated, setAuth } = useStore();
+    const { user, isAuthenticated } = useStore();
     const [school, setSchool] = useState([]);
     const [imageURL, setImageURL] = useState();
 

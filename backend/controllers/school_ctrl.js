@@ -67,7 +67,7 @@ exports.findSchool = async (req, res) => {
 exports.findAll = async (req, res) => {
     try {
         schools = await School.getAll();
-        if (!schools || schools.length === 0) {
+        if (schools.length === 0) {
             console.log("School database is empty");
             return res.status(404).send({ existing: false, message: `No schools in database` });
         } else {

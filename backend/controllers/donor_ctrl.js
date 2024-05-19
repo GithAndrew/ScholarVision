@@ -4,7 +4,6 @@ const Scholarship = require('../handlers/scholarship_hndlr');
 const Delete = require('../handlers/deleted_hndlr');
 const Log = require('../handlers/log_hndlr');
 const utils = require('./utils');
-const scholar_mdl = require('../models/scholar_mdl');
 
 exports.findDonor = async (req, res) => {
     if (!req.cookies || !req.cookies.authToken) {
@@ -119,6 +118,32 @@ exports.search = async (req, res) => {
         }
     }
 
+    if (queryParameter === 'scholarship_year') {
+        const scholarship = await Scholarship.getAll();
+        for (i = 0; i < scholarship.length; i++) {
+            for (j = 0; j < donorGetAll.length; j++) {
+                if (scholarship[i].donor_id == donorGetAll[j]._id) {
+                    if (String(scholarship[i].year).match("-")){
+                        const searchYear = parseInt(search, 10);
+                    
+                        const yearRange = scholarship[i].year.split('-');
+                        const startYear = parseInt(yearRange[0], 10);
+                        const endYear = parseInt(yearRange[1], 10);
+    
+                        if (searchYear >= startYear && searchYear <= endYear) {
+                            scholArr.push(donorGetAll[j]);
+                        }
+                    }
+                    else {
+                        if (String(scholarship[i].year).match(search)) {
+                            scholArr.push(donorGetAll[j]);
+                        }    
+                    }
+                }
+            }
+        }
+    }
+
     try {
         if (search === '') {
             return res.status(200).send({ result });
@@ -129,6 +154,10 @@ exports.search = async (req, res) => {
             return res.status(400).send({ message: `No donor in database` });
         } else {
             if (queryParameter === 'grant') {
+                if (scholArr.length > 0) {
+                    return res.status(200).send({result: scholArr});
+                }
+            } else if (queryParameter === 'scholarship_year') {
                 if (scholArr.length > 0) {
                     return res.status(200).send({result: scholArr});
                 }

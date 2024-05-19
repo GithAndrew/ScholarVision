@@ -78,6 +78,7 @@ function List () {
         { label: 'NONE', value: '' },
         { label: 'LAST NAME', value: 'last_name' },
         { label: 'FIRST NAME', value: 'first_name' },
+        { label: 'INCOME', value: 'income'},
         { label: 'GRAD YEAR', value: 'graduation_year' },
         { label: 'GRANT', value: 'grant' },
         { label: 'ADD VIEW', value: 'newfield' }
@@ -89,6 +90,7 @@ function List () {
         { label: 'FIRST NAME', value: 'first_name' },
         { label: 'GRAD YEAR', value: 'graduation_year' },
         { label: 'GRANT', value: 'grant' },
+        { label: 'SCHOLARSHIP YEAR', value: 'scholarship_year'},
         { label: 'ADD SEARCH', value: 'searchfield' }
     ]);
 
@@ -475,9 +477,9 @@ function List () {
                             {(!field && viewValue === "donor") || (!field && viewValue === "scholar?value=true") ? <th className='list-head'>SCHOLARSHIP DETAILS</th> : ""}
                             {!field && attributes.map((attribute) => (<th className='list-head'>{attribute.toUpperCase().split("~")[0]}</th>))}
                             {!field && viewValue !== "donor" ? <th className='list-head'>LINKS</th> : ""}
-                            {!field && viewValue === "scholar?value=false" ? <th className='list-head'>ASSIGN</th> : ""}
+                            {!field && viewValue === "scholar?value=false" ? <th className='button-list-head'>ASSIGN</th> : ""}
                             {!field && viewValue === "applicant" ? <th className='list-head'><AiFillCheckCircle className='green-check'></AiFillCheckCircle></th> : ""}
-                            {!field && viewValue === "applicant" ? <th className='list-head'>ACCEPT?</th> : ""}
+                            {!field && viewValue === "applicant" ? <th className='button-list-head'>ACCEPT?</th> : ""}
                             {(userRole === "admin" || userRole === "member") && !field && viewValue !== "applicant" ? <th className='list-head'>DELETE?</th> : ""}
                             {(userRole === "admin" || userRole === "member") && !field ? <th className='list-head'><AiFillDelete className='red-trash'></AiFillDelete> </th> : ""}
                             {field ? <th className='barrier'>&nbsp;</th> : ""}
@@ -511,10 +513,10 @@ function List () {
                                     {(!field && viewValue !== 'donor' && person.applicant_link !== undefined) ? <td className='list-cell'><a href={`${person.applicant_link}`} target="_blank" rel="noreferrer" className='app-link'>link</a> </td> :
                                         !field && viewValue !== 'donor' ? <td className='list-cell'><input type='text' className='link-input' id = {`app_link${i}`} placeholder='Input link of files.'></input> <button className='app-red-button' onClick={() => editAppLink(person, i)}>Submit</button></td> 
                                     : ""}
-                                    {!field && viewValue === "scholar?value=false" ? <td className='list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
+                                    {!field && viewValue === "scholar?value=false" ? <td className='button-list-cell'> <button className='app-green-button' onClick={() => giveScholarship(person)}>Yes</button></td> : ""}
                                     {!field && viewValue === "applicant" ? <td className='list-cell'><input type = 'checkbox' className='list-checkbox' checked = {checkedAccept[i]} value = {checkedAccept[i]} onChange={() => handleCheckAcceptChange(i)}></input></td> : ""}
                                     {!field && viewValue === "applicant" ?
-                                        <td className='list-cell'>
+                                        <td className='button-list-cell'>
                                             <div className='list-buttons'>
                                                 <button className='app-green-button' onClick={() => openConfirmation(person, "accept")}>Yes</button>&nbsp;
                                                 <button className='app-red-button' onClick={() => openConfirmation(person, "delete")}>No</button>

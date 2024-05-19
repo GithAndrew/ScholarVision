@@ -144,6 +144,32 @@ exports.search = async (req, res) => {
             }
         }
     }
+
+    if (queryParameter === 'scholarship_year' && value === 'true') {
+        const scholarship = await Scholarship.getAll();
+        for (i = 0; i < scholarship.length; i++) {
+            for (j = 0; j < scholarGetAll.length; j++) {
+                if (scholarship[i]._id == scholarGetAll[j].scholarship_id) {
+                    if (String(scholarship[i].year).match("-")){
+                        const searchYear = parseInt(search, 10);
+                    
+                        const yearRange = scholarship[i].year.split('-');
+                        const startYear = parseInt(yearRange[0], 10);
+                        const endYear = parseInt(yearRange[1], 10);
+    
+                        if (searchYear >= startYear && searchYear <= endYear) {
+                            scholArr.push(scholarGetAll[j]);
+                        }
+                    }
+                    else {
+                        if (String(scholarship[i].year).match(search)) {
+                            scholArr.push(scholarGetAll[j]);
+                        }    
+                    }
+                }
+            }
+        }
+    }
     
     try {
         if (!search) {
@@ -158,7 +184,11 @@ exports.search = async (req, res) => {
                 if (scholArr.length > 0) {
                     return res.status(200).send({result: scholArr});
                 }
-            } else {
+            } else if (queryParameter === 'scholarship_year' && value === 'true') {
+                if (scholArr.length > 0) {
+                    return res.status(200).send({result: scholArr});
+                }
+            }else {
                 search = search.toLowerCase();
                 let data = []
                 for (let i = 0; i < scholar.length; i++) {
@@ -213,6 +243,22 @@ exports.sortBy = async (req, res) => {
 
     try {
         scholarGetAll = await Scholar.getAll();
+
+        if (key[0] === "income") {
+            scholarGetAll.sort((a, b) => {
+                const sumA = (a.father_details?.father_income || 0) + (a.mother_details?.mother_income || 0) + (a.guardian_details?.guardian_income || 0);
+                const sumB = (b.father_details?.father_income || 0) + (b.mother_details?.mother_income || 0) + (b.guardian_details?.guardian_income || 0);
+                return sumA - sumB;
+            });
+
+            if (!scholarGetAll) {
+                console.log("Applicant database is empty");
+                return res.status(404).send({ message: `No applicant in database` });
+            } else {
+                return res.status(200).send(scholarGetAll);
+            }    
+        }
+
         let newFields = [];
         if (scholarGetAll && scholarGetAll.length > 0 && scholarGetAll[0].newFields) {
             newFields = Object.keys(scholarGetAll[0].newFields);

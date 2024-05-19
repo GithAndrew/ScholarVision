@@ -143,8 +143,8 @@ function Login() {
             </span>
 
               <div id="signInDiv">
-                  <span class="icon"></span>
-                  <span class="buttonText">Google</span>
+                <span class="icon"></span>
+                <span class="buttonText">Google</span>
               </div>
           </form>
 
