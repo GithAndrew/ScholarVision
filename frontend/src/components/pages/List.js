@@ -74,25 +74,53 @@ function List () {
         {label:'APPLICANT', value:'applicant'}
     ]
 
-    const [orderFilter, setOrderFilter] = useState([
+    const [orderFilter, setOrderFilter] = useState([]);
+
+    const applicantOrderFilter = [
         { label: 'NONE', value: '' },
         { label: 'LAST NAME', value: 'last_name' },
         { label: 'FIRST NAME', value: 'first_name' },
         { label: 'INCOME', value: 'income'},
         { label: 'GRAD YEAR', value: 'graduation_year' },
+        { label: 'ADD VIEW', value: 'newfield' }
+    ];
+
+    const donorOrderFilter = [
+        { label: 'NONE', value: '' },
+        { label: 'LAST NAME', value: 'last_name' },
+        { label: 'FIRST NAME', value: 'first_name' },
         { label: 'GRANT', value: 'grant' },
         { label: 'ADD VIEW', value: 'newfield' }
-    ]);
+    ];
 
-    const [searchOrderFilter, setSearchOrderFilter] = useState([
+    const acceptedOrderFilter = [
+        { label: 'NONE', value: '' },
+        { label: 'LAST NAME', value: 'last_name' },
+        { label: 'FIRST NAME', value: 'first_name' },
+        { label: 'INCOME', value: 'income'},
+        { label: 'GRAD YEAR', value: 'graduation_year' },
+        { label: 'ADD VIEW', value: 'newfield' }
+    ];
+
+    const [searchOrderFilter, setSearchOrderFilter] = useState([]);
+
+    const applicantSearchFilter = [
         { label: 'NONE', value: '' },
         { label: 'LAST NAME', value: 'last_name' },
         { label: 'FIRST NAME', value: 'first_name' },
         { label: 'GRAD YEAR', value: 'graduation_year' },
+        { label: 'ADD SEARCH', value: 'searchfield' }
+    ];
+
+    const donorSearchFilter = [
+        { label: 'NONE', value: '' },
+        { label: 'LAST NAME', value: 'last_name' },
+        { label: 'FIRST NAME', value: 'first_name' },
         { label: 'GRANT', value: 'grant' },
         { label: 'SCHOLARSHIP YEAR', value: 'scholarship_year'},
         { label: 'ADD SEARCH', value: 'searchfield' }
-    ]);
+    ];
+
 
     const viewChange = (selectedValue) => {
         setViewValue(selectedValue);
@@ -421,6 +449,43 @@ function List () {
     }, [orderValue, viewValue]);
 
     useEffect(() => {
+        if (viewValue === 'applicant') {
+            setOrderFilter(applicantOrderFilter);
+        } else if (viewValue === 'donor') {
+            setOrderFilter(donorOrderFilter);
+        } else if (viewValue === 'scholar?value=false') {
+            setOrderFilter(acceptedOrderFilter);
+        }  else {
+            setOrderFilter([
+                { label: 'NONE', value: '' },
+                { label: 'LAST NAME', value: 'last_name' },
+                { label: 'FIRST NAME', value: 'first_name' },
+                { label: 'INCOME', value: 'income'},
+                { label: 'GRAD YEAR', value: 'graduation_year' },
+                { label: 'GRANT', value: 'grant' },
+                { label: 'ADD VIEW', value: 'newfield' }
+            ]);
+        }
+        
+        if (viewValue === 'applicant' || viewValue === 'scholar?value=false') {
+            setSearchOrderFilter(applicantSearchFilter)
+        } else if (viewValue === 'donor') {
+            setSearchOrderFilter(donorSearchFilter)
+        } else {
+            setSearchOrderFilter([
+                { label: 'NONE', value: '' },
+                { label: 'LAST NAME', value: 'last_name' },
+                { label: 'FIRST NAME', value: 'first_name' },
+                { label: 'GRAD YEAR', value: 'graduation_year' },
+                { label: 'GRANT', value: 'grant' },
+                { label: 'SCHOLARSHIP YEAR', value: 'scholarship_year'},
+                { label: 'ADD SEARCH', value: 'searchfield' }
+            ]);
+        }
+    
+    }, [viewValue]);
+
+    useEffect(() => {
         if (record === undefined) {}
         else {
             setcheckedDelete(new Array(record.length).fill(false));
@@ -499,11 +564,11 @@ function List () {
                                             return (
                                                 viewValue === 'donor' ? 
                                                     (person._id === scholarship.donor_id ? 
-                                                        <td className='list-cell'>{scholarship.grant.toLocaleString()} {scholarship.details}</td>
+                                                        <td className='list-cell'>{scholarship.grant} {scholarship.details}</td>
                                                         : "") 
                                                     : viewValue === 'scholar?value=true' ?
                                                         (person.scholarship_id === scholarship._id ? 
-                                                            <td className='list-cell'>{scholarship.grant.toLocaleString()} {scholarship.details}</td> 
+                                                            <td className='list-cell'>{scholarship.grant} {scholarship.details}</td> 
                                                             : "") 
                                                         : " "
                                             )
