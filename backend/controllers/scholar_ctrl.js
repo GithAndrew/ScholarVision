@@ -251,12 +251,18 @@ exports.sortBy = async (req, res) => {
                 return sumA - sumB;
             });
 
-            if (!scholarGetAll) {
-                console.log("Applicant database is empty");
-                return res.status(404).send({ message: `No applicant in database` });
+            for (let i = 0; i < scholarGetAll.length; i++) {
+                if (!scholarGetAll[i].scholarship_id) {
+                    withoutScholarship.push(scholarGetAll[i]);
+                } else {
+                    withScholarship.push(scholarGetAll[i]);
+                }
+            }
+            if (value[1] == 'true') {
+                return res.status(200).send(withScholarship);
             } else {
-                return res.status(200).send(scholarGetAll);
-            }    
+                return res.status(200).send(withoutScholarship);
+            }
         }
 
         let newFields = [];
