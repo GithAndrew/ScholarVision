@@ -564,11 +564,11 @@ function List () {
                                             return (
                                                 viewValue === 'donor' ? 
                                                     (person._id === scholarship.donor_id ? 
-                                                        <td className='list-cell'>{scholarship.grant} {scholarship.details}</td>
+                                                        <td className='list-cell'>{scholarship.grant.toLocaleString()} {scholarship.details}</td>
                                                         : "") 
                                                     : viewValue === 'scholar?value=true' ?
                                                         (person.scholarship_id === scholarship._id ? 
-                                                            <td className='list-cell'>{scholarship.grant} {scholarship.details}</td> 
+                                                            <td className='list-cell'>{scholarship.grant.toLocaleString()} {scholarship.details}</td> 
                                                             : "") 
                                                         : " "
                                             )
