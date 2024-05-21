@@ -206,7 +206,7 @@ function DownloadPopUp (props) {
                     return
                 }
 
-                if (row[1] === "Reason/s for Applying for Personal Statement") {
+                if (row[1] === "Reason/s for Applying") {
                     boolData = true;
                     data["statement"] = rows[i+1].split(",")[1];
                     break
@@ -288,7 +288,7 @@ function DownloadPopUp (props) {
                     return
                 }
     
-                if (row[1] === "Reason/s for Applying for Personal Statement"){
+                if (row[1] === "Reason/s for Applying"){
                     boolData = true;
                     data["statement"] = rows[i+1].split(",")[1];
                     break
