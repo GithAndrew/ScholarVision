@@ -110,6 +110,11 @@ function ProfileScholarship () {
                                     <td className='info-here'>{scholarship.scholarshipname}</td>
                                     <td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td>
                                 </tr>
+                                <tr>
+                                    <td className='cell-bold'>Donor Name</td>
+                                    <td className='info-here'>{scholarship.donor}</td>
+                                    <td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td><td className='barrier'>||||</td>
+                                </tr>
                                 <tr className='smol'></tr>
                                 <tr>
                                     <td className='cell-bold'>Year Granted</td>
